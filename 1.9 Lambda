@@ -5,11 +5,11 @@
     functionname = lambdaKeyword passing_parameter  :  function_operation
 
 ///////Example////////////////////////////////////////////////////////
-x = lambda a : a + 10     //function x(a){ return i = a + 10;}
+x = lambda a : a + 10     //function x(a){ return  a + 10;}
 print(x(5))
 
 
-x = lambda a, b : a * b   //function x(a,b){ return i = a * b;}
+x = lambda a, b : a * b   //function x(a,b){ return  a * b;}
 print(x(5, 6)) 
 
 
