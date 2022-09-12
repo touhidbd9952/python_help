@@ -11,3 +11,18 @@ print(x(5))
 
 x = lambda a, b : a * b   //function x(a,b){ return i = a * b;}
 print(x(5, 6)) 
+
+
+//////lambda use in function////////////////////////////////////////
+
+    def myfunc(n):
+      return lambda a : a * n
+
+    mydoubler = myfunc(2)  // a=2,  mydoubler = 2 * n
+
+    print(mydoubler(11))  //n=11, mydoubler = 2 * 11
+ 
+    //output: 22
+ 
+ 
+
