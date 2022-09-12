@@ -11,7 +11,7 @@ This file can be include in project.
             
     2. in another file use "mymodule"
     
-          import mymodule      //add module
+          import mymodule      //add module file
 
           mymodule.greeting("Jonathan")  // access module
        
