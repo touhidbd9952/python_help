@@ -1,6 +1,22 @@
 
 x = 5
 y = "John"
+
+mylist = ["apple", "banana", "cherry"]
+list2 = [1, 5, 7, 9, 3]
+list1 = ["abc", 34, True, 40, "male"]
+list2.append(4)             //add an item to the end of the list
+list1.insert(1, "orange")   //insert a list item at a specified index
+list1.extend(list2)         //append elements from another list to the current list
+
+list1.remove("male")        //Remove "male" 
+list1.pop(1)                //Removes the specified index
+del list1[0]                //Removes the specified index
+del list1                   //Delete the entire list 
+
+print(len(list2))   //number of item
+print(list2[1])  //access list item
+
 print(x)
 print(y)
 x, y, z = "Orange", "Banana", "Cherry"
