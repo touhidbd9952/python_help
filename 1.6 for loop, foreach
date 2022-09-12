@@ -1,0 +1,10 @@
+//////foreach loop//////////
+thislist = ["apple", "banana", "cherry"]
+for x in thislist:
+  print(x) 
+  
+or 
+
+thislist = ["apple", "banana", "cherry"]
+for i in range(len(thislist)):
+  print(thislist[i])
