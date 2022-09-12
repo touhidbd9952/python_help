@@ -10,3 +10,8 @@ class Person:
  ////create "Student" class from "Person" class//////////////////
   class Student(Person):
     pass 
+ 
+ 
+ /////Create Object/////////////////////////////////////////////
+    x = Student("Mike", "Olsen")
+    x.printname()
