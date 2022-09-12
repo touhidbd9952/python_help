@@ -1,15 +1,15 @@
 txt = "hello, and welcome to my world."
 x = txt.capitalize()
 
-Method 	          Description
-----------------------------------------------------------------------------------------------------
+Method 	          Description                                                                                           Example
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
 capitalize()	    Converts the first character to upper case
 
 casefold()	      Converts string into lower case
 
 center()	        Returns a centered string
 
-count()	          Returns the number of times a specified value occurs in a string
+count()	          Returns the number of times a specified value occurs in a string                                      x = txt.count("apple")
 
 encode()	        Returns an encoded version of the string
 
