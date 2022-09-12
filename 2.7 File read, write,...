@@ -1,0 +1,44 @@
+/////file Open in read mode///////////////////////////////////
+f = open("demofile.txt", "r")
+print(f.read()) 
+
+f = open("D:\\myfiles\welcome.txt", "r")
+x = f.read()  //returns the whole text
+x = f.read()  //returns the whole text
+x = f.readline() //return one line
+x = f.read(5) //return 5 first characters
+
+
+/////Loop through the file line by line////////////////////
+f = open("demofile.txt", "r")
+for x in f:
+  print(x) 
+
+
+///////Open file and add new line/////////////////////////////////////
+f = open("demofile2.txt", "a")
+f.write("Now the file has more content!")
+f.close()
+
+////////Delete file data and add new data////////////////////////////
+f = open("demofile3.txt", "w")
+f.write("Woops! I have deleted the content!")
+f.close()
+
+//////create file and open//////////////////////////////////////////
+f = open("myfile.txt", "x")
+
+
+////////Delete File////////////////////////////////////////////////
+
+import os  //to delete a file need to use os module
+if os.path.exists("demofile.txt"):
+  os.remove("demofile.txt")
+else:
+  print("The file does not exist")
+
+////////Delete Folder/Directory///////////////////////////////////
+
+  import os
+  os.rmdir("myfolder") 
+
