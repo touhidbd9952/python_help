@@ -1,0 +1,17 @@
+///////What is module////////
+A file (filename.py) that containing one or more functions is known as module
+This file can be include in project.
+
+/////Create a Module and use//////
+
+    1. write below code in a file and save it as "mymodule.py"
+    
+          def greeting(name):
+            print("Hello, " + name)
+            
+    2. in another file use "mymodule"
+    
+          import mymodule      //add module
+
+          mymodule.greeting("Jonathan")  // access module
+       
