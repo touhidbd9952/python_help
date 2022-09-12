@@ -1,0 +1,30 @@
+///////Creating a Function/////////////////////////////////
+function is defined using the def keyword. 
+function has no body bracket({...})
+
+  def functionName():
+      statement-1
+      statement-2
+      .
+      .
+    
+
+/////Example////////////////////////////////////////////
+
+    def my_function():
+      print("Hello from a function")
+
+
+///////Call a Function///////////////////////////////////
+
+    def my_function():
+      print("Hello from a function")
+
+    my_function()
+
+//////Parameter passing/////////////////////////////////
+
+    def my_function(child3, child2, child1):
+      print("The youngest child is " + child3)
+
+    my_function(child1 = "Emil", child2 = "Tobias", child3 = "Linus")   //calling function and parameter pass
