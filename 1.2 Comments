@@ -1,0 +1,12 @@
+/////Comments starts with  #///////
+  #This is a comment
+  print("Hello, World!")
+
+//////multi line comments//////////
+Python does not have syntax for multi line comments.
+To add a multiline comment you could insert  # for each line:
+
+  #This is a comment
+  #written in
+  #more than just one line
+  print("Hello, World!")
