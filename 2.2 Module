@@ -15,3 +15,20 @@ This file can be include in project.
 
           mymodule.greeting("Jonathan")  // access module
        
+
+//////Built-in Modules////////////////////////////////////////////////
+
+    1. platform module : to get about windows, windows version,..... 
+    
+            x = platform.system()   //Windows
+            x = dir(platform)  //['DEV_NULL', '_UNIXCONFDIR', 'WIN32_CLIENT_RELEASES', 'WIN32_SERVER_RELEASES', .....
+            
+    2. Datetime module : to get date
+             
+             import datetime
+             x = datetime.datetime.now()  //2022-09-12 14:54:03.192628
+             x = datetime.datetime.now()  
+             x.year  //2022
+             x.strftime("%A") //Monday
+             x = datetime.datetime(2020, 5, 17) //2020-05-17 00:00:00
+    3. 
