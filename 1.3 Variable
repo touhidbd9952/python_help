@@ -13,6 +13,8 @@ list1.remove("male")        //Remove "male"
 list1.pop(1)                //Removes the specified index 
 list1.pop()                 //Remove last index value
 list1.clear()               //clear list and make it empty
+list1.short()               //array short in asc
+list1.reverse()             //array short in desc
 del list1[0]                //Removes the specified index
 del list1                   //Delete the entire list 
 
