@@ -15,3 +15,43 @@ Test python
 4. to exit, type "exit()" and enter
 
 python file has extention (.py)
+
+
+
+///////////////////////////////////////////////////////////////////
+
+////Python version check in command prompt/////////
+c:\users\touhid>python
+
+////Installation python///////////////////////////
+1. go to google and type "python download" and download python from python.org
+2. install python in your pc
+
+////django install////////////////////////////////
+pip install django
+
+to check django install or not
+-------------------------------
+pip list
+
+////Create python project////////////////////////
+django-admin startproject YourProjectName
+
+////Open Project and Run/////////////////////////
+1. go to project folder
+2. python manage.py runserver
+3. copy "http://127.0.0.1:8000" and paste in browser
+
+////To change port///////////////////////////////
+1. if you run your project, your will see http://127.0.0.1:8000
+2. sometime port can create problem, so port need to change
+    
+      python manage.py runserver 7000   //port will change as http://127.0.0.1:7000
+
+
+////Close Server///////////////////////////////
+ctrl + c
+
+////Close Python///////////////////////////////
+ctrl+z enter
+
