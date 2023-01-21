@@ -1,0 +1,4 @@
+////today date ////////
+    x = datetime.datetime.now()
+    todaydate = x.strftime("%Y")+"-"+x.strftime("%m")+"-"+x.strftime("%d")
+    print(todaydate)  //2023-01-21
