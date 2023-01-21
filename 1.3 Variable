@@ -18,6 +18,7 @@ list1.short(key=str.lower)  //convert array value as string lower case before sh
 list1.reverse()             //array short in desc
 del list1[0]                //Removes the specified index
 del list1                   //Delete the entire list 
+list3 ={10,10,12}           //set is use to remove duplicate value from array and make one value like  {10,12}
 
 print(len(list2))   //number of item
 print(list2[1])  //access list item
