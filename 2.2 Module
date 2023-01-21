@@ -31,4 +31,7 @@ This file can be include in project.
              x.year  //2022
              x.strftime("%A") //Monday
              x = datetime.datetime(2020, 5, 17) //2020-05-17 00:00:00
-    3. 
+    3. today date
+    x = datetime.datetime.now()
+    todaydate = x.strftime("%Y")+"-"+x.strftime("%m")+"-"+x.strftime("%d")
+    print(todaydate)  //2023-01-21
