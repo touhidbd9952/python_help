@@ -1,10 +1,62 @@
 //////foreach loop//////////
-thislist = ["apple", "banana", "cherry"]
-for x in thislist:
-  print(x) 
+list1 = ["apple", "banana", "cherry"]
+listlength = list1.len()
+
+for x in list1:
+  print(x)    //["apple", "banana", "cherry"]
   
 or 
 
-thislist = ["apple", "banana", "cherry"]
-for i in range(len(thislist)):
-  print(thislist[i])
+list1 = ["apple", "banana", "cherry"]
+for i in range(len(list1)):
+  print(list1[i])
+
+//forloop in tuple array
+myTuple = [("a",1, "BDT"),("b",2,"USD"),("c",3,"CAD")]       
+for x,y,z  in  myTyple:
+  print(f"{x},{y},{z}")
+
+//forloop in Object/Dictionary Array
+myObject =[{"name":"Karim","age":25},{"name":"Rahim","age":30}]
+for key,value  in  myObject:
+  print(f"{key}=>{value}")
+
+//for loop in string
+myStr = "abcdefgh"
+for  i  in  myStr:
+  print(i)    //print 1 character per line
+
+//for loop in  Set type array
+mySet = {"BDT","USD","CAD"}
+for  i  in mySet:
+   print(i)  //print 1 word per line
+
+//for loop in range
+for  i  in  range(0,10):
+   print(i)  
+
+//for loop in list by using enumerate()
+mylist = ["a","b","c","d","e"]
+for  key,value   in  enumerate(mylist):
+   print(f"{key} index of {value}")
+
+//transfer one list to another list
+mylist =[1,2,3,4,5,6]
+newlist = []
+for  i  in mylist:
+   newlist.append(i)
+
+///////////////////////////////// Short cut forloop / comprehension on forloop////////////////////////
+mylist = [1,2,3,4,5,6]
+comlist = [i  for i  in  mylist]  //syntex: comlist = [operatin    forloop]     result will be [1,2,3,4,5,6]
+comlist = [i*i   for  i  in mylist] //[1,4,9,.....]
+
+//to create tuple list like [(1,1),(2,4),...()]
+newTuplelist = [(i,i*i)  for i  in mylist]
+
+//to create matrix like [[0,1,2,3],[0,1,2,3],[0,1,2,3]]
+newMatrix = [[j  for j  in  range(4)]   for  i  in  range(3)]
+              
+//to access fist index value from matrix by using comprehension
+myMatrix = [[0,1,2,3],[0,1,2,3],[0,1,2,3]]
+newlist = [i[0]   for  i  in  myMatrix]   //[0,0,0]
