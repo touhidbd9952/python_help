@@ -16,10 +16,30 @@ list1.clear()               //clear list and make it empty
 list1.short()               //array short in asc
 list1.short(key=str.lower)  //convert array value as string lower case before shorting in asc
 list1.reverse()             //array short in desc
+
+list1.len()                 //get length of list
+
 del list1[0]                //Removes the specified index
 del list1                   //Delete the entire list 
 list3 ={10,10,12}           //set is use to remove duplicate value from array and make one value like  {10,12}
+myTuple = ("Karim",40)      //Tuble type array (imutable)
+myObject = {"name":"Karim","age":40}
+myTuple.len()
+myObject.len()
 
+///searching data/////////////////////
+result = "Rahim" in myTouple
+print(result)  //false
+result = "Karim" in myObject
+print(result)  //true
+myrange = range(0,51)
+result2 = 4o in myrange
+print(result2) //true
+
+/// Concatination 2 array ////////////////
+result = myTuple1 + myTuple2
+result1 = mylist1 + mylist2
+result = myobject1 + myobject2
 print(len(list2))   //number of item
 print(list2[1])  //access list item
 
@@ -44,6 +64,34 @@ type(x)
 a = 4
 A = "Sally"
 #A will not overwrite a 
+
+////Object type Array/Dictionary type Array///////////////////////////////////////////////////////////
+object1 = {'name':'karim', 'age':25}
+or
+object1 = dict(name = 'Karim', age = 25)
+or
+object1 = dict(zip(['name','age'],['Karim',52]))
+
+print(object1)   //{'name':'karim', 'age':25}
+
+//////// empty object create/////
+object1 ={}
+or 
+object1 = dict()
+
+//////// assign value in object ////////////////////
+object1['name'] = 'Karim'
+
+/////// remove value////////
+del object1['name']
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////Range//////////////////////////////////////////////////////////////////////////////////////////
+a = list(range(0,10))   //[0,1,2,....,9]
+a = list(range(0,10,1))  //range(start value,end value,skip)     [0,2,4,....]
+a = list(range(1,10,2))  //range(start value,end value,skip)     [1,3,5,....]
+a = list(range(10,0,-1))  //range(start value,end value,skip)     [10,9,8,....]
 
 /////Multiline Strings////////////////////////////
 You can assign a multiline string to a variable by using three quotes ("""...""") or ('''...'''):
