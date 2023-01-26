@@ -1,6 +1,9 @@
 //////Syntax///////////////////////////////////////
 
-    lambda arguments : expression
+    functionname = lambda parameter : operation
+    
+    example
+    -------
     x = lambda a : a + 10 
     functionname = lambdaKeyword passing_parameter  :  function_operation
 
