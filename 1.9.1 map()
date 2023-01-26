@@ -1,0 +1,11 @@
+//Map Function:
+map() use for forloop
+syntex:
+a. first create a function and array, 
+b. then create map(function, array) 
+c. convert to list/tuple/object array
+
+
+datalist1 = [3, 4, 1, 0, 6]   //listtypearray
+//variable = list(map(operation,  array))
+newL = list(map(lambda  k : k*k*k,  datalist1))      // newL = [ k*k*k   for   k   in   datalist1 ]
