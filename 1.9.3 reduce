@@ -1,0 +1,17 @@
+/////reduce function////////////////////////////
+reduce function apply on list for some reason
+-to sum all list value
+-to multiplicate all list value
+
+//to work with reduce first need to import reduce from functools module
+from functools import reduce
+li = [1, 2, 3, 4,2 ,3 ,4]
+def func(x, y):
+    return x + y
+
+sum = reduce(func, li)
+or
+sum = reduce(func, li)
+or
+sum = reduce(lambda x, y: x+y, li)
+print(sum)
