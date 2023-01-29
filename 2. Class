@@ -1,6 +1,6 @@
 ///////Create Class name "Person"//////////////////////////////////
 class Person:
-  def __init__(self, name, age):                       //__init__() function is called automatically when create a new object
+  def __init__(self, name, age):                       //__init__() function/default constrator is called automatically when create a new object
     self.name = name
     self.age = age
    
@@ -47,6 +47,10 @@ put in the pass statement to avoid getting an error.
 
     class Person:
       pass
-  
+
+
+/////Simple default constractor declaration system///////////
+def _init_(self):
+  print("I am default constractor ")
  
 
