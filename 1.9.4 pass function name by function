@@ -1,0 +1,12 @@
+def hello():
+    print('hello everybody')
+
+def greating():
+    print('nice to meet you')
+
+def callfunction(fn):
+    print(fn.name)
+    fn()
+
+callfunction(hello)  //hello everybody
+
