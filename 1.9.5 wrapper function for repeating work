@@ -1,0 +1,19 @@
+//if you need to send some same information in 500 or more mail
+//then we can make wrapper function below way
+
+def myWrapper(fn):
+   def mailfooter():
+      fn()                      //custom function
+      print('Thank you,')
+      print('woody co.,ltd.')
+    return mailfooter
+ 
+def mypresentationmail():
+    print('.......')
+    
+//use myWrapper when required
+presentationmail = myWrapper(mypresentationmail)
+presentationmail()      //first show presentation message and at the end of mail, it shows 'Thank you, woody co., ltd.'
+
+
+   
