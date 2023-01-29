@@ -16,4 +16,28 @@ presentationmail = myWrapper(mypresentationmail)
 presentationmail()      //first show presentation message and at the end of mail, it shows 'Thank you, woody co., ltd.'
 
 
+///////another way of using wrapper function that known as Decorators////////
+1. wrapper function create
+2. write @wrapper_function_name before our particular function
+3. now call that particular function (decorator function) directly
+
+//wrapper function create
+def myWrapper(fn):
+   def mailfooter():
+      fn()                      //custom function
+      print('Thank you,')
+      print('woody co.,ltd.')
+    return mailfooter
+
+//use wrapper as decorators
+@myWrapper    
+def mypresentationmail():
+    print('.......')
+
+//now cal decorator function
+mypresentationmail()
+
+
+
+
    
