@@ -55,3 +55,5 @@ def _init_(self):
  
 ////To see all properties and methods of a class//////////////
 print(dir(classobjname))  // print(dir(p1))
+
+
