@@ -1,18 +1,26 @@
+///////Step-1  create parent class ////////////////////////////////////////////////////////////////////////
 class A:
+   //constractor
    def   _init_(seft, name):
 	    self.name = name
-
+   //method
    def  hello(selft):
 	    print("Hello from class A")
 
+
+///////Step-2  create child class from parent class///////////////////////////////////////////////////////
+
 class B(A):
+   //constractor overloading
    def  _init_(seft, name, job):
 	    A._init_(seft, name)  //call default constractor of class A  with parameter
 	    seft.job = job
-
+	    
+   //method overloading
    def  hello(seft):
 	    print(f"{self.name} is a {seft.job}")
 
-//creating Object and passing parameter
+///////Step-3   creating Object and passing parameter//////////////////////////////////////////////////////
+
 obj1 = B("Touhid", "Programmer")
 obj1.hello()
