@@ -17,13 +17,13 @@ p1.myfunc()                                            //calling function by obj
 
 
 /////////note start///////////////////////////////////////////////////
-It does not have to be named "self" , you can call it whatever you like, 
+It does not have to be named "self" , you can call it whatever you like (this), 
 but it has to be the "first parameter" of any function in the class
 
     class Person:
-      def __init__(mysillyobject, name, age):
-        mysillyobject.name = name
-        mysillyobject.age = age
+      def __init__(this, name, age):
+        this.name = name
+        this.age = age
 
       def myfunc(abc):
         print("Hello my name is " + abc.name)
@@ -53,4 +53,5 @@ put in the pass statement to avoid getting an error.
 def _init_(self):
   print("I am default constractor ")
  
-
+////To see all properties and methods of a class//////////////
+print(dir(classobjname))  // print(dir(p1))
