@@ -1,0 +1,18 @@
+class A:
+   def   _init_(seft, name):
+	    self.name = name
+
+   def  hello(selft):
+	    print("Hello from class A")
+
+class B(A):
+   def  _init_(seft, name, job):
+	    A._init_(seft, name)  //call default constractor of class A  with parameter
+	    seft.job = job
+
+   def  hello(seft):
+	    print(f"{self.name} is a {seft.job}")
+
+//creating Object and passing parameter
+obj1 = B("Touhid", "Programmer")
+obj1.hello()
