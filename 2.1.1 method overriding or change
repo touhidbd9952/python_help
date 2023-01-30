@@ -1,0 +1,24 @@
+//if same method name is write in child class but its definition write in different way,
+//therefor, when object create form child class, child method is call not parent method call
+
+class ClassA:
+  def _init(self, name, age):
+      self.name = name
+      self.age = age
+  
+  def printname(self):
+      print("Name: "+self.name)
+      print("Age: "+self.age)
+
+class ClassB(ClassA):
+  def printname(self):
+      print("My name is: "+self.name)
+      print("My age is: "+self.age)
+
+
+obj1 = B("Karim Hossain", 45)
+obj1.printname()   
+
+//output
+My name is: Karim Hossain
+My age is: 45
