@@ -13,7 +13,7 @@ class A:
 class B(A):
    //constractor overloading
    def  _init_(seft, name, job):
-	    A._init_(seft, name)  //call default constractor of class A  with parameter
+	    A._init_(seft, name)  //call constractor of class A and pass parameter
 	    seft.job = job
 	    
    //method overloading
