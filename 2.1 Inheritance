@@ -19,11 +19,11 @@ class Person:
     
 ////Multiple inheritance//////////////////////////////////////
 class A:
-      def _init_(this, name):
+      def __init__(this, name):
           this.name = name
 
 class B:
-      def _init_(this, name):
+      def __init__(this, name):
           this.name = name
           
 class  C(A,B):
