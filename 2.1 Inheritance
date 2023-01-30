@@ -28,3 +28,6 @@ class B:
           
 class  C(A,B):
       pass
+
+/////Show method order of a Class////////////////////////////
+print(C.__mro__)    //mro = method order resolution
