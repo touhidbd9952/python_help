@@ -23,11 +23,13 @@ class A:
           this.name = name
 
 class B:
-      def __init__(this, name):
-          this.name = name
+      def __init__(this, age):
+          this.age = age
           
 class  C(A,B):
-      pass
+      def __init__(this,name,age):
+          A.__init__(this,name)
+          B.__init__(this.age)
 
 /////Show method order of a Class////////////////////////////
 print(C.__mro__)    //mro = method order resolution
