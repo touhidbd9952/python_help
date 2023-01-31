@@ -57,3 +57,19 @@ def _init_(self):
 print(dir(classobjname))  // print(dir(p1))
 
 
+////////////////////////////////////////////////////////////////
+/////////////////Meta Class///////////////////////
+1. when a class is created, it actually created in Meta Class. Meta class is known as class of class
+2. in python, everything is object
+3. every veriable has a class (string, integer,...)
+4. one of Meta Class name is "type"
+
+  str1 = "your text"
+  print(type(str1)) //class string
+  
+  class A:
+      pass
+  
+  print(type(A)) //class type
+  
+  
