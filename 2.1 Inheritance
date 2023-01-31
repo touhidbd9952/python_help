@@ -32,9 +32,9 @@ class  C(A,B):
           B.__init__(this.age)
       
       def hello(this):
-          print("Hello everybody")
+          print(f"Name: {this.name} Age: {this.age}")
 
-obj1 = C()
+obj1 = C("Touhid",39)
 obj1.hello()
 
 
