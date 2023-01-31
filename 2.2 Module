@@ -42,7 +42,11 @@ This file can be include in project.
             print(result1)
             print(result2)
 
+//if module file is located inside a folder
+from  foldername.modulefilename  import *
 
+    //print(dir(foldername.modulefilename))   and view all content
+    
 
 //////Built-in Modules////////////////////////////////////////////////
 
