@@ -16,9 +16,9 @@ This file can be include in project.
                 def show_message(self):
                     print(f"Name: {self.name}, Age: {self.age}")
                     
-    2. in another file use "mymodule"
+    2. in another file "abc.py" use "myhelp" module
     
-          import myhelp      //add module file
+          import myhelp      //add module
 
           myhelp.greeting("Jonathan")  // access module
           obj1 = myhelp.A("Touhid",39)
