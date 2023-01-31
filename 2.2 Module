@@ -20,6 +20,8 @@ This file can be include in project.
     
           import myhelp      //add module
 
+          //to see all information of a file, print(dir(myhelp))
+          
           myhelp.greeting("Jonathan")  // access module
           obj1 = myhelp.A("Touhid",39)
           obj1.show_message() //Name: Touhid, Age: 39
