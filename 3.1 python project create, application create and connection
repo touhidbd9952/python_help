@@ -20,7 +20,9 @@ dir    //to see all info
 
 3. step: run project
 --------------------------------------------
-python  manage.py  runserver
+go to My_First_Project -->cd My_First_Project   (enter)
+
+	python  manage.py  runserver
 
 4. step: create project application(login, registration, ....) inside project folder
 ------------------------------------------------------------------------------------
