@@ -4,16 +4,25 @@ This file can be include in project.
 
 /////Create a Module and use//////
 
-    1. write below code in a file and save it as "mymodule.py"
+    1. write below code in a file and save it as "myhelp.py"
     
           def greeting(name):
-            print("Hello, " + name)
-            
+                print("Hello, " + name)
+          
+          class A:
+                def __init__(self,name,age):
+                    self.name = name
+                    self.age = age
+                def show_message(self):
+                    print(f"Name: {self.name}, Age: {self.age}")
+                    
     2. in another file use "mymodule"
     
-          import mymodule      //add module file
+          import myhelp      //add module file
 
-          mymodule.greeting("Jonathan")  // access module
+          myhelp.greeting("Jonathan")  // access module
+          obj1 = myhelp.A("Touhid",39)
+          obj1.show_message() //Name: Touhid, Age: 39
        
 
 //////Built-in Modules////////////////////////////////////////////////
