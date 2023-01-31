@@ -1,0 +1,37 @@
+///////python project create by Django Framework////////////////////////////
+1. create a new project folder
+2. login project folder and create  main project
+3. run project
+4. create project application (login, registration, .....) in project folder
+    but outside main project
+5. connect module with main project
+
+1. step: create project folder
+-------------------------------------------
+create project folder name "My_First_Project"
+
+cd My_First_Project   //enter
+
+2. step: create main project
+-------------------------------------------
+django-admin  startproject  My_First_Project
+
+dir    //to see all info
+
+3. step: run project
+--------------------------------------------
+python  manage.py  runserver
+
+4. step: create project application(login, registration, ....) inside project folder
+------------------------------------------------------------------------------------
+python  manage.py  startapp  registration
+
+5. step: connect "registration" application with main project
+-----------------------------------------------------------------------
+a. go to main project --> settings.py
+
+	INSTALLED_APPS = [
+		.
+		.
+	   'registration',
+	]
