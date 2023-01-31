@@ -59,7 +59,7 @@ MYVAR = "John"
 myvar2 = "John" 
 
 ////get the data type of a variable/////////////
-type(x)
+type(x)   //type(yourvariablename)
 
 a = 4
 A = "Sally"
