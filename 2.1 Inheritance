@@ -31,7 +31,7 @@ class  C(A,B):
           A.__init__(this,name)
           B.__init__(this.age)
       
-      def hello():
+      def hello(this):
           print("Hello everybody")
 
 obj1 = C()
