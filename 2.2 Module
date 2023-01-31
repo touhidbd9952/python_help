@@ -15,6 +15,10 @@ This file can be include in project.
                     self.age = age
                 def show_message(self):
                     print(f"Name: {self.name}, Age: {self.age}")
+                
+                def add(self,x,y):
+                    return x+y
+                
                     
     2. in another file "abc.py" use "myhelp" module
     
@@ -26,6 +30,14 @@ This file can be include in project.
           obj1 = myhelp.A("Touhid",39)
           obj1.show_message() //Name: Touhid, Age: 39
        
+
+///////To import particular function from a module file//////////////////////
+
+            from myhelp import add
+            result = add(10,5)
+            print(result)
+
+
 
 //////Built-in Modules////////////////////////////////////////////////
 
