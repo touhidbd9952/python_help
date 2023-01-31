@@ -18,6 +18,9 @@ This file can be include in project.
                 
                 def add(self,x,y):
                     return x+y
+                    
+                def multiplication(self,x,y):
+                    return x*y
                 
                     
     2. in another file "abc.py" use "myhelp" module
@@ -33,9 +36,11 @@ This file can be include in project.
 
 ///////To import particular function from a module file//////////////////////
 
-            from myhelp import add
-            result = add(10,5)
-            print(result)
+            from myhelp import add,multiplication       //if need to add all function write " from myhelp import * "
+            result1 = add(10,5)
+            result2 = multiplication(10,5)
+            print(result1)
+            print(result2)
 
 
 
