@@ -1,0 +1,128 @@
+Browser (request)   =====> urls.py (route)
+	/\|		||
+	||		||
+	||	                  \/
+	===response==== views.py
+
+//////Step-1: Basic Project Structure///////////////////////////////////////////////////
+woodyengineering
+	|
+	WoodyEngineering
+		|
+		| __pycache__(folder)
+		|
+		| __init__.py
+		| settings.py (config file)
+		| urls.py  (route file)
+		| wsgi.py
+
+///////Step-2: Add an application named "amphibious" in  woodyengineering/////////////
+
+woodyengineering
+	|
+	amphibious
+	|	|
+	|	migration (folder)
+	|	|
+	|	|__init__.py
+	|	| admin.py
+	|	| apps.py
+	|	| models.py
+	|	| tests.py
+	|	| views.py (controller)
+	|
+	woodyengineering
+		|
+		| __pycache__(folder)
+		|
+		| __init__.py
+		| settings.py (config file)
+		| urls.py  (route file)
+		| wsgi.py
+
+////Step-3: use controller///////////////////////
+in views.py       of your application (amphibious)
+---------------------
+from  django.shortcuts  import  render
+from  django.http  import  HttpResponse
+
+//function index
+def  index(request):
+	return HttpResponse("This is home page <a href='/contact'>Contact</a>")
+
+//function contact
+def contact(request):
+	return HttpResponse("This is contact page <a href='/'>Home</a>")
+
+/////Step-4: route (main route)/////////////////////////////////
+in urls.py           of main project (woodyengineering)
+----------------------
+from  django.contrib  import  admin
+from  django.urls  import  path
+from  first_app  import  views   //add views_controller in route
+
+//write all route in urlpattern
+urlpatterns = [
+	path('admin/', admin.site.urls),
+	path('index/', views.index, name='index'),      //path('url', controllername.functionname, name='routename')
+	path('home/', views.index, name='index'), 
+	path('', views.index, name='index'), 
+	path('contact/', views.contact, name='contact'),
+]
+
+///////Create different route for each application name/////////////
+//create a file for route named as urls.py in amphibious (application)
+
+woodyengineering
+	|
+	amphibious
+	|	|
+	|	migration (folder)
+	|	|
+	|	|__init__.py
+	|	| admin.py
+	|	| apps.py
+	|	| models.py
+	|	| tests.py
+	|	| urls.py  (route file)   //use for amphibious
+	|	| views.py (controller) //use for amphibious
+	|
+	woodyengineering
+		|
+		| __pycache__(folder)
+		|
+		| __init__.py
+		| settings.py (config file)
+		| urls.py  (route file)
+		| wsgi.py
+
+/////connect application route in main route/////////////////////////////////
+
+in urls.py           of main project (woodyengineering)
+----------------------
+from  django.contrib  import  admin
+from  django.urls  import  path
+from  django.conf.urls  import  include   //import include for url connection
+
+urlpatterns = [
+	path('admin/', admin.site.urls),
+	path('amphibious/',  include('amphibious.urls')),   //connect route
+]
+
+
+/////now write all route related with amphibious application in ---> amphibious/urls.py////////
+
+in urls.py   of amphibious
+_________
+
+from  django.conf.urls  import  url
+from  django.urls  import   path
+from  amphibious  import  views   // contoller
+
+urlpatterns =[
+	path('',  views.index,  name='index'),
+	path('/aboutus/',  views.aboutus,  name='aboutus'),
+]
+
+
+////// now write function in "views" controller of amphibious///////////////////////
