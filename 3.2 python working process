@@ -1,8 +1,8 @@
 Browser (request)   =====> urls.py (route)
-	/\		||
-	||		||
-	||	        \/
-	===response====< views.py
+	/\			||
+	||			||
+	||	        	\/
+	===response======< views.py (controller)
 
 //////Step-1: Basic Project Structure///////////////////////////////////////////////////
 woodyengineering
