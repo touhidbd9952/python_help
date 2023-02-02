@@ -1,8 +1,8 @@
 Browser (request)   =====> urls.py (route)
-	/\|		||
+	/\		||
 	||		||
-	||	                  \/
-	===response==== views.py
+	||	        \/
+	===response====< views.py
 
 //////Step-1: Basic Project Structure///////////////////////////////////////////////////
 woodyengineering
@@ -126,3 +126,73 @@ urlpatterns =[
 
 
 ////// now write function in "views" controller of amphibious///////////////////////
+
+
+///////////////////Step-5: Templates ////////////////////////////////////////////////////////////////////////////
+step-a:
+---------
+1. create a folder in main project (woodyengineering) name as "templates"
+2. create one folder for each application. for example we will create a folder
+     name as "amphibious"
+3. now, we will create all files and folders related with views of "amphibious" in
+    this folder. for home page, create a file "index.html"
+
+	woodyengineering
+	|-----------amphibious(application folder)
+	|	|------urls.py(route file)
+	|	|------view.py (controller file)
+	|-----------steelfabrication(application folder)
+	|-----------woodyboats(application folder)
+	|
+	|-----------templates(views folder)  
+	|              	|------amphibious
+	|	|	|----index.html
+	|	|------steelfabrication
+	|	|------woodyboats
+	|
+	|------------woodyengineering(main project)
+		|-----urls.py (main route file)
+		|-----settings.py(config file)
+
+step-b
+---------
+connect "templates" folder in "settings.py" of main project
+
+1. open settings.py
+2. create a variable "TEMPLATES_DIR" with path under "BASE_DIR"
+
+	TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
+3. "TEMPLATES_DIR" add in "DIRS of TEMPLATES[ ]" dictionary
+
+	'DIRS':  [TEMPLATES_DIR,],
+
+4. now, go to views.py (controller of amphibious) and write below code to show html file as view page
+
+    views.py (controller)
+----------------------------
+	from  django.shortcuts  import render
+	from  django.http  import HttpResponse
+	
+	def index(request):
+		//diction = {} // templates folder path
+		diction = {'text_1': 'I am a text sent from views.py'} // we can pass data by context
+		return render(request, 'amphibious/index.html', context =diction)
+
+index.html     in amphibious
+-------------------------------------
+	<html>
+	   <head>
+		<title>Amphibious</title>
+	  </head>
+	  <body>
+		<h1> home page of amphibious </h1>
+
+		{{ text_1 }}
+
+	  </body>
+	</html>
+	
+
+
+
