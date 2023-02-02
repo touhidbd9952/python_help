@@ -194,5 +194,57 @@ index.html     in amphibious
 	</html>
 	
 
+//////////////////////Image, css, js, font,.... add in html///////////////////////////////////////////////////
+step:1
+we will create a folder "static" in main project (woodyengineering).
+
+	static --> "images"
+	static --> "css"
+	static --> "js" 
+
+	static --> images --> amphibious
+	static --> images --> steelfabrication
+	static --> images --> woodyboats
+
+	static --> css --> amphibious
+	static --> js --> steelfabrication
+	static --> font --> woodyboats
+
+step:2
+//connect "statice" folder in settings.py (main project)
+---------------------------------------------------------------------------------------------------
+
+	STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+//add in "STATIC_URL"      //if STATICFILES_DIRS[ ] not exist create it
+---------------------------------------------------------------------------------------------------
+	
+	STATIC_URL  =  '/static'
+	STATICFILES_DIRS  = [
+		STATIC_DIR, 
+	]
+	
+//in index.html (amphibious), add image, css, js
+-----------------------------------------------------------------------------------------------------
+	
+	<!DOCTYPE html>
+	{% load   staticfiles %}                     //to load image, css, js from static folder
+	<html>
+	   <head>
+		<title>Amphibious</title>
+		
+		<link rel="stylesheet" href="{% static "css/amphibious/style1.css"%}">
+		<script src="{% static "css/amphibious/style1.js"%}"></script>
+
+	  </head>
+	  <body>
+		<h1> home page of amphibious </h1>
+
+		{{ text_1 }}
+		
+		<img  src ="{%  static  "images/amphibious/slider.jpg"%}">
+	  </body>
+	</html>
+
 
 
