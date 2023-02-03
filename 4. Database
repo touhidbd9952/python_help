@@ -1,0 +1,52 @@
+///// Database Table Create///////////////////////////
+every application has a "models.py" file
+//help url:    docs.djangoproject.com/en/3.0/topics/db/models/
+
+woodyengineering
+|-------- amphibious
+|	|---_init_.py
+|	|--- admin.py
+|	|--- apps.py
+|	|--- models.py (Database Table Create)
+|	|--- tests.py
+|	|--- urls.py (route)
+|	|--- views.py (controller)
+|
+|--------- My_First_Project
+	|--- settings.py
+	|--- urls.py
+			
+in models.py (amphibious)
+-----------------------------------
+step-1: table design
+----------
+from django.db import models
+
+class Musician(models.Model):
+   #  id  = models.AutoField(Primary_key = True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    instrument = models.CharField(max_length=100)
+
+class Album(models.Model):
+   #  id  = models.AutoField(Primary_key = True)
+    artist = models.ForeignKey(Musician, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    release_date = models.DateField()
+    num_stars = models.IntegerField()
+
+step-2: Table Generate
+----------
+//create table
+
+	python  manage.py  migrate
+
+//connect models with amphibious application
+
+	python  manage.py  makemigrations  amphibious
+
+//now again run table create command
+
+	python  manage.py  migrate
+
+if any kind of change happen in table, we need to run above 3 command
