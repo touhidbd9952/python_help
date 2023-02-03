@@ -1,0 +1,58 @@
+///// Admin Site Create///////////////////////////
+python gives us a builtin admin panel. To use builtin admin panel we need to do below
+task
+1. add model(table) in admin.py
+2. connect/register model in admin.py
+3. create supper admin account
+
+
+every application (amphibious), has a admin.py file. By using this file, we will add and connect
+related model( table ) with admin panel.
+
+woodyengineering
+|-------- amphibious
+|	|---_init_.py
+|	|--- admin.py (add model, connect model)
+|	|--- apps.py
+|	|--- models.py (Database Table Create)
+|	|--- tests.py
+|	|--- urls.py (route)
+|	|--- views.py (controller)
+|
+|--------- My_First_Project
+	|--- settings.py
+	|--- urls.py
+
+
+in admin.py (amphibious)
+----------------------------------
+
+from  django.contrib  import  admin
+from  amphibious.models  import  Musician, Album   // add table
+
+admin.site.register(Musician)  //register your models here
+admin.site.register(Album)
+
+
+
+
+
+//////////Create Super Admin Account////////////////////////////////////////////////////////////
+
+1. open terminal and type below code
+
+	python  manage.py  createsuperuser
+	
+	username (.....) : 
+	email address : type your email
+	password: type super account password
+	password validation: y
+
+///////Run Server and Login admin//////////////////////////////////////////////////////////
+
+	python  manage.py  runserver
+
+in Browser addressbar type:   http://127.0.0.1:8000/admin
+
+
+
