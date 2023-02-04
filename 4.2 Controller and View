@@ -1,0 +1,54 @@
+///////Fontend///////////////////////////////////////////
+
+in views.py (controller of amphibious)
+--------------------------------------------------
+#import files
+
+from django.shortcuts  import render
+from django.http import HttpResponse
+from amphibious.models import Musician, Album    //use model
+
+# Create your views here.
+
+def index(request):
+	#SELECT * FROM Muscian ORDER BY first_name
+
+	musician_list = Musician.objects.order_by('first_name')
+	
+	diction = {'text-1':'This is a list of Musicians', 'musician': musician_list}
+	
+	return render(request, 'amphibious.index.html', context=diction )
+
+
+///////in index.html (amphibious) page///////////////////////////////////
+
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{% static  "css/mystyle.css" %}">
+	<title>Musician List</title>
+</head>
+<body>
+	<h1>{{ text-1 }}</h1>
+	
+	<table>
+	  <tr>
+	    <th>First Name</th>
+	    <th>Last Name</th>
+                      <th>Instrument</th>
+	 </tr>
+
+	{% for row  in  musician %}
+	<tr>
+	    <td>{{ row.first_name }}</td>
+	    <td>{{ row.last_name }}</td>
+                      <td>{{ row.instrument }}</td>
+	 </tr>
+	{% endfor %}
+	
+	</table>
+
+</body>
+<html>
