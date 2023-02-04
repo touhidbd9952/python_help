@@ -66,3 +66,15 @@ step-2: Table Generate
 	python  manage.py  migrate
 
 if any kind of change happen in table, we need to run above 3 command
+
+
+
+///use of null, blank/////////////////////
+------------------------------------------
+1. null : by default null = false.  we can set "null=True", if user not given this field value, it automatically set  "null"
+2. blank : by default blank value is True (required field). blank = False (required field)
+
+class Album(models.Model):
+	first_name = models.CharField(max_length=50)   //by default null = False
+	first_name = models.CharField(max_length=50, null=True)   
+	first_name = models.CharField(max_length=50, blank=True) 
