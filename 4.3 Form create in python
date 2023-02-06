@@ -1,0 +1,75 @@
+/////form in python////////////////////////////////////////////////
+
+1. create a file "forms.py"  in application (amphibious)
+
+2. open "forms.py" and write a class for each form
+
+in "forms.py"
+____________
+
+from django import forms
+
+class user_form(forms.Form):
+
+  #<label for="user_name">Full Name</label>
+  #<input type="text" name="user_name" placeholder="Enter your full name"
+    value="" style="width:300px" required>
+
+  user_name = forms.CharField(label="Full Name", widget = forms.TextInput(
+                         attrs = {'placehold':'Enter your full name', 'style':'width:300px'} ) )
+
+ #<input type="date">
+  user_dob = forms.DateField(label="Date of Birth", widget = forms.TextInput(
+                         attrs = {'type':'date', 'style':'width:300px'} ) )
+  
+  user_email = forms.EmailField(label="Email", widget = forms.TextInput(
+                         attrs = {'placehold':'Enter your email', 'style':'width:300px'} ) )
+
+class user_reg_form(forms.Form):
+	.
+	.
+
+
+
+3. in controller "views.py" of application (amphibious)
+
+//add library
+from django.shortcuts import render
+from django.http import HttpResponse
+from amphibious.models import Musician, Album
+from amphibious import forms
+
+//user_form
+ def get_user_form():
+	new_form = froms.user_form()
+	pagedata = {'user_form' : new_form, 'heading-1' : "User Loin Form"}
+	return render(request, 'amphibious/user_form.html', context = pagedata)
+
+
+4. create a file "user_form.html" in application (amphibious)
+
+  in user_form.html
+_________________
+
+<!DOCTYPE html>
+</html lang="en" dir="ltr">
+ <head>
+  <meta charset="utf-8">
+  <title>User Form</title>
+ </head>
+ <body>
+  <h3>{{header-1}}</h3>
+  <form action="" method="post">
+   {{ test_form.as_p }}     //convertion of form.  For paragraph "as_p", for table "as_table"
+   <input type="submit" name="submit" value="Submit">
+  </form>
+ </body>
+</html>
+
+5. set a route path in "urls.py" of application (amphibious)
+
+urlpatterns = [
+	path('user_form/', views.get_user_form, name='user_form'),
+]
+
+
