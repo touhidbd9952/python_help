@@ -1,6 +1,7 @@
 
 
-//////
+//////if you have python installed in your pc, then do the below step///////////////////////////////////
+
 1. create a project folder "PythonProjects" in d drive where your want
 2. go to "PythonProjects" and open cmd (command prompt)
 
@@ -34,6 +35,11 @@ for more help visit
 https://bobbyhadz.com/blog/django-admin-is-not-recognized-as-internal-or-external-command
 
 
+
+
+
+
+//////////////////Python Installation in PC/////////////////////////////////////////////////////////////////////////
 
 Many PCs and Macs will have python already installed.
 
