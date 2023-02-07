@@ -1,39 +1,42 @@
 ///////python project create by Django Framework////////////////////////////
-1. create a new project folder
-2. login project folder and create  main project
+1. create a new project folder (woodyengineering)
+2. login project folder and create  main project (woodyengineering)
 3. run project
-4. create project application (login, registration, .....) in project folder
+4. create project application (steelfabrication, amphibious, .....) in project folder
     but outside main project
 5. connect application with main project
 
 1. step: create project folder
 -------------------------------------------
-create project folder name "My_First_Project"
+create project folder name "woodyengineering"
 
-cd My_First_Project   //enter
+cd woodyengineering   //enter
 
 2. step: create main project
 -------------------------------------------
-django-admin  startproject  My_First_Project
+django-admin  startproject  woodyengineering
 
 dir    //to see all info
 
 3. step: run project
 --------------------------------------------
-go to My_First_Project -->cd My_First_Project   (enter)
+go to woodyengineering -->cd woodyengineering   (enter)
 
 	python  manage.py  runserver
 
-4. step: create project application(login, registration, ....) inside project folder
+4. step: create project application(steelfabrication, amphibious, ....) inside project folder
 ------------------------------------------------------------------------------------
-python  manage.py  startapp  registration
+python  manage.py  startapp  amphibious
 
-5. step: connect "registration" application with main project
+5. step: connect "amphibious" application with main project
 -----------------------------------------------------------------------
 a. go to main project --> settings.py
+
+settings.py of main project (woodyengineering)
+____________________________
 
 	INSTALLED_APPS = [
 		.
 		.
-	   'registration',
+	   'amphibious',
 	]
