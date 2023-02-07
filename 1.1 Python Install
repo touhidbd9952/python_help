@@ -21,7 +21,7 @@ python file has extention (.py)
 ///////////////////////////////////////////////////////////////////
 
 ////Python version check in command prompt/////////
-c:\users\touhid>python
+c:\users\touhid>python --version
 
 ////Installation python///////////////////////////
 1. go to google and type "python download" and download python from python.org
