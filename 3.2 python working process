@@ -70,8 +70,10 @@ urlpatterns = [
 	path('contact/', views.contact, name='contact'),
 ]
 
-///////Create different route for each application name/////////////
-//create a file for route named as urls.py in amphibious (application)
+
+/////////////////////////////// Create different route for each application name ///////////////////////////////////////////////////////////
+
+1. create a file for route named as urls.py in amphibious (application)
 
 woodyengineering
 	|
@@ -96,7 +98,7 @@ woodyengineering
 		| urls.py  (route file)
 		| wsgi.py
 
-/////connect application route in main route/////////////////////////////////
+2. connect application route in main route/////////////////////////////////
 
 in urls.py           of main project (woodyengineering)
 ----------------------
@@ -110,7 +112,7 @@ urlpatterns = [
 ]
 
 
-/////now write all route related with amphibious application in ---> amphibious/urls.py////////
+3. now write all route related with amphibious application in ---> amphibious/urls.py////////
 
 in urls.py   of amphibious
 _________
@@ -123,6 +125,9 @@ urlpatterns =[
 	path('',  views.index,  name='index'),
 	path('/aboutus/',  views.aboutus,  name='aboutus'),
 ]
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 ////// now write function in "views" controller of amphibious///////////////////////
