@@ -1,3 +1,40 @@
+
+
+//////
+1. create a project folder "PythonProjects" in d drive where your want
+2. go to "PythonProjects" and open cmd (command prompt)
+
+3. 👇️ create virtual environment:  
+
+        python -m venv venv
+
+4. 👇️ activate on Windows (cmd.exe):
+      
+        venv\Scripts\activate.bat
+
+5. 👇️ install django in the virtual environment:
+
+        pip install django
+
+6. 👇️ create your django project:
+
+      django-admin startproject yourprojectname
+      
+7. 👇️ go to "yourprojectname":
+
+      cd yourprojectname
+
+8. 👇️ run your project:
+
+      python manage.py runserver
+
+
+for more help visit
+----------------------
+https://bobbyhadz.com/blog/django-admin-is-not-recognized-as-internal-or-external-command
+
+
+
 Many PCs and Macs will have python already installed.
 
 To check if you have python installed on a Windows PC:
