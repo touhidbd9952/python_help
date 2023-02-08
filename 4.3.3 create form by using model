@@ -17,7 +17,13 @@ class UserForm(froms.ModelForm):
 
 in views.py (controller)
 --------------------------------
+//add library
+from django.shortcuts import render
+from django.http import HttpResponse
+from amphibious.models import Musician, Album
+from amphibious import forms
 
+//user_form function
 def  user_form(request):
 	new_form = forms.UserForm()    // get form before submit
 	diction = {'UserForm': new_form, 'form_header':'User Form'}
