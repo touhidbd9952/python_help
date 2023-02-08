@@ -40,12 +40,12 @@ def form(request):
 		user_dob = new_form.cleaned_data['user_dob']
 		user_email = new_form.cleaned_data['user_email']
 		boolean_field = new_form.cleaned_data['boolean_field']
-
-	//update variable
-	diction.update({'user_name': user_name})
-	diction.update({'user_dob': user_dob})
-	diction.update({'user_email': user_email})
-	diction.update({'boolean_field': boolean_field})
-	diction.update({'form_submited': "yes"})
+		
+		//update variable
+		diction.update({'user_name': user_name})
+		diction.update({'user_dob': user_dob})
+		diction.update({'user_email': user_email})
+		diction.update({'boolean_field': boolean_field})
+		diction.update({'form_submited': "yes"})
 
 	return rendere(request, 'first_app/form.html', context=diction)
