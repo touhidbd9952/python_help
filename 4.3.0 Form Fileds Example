@@ -1,6 +1,13 @@
-///////
-in forms.py
+For more help about form and its fields
+----------------------------------------------------
+docs.djangoproject.com/en/3.0/ref/forms/#built-in-field-classes
+
+
+///////Use of Some Most Common Fields//////////////////////////////////////////////////////////////
+
+in forms.py of your application
 -----------------------
+
 from django import froms
 
 class user_form(froms.Form):
