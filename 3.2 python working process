@@ -166,7 +166,7 @@ step-a:
 
 	woodyengineering
 	|
-	||-----static(folder)
+	|------static(folder)
 	|	|---css(folder)
 	|	|---js
 	|	|---images
