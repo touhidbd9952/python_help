@@ -1,0 +1,21 @@
+////////////////////////////Relative Url///////////////////////////////////////////////////////////////
+
+//in urls.py of application (amphibious)///////////////////////////////
+----------------------------------------------------------
+from  django.conf.urls  import  url
+from  django.urls  import  path
+from  first_app  import  views
+
+
+app_name = "amphibious_app"
+
+
+urlpatterns = [
+	path('', views.index, name = 'index'),
+	path('user_login_form', views.index, name = 'userloginform'),
+]
+
+
+//(in index.html page) routing ////////////////////////////////////////////////
+
+<a href="{% url  'amphibious_app:userloginform'  %}">User Login Form</a>
