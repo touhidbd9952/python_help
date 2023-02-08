@@ -1,0 +1,23 @@
+///////
+in forms.py
+-----------------------
+from django import froms
+
+class user_form(froms.Form):
+
+  //password
+	password = forms.CharField(max_length=12, min_length=8)
+  
+  //dropdown/select
+	rating = forms.ChoiceField(choices=(('','Select Option'),('1','Not Good'),('2','Average'),('3','Good')), required=False)
+	
+  //Radio button
+	gender = forms.ChoiceField(choices=(('',''),('m','Male'),('f','Female')), widget = forms.RadioSelect)
+	
+  //Multiple Choice Field/Check Box Field 
+	choiceslist = (('','--Select Option--'),('1','Fontend'),('2','Backend'))
+	//job_skill = forms.MultipleChoiceField(choices=choiceslist, widget = forms.RadioSelect)
+	job_skill = forms.MultipleChoiceField(choices=choiceslist, widget = forms.CheckboxSelectMultiple)
+  
+  //condition (terms and condition)
+  agree = froms.BooleanField()        // a check box field (for True/False)
