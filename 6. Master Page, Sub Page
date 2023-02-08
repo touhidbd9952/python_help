@@ -1,6 +1,6 @@
 //////Master Page, Sub Page///////////////////
 
-1. create a file "base.html" in your application "amphibious"
+1. create a file "master.html" in your application "amphibious"
 2. write below code in "master.html", 
 	before {% block body_block %}   and after {% endblock %} will show 
 as master page content for all page.
