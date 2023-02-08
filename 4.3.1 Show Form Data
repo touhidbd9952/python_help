@@ -2,8 +2,10 @@ form.html of application (amphibious)
 ----------------------
 
 <form action="" method="POST">
-  {{ test_form.as_p}}
+  
   {% csrf_token %}
+  
+  {{ test_form.as_p}}   //show form in para wise
   
   <input type="submit" name="submit" value="Save">
 </form>
@@ -16,7 +18,7 @@ form.html of application (amphibious)
 {% endif %}
 
 
-in views.py  of application (amphibious)
+in views.py  controller of application (amphibious)
 ----------------
 
 def form(request):
