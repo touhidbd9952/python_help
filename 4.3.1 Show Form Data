@@ -5,7 +5,7 @@ form.html of application (amphibious)
   
   {% csrf_token %}
   
-  {{ test_form.as_p}}   //show form in para wise
+  {{ user_form.as_p}}   //show form in para wise
   
   <input type="submit" name="submit" value="Save">
 </form>
