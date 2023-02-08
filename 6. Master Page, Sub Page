@@ -1,0 +1,38 @@
+//////Master Page, Sub Page///////////////////
+
+1. create a file "base.html" in your application "amphibious"
+2. write below code in "master.html", 
+	before {% block body_block %}   and after {% endblock %} will show 
+as master page content for all page.
+
+
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+    <nav class="">
+	your menu code
+    </nav>
+	
+	{% block body_block %}
+
+
+	{% endblock %}
+
+</body>
+</html>
+
+3. in subpage "home.html" in your application add master page
+
+<!DOCTYPE html >
+{%  extends  "amphibious/master.html"  %}
+{%  block  body_block%}
+
+<h1> your page html code </h1>
+
+{%  endblock  %}
+
