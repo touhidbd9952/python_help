@@ -1,0 +1,61 @@
+/////form validation///////////////////////////////
+//for more help
+docs.djangoproject.com/en/3.0/ref/validators
+
+
+
+in forms.py 
+-------------------
+
+from  django  import  forms  //add forms library
+from  django.core  import  validators   //add validator library
+
+def  even_or_not(value):
+	if  value%2==1:
+		raise  forms.ValidationError("Please Insert an Even Number")
+
+class  user_form(forms.Form):
+	user_name = froms.CharField(validators = [validators.MaxLengthValidator(10),
+		validators.MinLengthValidator(5)])
+
+	user_email = forms.EmailField()
+	user_vmail = forms.EmailField()
+	
+	number_field1 = froms.IntegerField(validators = [validators.MaxValueValidator(10),
+		validators.MinValueValidator(5)])
+
+	number_field2 = froms.IntegerField(validators = [even_or_not])
+
+
+	def  clean(self):
+		all_cleaned_data = super().clean()   // get all data of userform
+		user_email  = all_cleaned_data['user_email']
+		user_vmail  = all_cleaned_data['user_vmail']
+		if user_email  != user_vmail:
+			raise forms.ValidationError("Fields Don't Match")  //show error message
+		
+
+
+
+in views.py (controller)
+--------------------
+
+//user login
+def  user_login_form(request):
+
+	new_user_form = forms.user_form()  //get form before post
+	diction = {'user_form': new_user_form, 'heading_1': "User Login Form"}  //store form in variable
+	
+	if request.method == 'POST':
+		new_form = forms.user_form(request.POST) // get form after post
+		diction.update({'user_form': new_user_form})   //update user_form with error message
+		
+		if new_form.is_valid():
+			diction.update({'user_name': new_form.cleaned_data['user_name']})
+			diction.update({'user_pass': new_form.cleaned_data['user_pass']})
+			diction.update({'form_submited': "Yes"})
+
+	return render(request, 'first_app/user_login_form.html', context = diction)
+
+
+
