@@ -4,6 +4,8 @@ Browser (request)   =====> urls.py (route)
 	||	        	\/
 	===response======< views.py (controller)
 
+
+-------------------- Part 1  ----------------------------------------------------------------------------------------------------------
 //////Step-1: Basic Project Structure///////////////////////////////////////////////////
 woodyengineering
 	|
@@ -16,7 +18,9 @@ woodyengineering
 		| urls.py  (route file)
 		| wsgi.py
 
+
 ///////Step-2: Add an application named "amphibious" in  woodyengineering/////////////
+
 
 woodyengineering
 	|
@@ -40,8 +44,10 @@ woodyengineering
 		| urls.py  (route file)
 		| wsgi.py
 
-////Step-3: use controller///////////////////////
-in views.py       of your application (amphibious)
+
+////Step-3: use controller///////////////////////////////////////////////////////////
+
+in views.py (controller)       of your application (amphibious)
 ---------------------
 from  django.shortcuts  import  render
 from  django.http  import  HttpResponse
@@ -54,7 +60,9 @@ def  index(request):
 def contact(request):
 	return HttpResponse("This is contact page <a href='/'>Home</a>")
 
-/////Step-4: route (main route)/////////////////////////////////
+
+/////Step-4: route (main route)///////////////////////////////////////////////////////
+
 in urls.py           of main project (woodyengineering)
 ----------------------
 from  django.contrib  import  admin
@@ -71,9 +79,16 @@ urlpatterns = [
 ]
 
 
-/////////////////////////////// Create different route for each application name ///////////////////////////////////////////////////////////
 
-1. create a file for route named as urls.py in amphibious (application)
+
+
+-------------------------------Part 2 -----------------------------------------------------------------------------------------------------------
+
+
+
+//////Create different route for each application name /////////////////////////////////////
+
+1. create a file for route named as "urls.py" in amphibious (application)
 
 woodyengineering
 	|
@@ -129,11 +144,16 @@ urlpatterns =[
 ]
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+-----------------Part 3 ------------------------------------------------------------------------------------------------------------------------
 
 
 ////// now write function in "views" controller of amphibious///////////////////////
 
+
+
+------------------ Part 4 ----------------------------------------------------------------------------------------------------------------------
 
 ///////////////////Step-5: Templates ////////////////////////////////////////////////////////////////////////////
 step-a:
@@ -145,34 +165,45 @@ step-a:
     this folder. for home page, create a file "index.html"
 
 	woodyengineering
+	|
+	||-----static(folder)
+	|	|---css(folder)
+	|	|---js
+	|	|---images
 	|-----------amphibious(application folder)
-	|	|------urls.py(route file)
-	|	|------view.py (controller file)
+	|		|------urls.py(route file)
+	|		|------view.py (controller file)
+	|
 	|-----------steelfabrication(application folder)
 	|-----------woodyboats(application folder)
 	|
 	|-----------templates(views folder)  
 	|              	|------amphibious
-	|	|	|----index.html
-	|	|------steelfabrication
-	|	|------woodyboats
+	|		|	|----index.html
+	|		|------steelfabrication
+	|		|------woodyboats
 	|
 	|------------woodyengineering(main project)
-		|-----urls.py (main route file)
-		|-----settings.py(config file)
+			|
+			|-----urls.py (main route file)
+			|-----settings.py(config file)
 
-step-b
----------
+step-b : remplate registration
+--------------------------------
 connect "templates" folder in "settings.py" of main project
 
 1. open settings.py
 2. create a variable "TEMPLATES_DIR" with path under "BASE_DIR"
+                                                      ---------
 
 	TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+	
 
 3. "TEMPLATES_DIR" add in "DIRS of TEMPLATES[ ]" dictionary
+                          ----------------------      
 
 	'DIRS':  [TEMPLATES_DIR,],
+
 
 4. now, go to views.py (controller of amphibious) and write below code to show html file as view page
 
