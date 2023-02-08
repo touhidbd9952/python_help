@@ -7,8 +7,9 @@
 in "forms.py"
 ____________
 
-from django import forms
+from django import forms   //add forms lib
 
+//user_form
 class user_form(forms.Form):
 
   #<label for="user_name">Full Name</label>
@@ -25,6 +26,7 @@ class user_form(forms.Form):
   user_email = forms.EmailField(label="Email", widget = forms.TextInput(
                          attrs = {'placehold':'Enter your email', 'style':'width:300px'} ) )
 
+//user_reg_form
 class user_reg_form(forms.Form):
 	.
 	.
@@ -39,7 +41,7 @@ from django.http import HttpResponse
 from amphibious.models import Musician, Album
 from amphibious import forms
 
-//user_form
+//show user_form in user_form.html page
  def get_user_form():
 	new_form = froms.user_form()
 	pagedata = {'user_form' : new_form, 'heading-1' : "User Loin Form"}
@@ -48,7 +50,7 @@ from amphibious import forms
 
 4. create a file "user_form.html" in application (amphibious)
 
-  in user_form.html
+  in user_form.html 
 _________________
 
 <!DOCTYPE html>
@@ -60,7 +62,10 @@ _________________
  <body>
   <h3>{{header-1}}</h3>
   <form action="" method="post">
+   {% csrf_token %}
+   
    {{ test_form.as_p }}     //convertion of form.  For paragraph "as_p", for table "as_table"
+   
    <input type="submit" name="submit" value="Submit">
   </form>
  </body>
