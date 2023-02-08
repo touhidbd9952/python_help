@@ -1,0 +1,32 @@
+in forms.py
+----------------------
+//add library
+from django  import  forms
+from django.core  import  validators
+from  first_app  import   models  // add model.py in your application
+
+
+//create class that will make form
+class UserForm(froms.ModelForm):
+	class Meta:
+		model = models.User  //use particular model from models
+		//fields = "__all__"      //create a form with all field of model
+		fields = ('first_name', 'last_name')  //write the name of those field that needed
+		//exclude = ['first_name'] //write the name of those field that not need
+
+
+in views.py (controller)
+--------------------------------
+
+def  user_form(request):
+	new_form = forms.UserForm()    // get form before submit
+	diction = {'UserForm': new_form, 'form_header':'User Form'}
+	if  request.method == 'POST':
+		new_form = forms.UserForm(request.POST)    // get form after submit
+		diction.update({'UserForm': new_form})
+
+		if new_form.is_valid():
+			new_form.save(commit = True)  // save data in db
+			return index(request)  // if save, call index function 
+
+	return render(request, 'amphibious/user_form.html', context = diction )
