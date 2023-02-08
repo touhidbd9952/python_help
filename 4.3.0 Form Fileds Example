@@ -7,8 +7,17 @@ class user_form(froms.Form):
    //input field
 	user_name = forms.CharField(label="Full Name", widget = forms.TextInput(
                          attrs = {'placehold':'Enter your full name', 'style':'width:300px'} ) )
+
+   //input type="date"
+  user_dob = forms.DateField(label="Date of Birth", widget = forms.TextInput(
+                         attrs = {'type':'date', 'style':'width:300px'} ) )
+  
+  //input type="email"
+  user_email = forms.EmailField(label="Email", widget = forms.TextInput(
+                         attrs = {'placehold':'Enter your email', 'style':'width:300px'} ) )
+			 
   //password
-	password = forms.CharField(max_length=12, min_length=8)
+	password = forms.CharField(label="Password", max_length=12, min_length=8)
   
   //dropdown/select
 	rating = forms.ChoiceField(choices=(('','Select Option'),('1','Not Good'),('2','Average'),('3','Good')), required=False)
