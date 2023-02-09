@@ -6,6 +6,9 @@
 as master page content for all page.
 
 
+in master.html of application (amphibious)
+------------------------------------------
+
 <!DOCTYPE html >
 <html>
 <head>
