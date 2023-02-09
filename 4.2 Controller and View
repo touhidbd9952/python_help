@@ -6,7 +6,8 @@ in views.py (controller of amphibious)
 
 from django.shortcuts  import render
 from django.http import HttpResponse
-from amphibious.models import Musician, Album    //use model
+from amphibious.models import Musician, Album    //add models.py
+from apphibious  import  forms  //add forms.py
 
 # Create your views here.
 
