@@ -20,8 +20,31 @@ in models.py (amphibious)
 -----------------------------------
 step-1: table design
 ----------
+
 from django.db import models
 
+# Create your models here.
+class Category(models.Model):
+   #  id  = models.AutoField(Primary_key = True)
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def  __str_(self):
+		        return "Category: "+self.name + " ,Created: "+ self.created_at
+			
+
+class SubCategory(models.Model):
+    #  id  = models.AutoField(Primary_key = True)
+    cat = models.ForeignKey(Category, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def  __str_(self):
+		        return "SubCategory: "+self.name + " ,cat-id"+self.name+" ,Created: "+ self.created_at
+			
+			
 class Musician(models.Model):
    #  id  = models.AutoField(Primary_key = True)
     first_name = models.CharField(max_length=50)
