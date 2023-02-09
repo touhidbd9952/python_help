@@ -22,6 +22,7 @@ Step-3: Database Table
 Step-4: Admin Panel
 
 Step-5: Application Task (route, model, view, controller)
+---------------------------------------------------------
 
 1. Make seperate route (your_appsname/urls.py) and connect with main route(urls.py)
 2. Create "Template" Folder as views and register in "settings.py"
