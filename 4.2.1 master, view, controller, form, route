@@ -1,0 +1,127 @@
+//////////////////master.html//////////////////////////////////////////////
+<a href="{%  url  'first_app:index'  %}"></a>
+<a href="{%  url  'first_app:album_form'  %}"></a>
+<a href="{%  url  'first_app:musician_form'  %}"></a>
+
+//////////////////urls.py//////////////////////////////////////////////////////
+from django.conf.urls  import  url
+from django.urls import path
+from first_app import views
+
+app_name = "first_app"
+
+urlpatterns = [
+	path('', views.index, name='index')
+	path('add_album/', views.album_form, name='album_form')
+	path('add_musician/', views.index, name='musician_form')
+]
+
+
+//////////////////in views.py (controller)  /////////////////////////
+--------------------------
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from first_app.models import Musician, Album
+from first_app import forms
+
+def index(request):
+	//get all data
+	musician_list = Musician.objects.all()
+	//get all data order by first_name
+	musician_list = Musician.objects.order_by('first_name')
+	
+	diction ={'title':"Home Page"}
+	return render(request, 'first_app/index.html', context = diction)
+
+def album_list(request):
+	diction = {'title':"List of Albums"}
+	return render(request, 'first_app/album_list.html', context = diction)
+
+def musician_form(request):
+	form = froms.MusicianForm()
+	diction = {'title':"Add Musician", 'musician_form': form}
+
+	if request.method == 'POST':
+		form = froms.MusicianForm(request.POST)
+	if form.is_valid():
+		form.save(commit=True)
+		return index(request)
+
+	return render(request, 'first_app/musician_form.html', context = diction)
+
+def album_form(request):
+	form = froms.AlbumForm()
+	diction = {'title':"Add Album"}
+	if request.method == 'POST':
+		form = froms.MusicianForm(request.POST)
+	if form.is_valid():
+		form.save(commit=True)
+		return index(request)
+
+	return render(request, 'first_app/album_form.html', context = diction)
+
+
+
+
+/////////forms.py//////////////////////////////////////////////////////////////
+from django  import froms
+from  first_app  import  models
+
+class MusicianForm(forms.ModelForm):
+	class Meta:
+		model = models.Musician
+		fields = "__all__"
+
+class AlbumForm(forms.ModelForm):
+	//overwride field
+	release_froms.DateField(widget = forms.TextInput(attrs = {'type':'date'}))
+	class Meta:
+		model = models.Album
+		fields = "__all__"
+
+
+///////////musician_form.html////////////////////////////////////////
+{%  extends  'first_app/master.html'  %}
+{%  block  body_block  %}
+
+<form method ="POST">
+   {{ musician_form.as_p }}
+   {%  csrf_token  %}
+   <input type = "submit" name = "submit" value = "Add" class="btn btn-primary btn-sm">
+</form>
+
+{%  endblock  %}
+
+
+/////////////view_musician.html//////////////////////////////////////////
+{%  extends  'first_app/master.html'  %}
+{%  block  body_block  %}
+
+<ul>
+  {% if musician_list %}
+     {% for  i  in   musician_list %}
+        <li>{{ i.first_name }} {{ i.last_name }} </li>
+     {% endfor %}
+  {% endif %}
+</ul>
+
+{%  endblock  %}
+
+
+///////////album_form.html////////////////////////////////////////
+{%  extends  'first_app/master.html'  %}
+{%  block  body_block  %}
+
+<form method ="POST">
+   {{ album_form.as_p }}
+   {%  csrf_token  %}
+   <input type = "submit" name = "submit" value = "Add" class="btn btn-primary btn-sm">
+</form>
+
+{%  endblock  %}
+
+
+
+
+	
