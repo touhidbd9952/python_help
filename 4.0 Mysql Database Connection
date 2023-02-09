@@ -3,7 +3,7 @@
 Step-1:
 -------------
     Install the Django MySQL Connector: You need to install the Django MySQL Connector to allow Django to connect to a MySQL database. 
-    You can install it using pip:
+    You can install it using pip in command prompt:
 
             pip install mysqlclient
 
