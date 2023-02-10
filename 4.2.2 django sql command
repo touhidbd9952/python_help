@@ -1,0 +1,14 @@
+SELECT * FROM  TableName   //sql
+tablename.objects.all()  //django
+
+SELECT * FROM TableName WHERE  id = 1   //sql
+tablename.objects.get(pk=1)  //django
+
+SELECT * FROM TableName WHERE columnName = value
+tablename.objects.filter(columnName = value)
+
+SELECT * FROM TableName WHERE columnName = value ORDER_BY columnName
+tablename.objects.filter(columnName = value).order_by('columnName')
+tablename.objects.filter(columnName = value).order_by('columnName1','columnName2')
+
+musician = Musician.objects.get(pk=musician_id).delete(0) // for delete
