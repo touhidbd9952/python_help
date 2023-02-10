@@ -1,0 +1,224 @@
+//////////////////master.html//////////////////////////////////////////////
+<a href="{%  url  'first_app:index'  %}"></a>
+<a href="{%  url  'first_app:album_form'  %}"></a>
+<a href="{%  url  'first_app:musician_form'  %}"></a>
+
+//////////////////urls.py//////////////////////////////////////////////////////
+from django.conf.urls  import  url
+from django.urls import path
+from first_app import views
+
+app_name = "first_app"
+
+urlpatterns = [
+	path('', views.index, name='index')
+	path('add_album/', views.album_form, name='album_form'),
+	path('add_musician/', views.index, name='musician_form'),
+	path('show_album_list/<int:musician_id>/', views.album_list, name='album_list'),
+	path('edit_musician_info/<int:musician_id>/', views.edit_musician_info, name='edit_musician_info'),
+	path('delete_album_info/<int:album_id>/<int:musician_id>', views.delete_album_info, name='delete_album_info'),
+]
+
+
+//////////////////in views.py (controller)  /////////////////////////
+--------------------------
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from first_app.models import Musician, Album
+from first_app import forms
+from django.dbmodels import Avg, Max, Min   // use to get average value
+
+def index(request):
+	//get all data
+	musician_list = Musician.objects.all()
+	//get all data order by first_name
+	musician_list = Musician.objects.order_by('first_name')
+	
+	diction ={'title':"Home Page"}
+	return render(request, 'first_app/index.html', context = diction)
+
+def album_list(request):
+	diction = {'title':"List of Albums"}
+	return render(request, 'first_app/album_list.html', context = diction)
+
+def musician_form(request):
+	form = froms.MusicianForm()
+	diction = {'title':"Add Musician", 'musician_form': form}
+
+	if request.method == 'POST':
+		form = froms.MusicianForm(request.POST)
+	if form.is_valid():
+		form.save(commit=True)
+		return index(request)
+
+	return render(request, 'first_app/musician_form.html', context = diction)
+
+def album_form(request):
+	form = froms.AlbumForm()
+	diction = {'title':"Add Album"}
+	if request.method == 'POST':
+		form = froms.MusicianForm(request.POST)
+	if form.is_valid():
+		form.save(commit=True)
+		return index(request)
+
+	return render(request, 'first_app/album_form.html', context = diction)
+
+
+def album_list(request, musician_id):
+	musician_info = Musician.objects.get(pk=musician_id)
+	albumlist = Album.objects.filter(musician = musician_id)
+	musician_rating = Album.objects.filter(musician = musician_id).aggregate(Avg('num_starts'))
+
+	diction = {'musician_info':musician_info, 'albumlist':albumlist, 'musician_rating':musician_rating}
+	return render(request, 'first_app/album_list.html', context=diction)
+
+def edit_musician_info(request, musician_id):
+	musician_info = Musician.objects.get(pk=musician_id)
+	form = froms.MusicianForm(instance=musician_info)
+	diction = {}
+	if request.method == 'POST':
+		form = froms.MusicianForm(request.POST, instance=musician_info)   //new info, oldinfo
+	if form.is_valid():
+		form.save(commit = True)  //for update data
+		return album_list(request, musician_id)
+
+	diction.update({'edit_from':form})
+	return render(request, 'first_app/musicia_edit_form.html', context=diction)
+
+def delete_album_info(request, album_id, musician_id):
+	album = Album.objects.get(pk=album_id).delete(0)
+
+	musician_info = Musician.objects.get(pk=musician_id)
+	albumlist = Album.objects.filter(musician = musician_id)
+	musician_rating = Album.objects.filter(musician = musician_id).aggregate(Avg('num_starts'))
+
+	diction = {'musician_info':musician_info, 'albumlist':albumlist, 'musician_rating':musician_rating}
+	diction.update({'emsg':'Data deleted'})
+	return render(request, 'first_app/album_list.html', context=diction)
+	
+	
+	
+
+
+
+
+/////////forms.py//////////////////////////////////////////////////////////////
+from django  import froms
+from  first_app  import  models
+
+class MusicianForm(forms.ModelForm):
+	class Meta:
+		model = models.Musician
+		fields = "__all__"
+
+class AlbumForm(forms.ModelForm):
+	//overwride field
+	release_froms.DateField(widget = forms.TextInput(attrs = {'type':'date'}))
+	class Meta:
+		model = models.Album
+		fields = "__all__"
+
+
+///////////musician_form.html////////////////////////////////////////
+{%  extends  'first_app/master.html'  %}
+{%  block  body_block  %}
+
+<form method ="POST">
+   {{ musician_form.as_p }}
+   {%  csrf_token  %}
+   <input type = "submit" name = "submit" value = "Add" class="btn btn-primary btn-sm">
+</form>
+
+{%  endblock  %}
+
+
+/////////////view_musician.html//////////////////////////////////////////
+{%  extends  'first_app/master.html'  %}
+{%  block  body_block  %}
+
+<ul>
+  {% if musician_list %}
+     {% for  i  in   musician_list %}
+        <li><a href="{% url  'first_app:album_list'  musician_id= i.id %}">{{ i.first_name }} {{ i.last_name }} </a></li>
+     {% endfor %}
+  {% endif %}
+</ul>
+
+{%  endblock  %}
+
+
+///////////album_form.html////////////////////////////////////////
+{%  extends  'first_app/master.html'  %}
+{%  block  body_block  %}
+
+<form method ="POST">
+   {{ album_form.as_p }}
+   {%  csrf_token  %}
+   <input type = "submit" name = "submit" value = "Add" class="btn btn-primary btn-sm">
+</form>
+
+{%  endblock  %}
+
+
+///////////album_list.html////////////////////////////////////////
+{%  extends  'first_app/master.html'  %}
+{%  block  body_block  %}
+
+<h4>Musician Name: {{musician_info.first_name}} {{musician_info.last_name}}</h4>
+<h4>Instrument: {{musician_info.instrument}} </h4>
+<h4>Rating: {{ musician_rating.num_stars_avg }}</h4>
+
+<a href="{% url  'first_app:edit_musician_info'  musician_id= musician_info.id %}"     class="btn btn-success btn-sm">Edit</a>
+
+<% if emsg %>
+<div class="alert  alert-danger">{{ emsg }}</div>
+<%endif%>
+
+<h4>Album List:</h4>
+<table class="table table-bordered">
+<tr>
+    <th>Album Name</th>
+    <th>Release Date</th>
+    <th>Rating</th>
+    <th></th>	
+</tr>
+{% if albumlist %}
+     {% for  i  in   albumlist %}
+        <tr>
+	<td> {{ i.album_name }} </td>
+	<td> {{ i.release_date | date:"M d, Y"}} </td>
+	<td> {{ i.rating }} </td>
+	<td>
+	      <a href="{% url  'first_app:delete_album_info'  album_id= i.id  musician_id=i.musician %}" onclick="return confirm('Delete This Musician?')"     class="btn btn-danger btn-sm">Delete</a>
+	</td>
+       </tr>
+     {% endfor %}
+   {% else %}
+         <tr>
+	<td colspan="2">No Record Found</td>
+       </tr>
+  {% endif %}
+
+{%  endblock  %}
+
+
+/////////////////////////musicia_edit_form.html/////////////////////////////////////////////////////////
+{%  extends  'first_app/master.html'  %}
+{%  block  body_block  %}
+
+<form method ="POST">
+   {{ edit_from.as_p }}
+   {%  csrf_token  %}
+   <input type = "submit" name = "submit" value = "Update" class="btn btn-primary btn-sm">
+</form>
+
+{%  endblock  %}
+
+
+
+
+
+
+	
