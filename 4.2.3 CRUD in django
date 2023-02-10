@@ -1,4 +1,4 @@
-//////////////////master.html//////////////////////////////////////////////
+//////////////////link in master.html page//////////////////////////////////////////////
 <a href="{%  url  'first_app:index'  %}"></a>
 <a href="{%  url  'first_app:album_form'  %}"></a>
 <a href="{%  url  'first_app:musician_form'  %}"></a>
