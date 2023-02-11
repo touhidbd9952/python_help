@@ -1,0 +1,80 @@
+you can upload python project from github to online in free for test. 
+
+1. go to "pythonanywhere.com" --> Pricing & signup --> Create a Beginner account
+2. Login 
+	Dashboard:  to see basic status of our project
+	Consoles: to work in command mode
+	Files: to see all file and folders of project related
+	Web: to do project related setup
+	Tasks: here, if we want we can set automatic setup (cron job)
+	Databases: to set database
+
+3. go to github.com and open your project from repogitory --> "Clone or download"
+	click here and copy the link
+4. click on "Consoles" --> Bash
+	git clone your-copied-github-link-paste-here  //copy from github
+	mkvirtualenv --python=/usr/bin/python3.7 djengo-env   //make-directory location python-version enverment-variable-name
+	pwd  //to see present working directory
+	ls  //to see folder and files
+	cd your-repo-name  
+	ls
+	cd your-project-application-name
+	ls
+	pwd
+	pip list  // to see what package of python is installed
+	pip install django==2.2.5    // install django with required version (check your django version from pc)
+	pip install pillow  // install image package
+	pip lis
+
+   a. copy the path ("web app source code") where manage.py is located "home/YourUserName/YourRepoName/YourProjectName" and paste it in notepad
+   b. copy the folder-name where "settings.py" is located (yourProjectName) in notepad
+   c. copy the ("virtual-environment-name") in notepad
+   d. copy the path "/home/YourUserName/.virtualenvs/YourVirtualEnvironmentName" in note pade
+	
+
+5. go to "web" -->"Add a new web app" and copy the domain-name (yourname.pythonanywhere.com) and save it in notepad
+    ---> next --> "Manual configuration" click here and select your-python-version
+    ---> next --> 
+	a. "Virtualenv" click on "Enter path to a virtualenv, if desired" and set path
+	b. "Code" 
+		1. click on "Enter the path to your web app source code" and paste "app source code" path
+		2. click on "WSGI configuration file" link 
+			1. delete "hello world" code from WSGI file
+			2. go to "django" section and ncomment code
+
+			#+++++++++ DJANGO ++++++++
+			import os
+			import sys
+
+			path = '/home/YourUserName/YourRepoName/YourProjectName/'
+			if path not in sys.path:
+				sys.path.insert(0, path)
+
+			os.environ['DJANGO_SETTINGS_MODULE'] = 'YourProjectName.settings'
+
+			from django.core.wsgi import get_wsgi_application
+			application = get_wsgi_application()
+
+
+
+	c. if you have mysql database, then go to "Database Setup" and flow the instruction
+
+6. go to "Files" menu --> django-deployment --> YourProjectName --> YourProjectName --> settings.py (open it)
+	
+	ALLOWED_HOST = ['YourUserName.pythonanywhere.com']
+
+	(save settings file it)
+
+7. now you have to restart your web
+
+	go to "web" menu --> "Reload YourUserName.pythonanywhere.com" click here
+
+8. open another tab and check "YourUserName.pythonanywhere.com"
+
+
+
+
+	
+
+	
+
