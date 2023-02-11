@@ -1,0 +1,28 @@
+//How to upload your djongo project in githum.com ///////////////
+
+Step-1: 	create account in "github.com" and login
+Step-2: 	create a repositories "woodyengineering" in githum.com
+    	and copy (..or create a new repository on the command line)
+    	in a note pad
+
+	git init   //it create a git folder in your computer project folder
+	git add .  //select all the folder and files of your project folder
+	git commit -m "your commit message" //save with message
+	git remote add "git provided address" //connect with github with project
+	git push -u origin master  //upload all file and folder to github
+
+Step-3:    	To upload your project data to githum, in your pc should have
+	"git" software. open command prompt "cmd"
+
+		git --version
+	
+	To install git software go to "git-scm.com/download/win" 
+	and download git latest version
+
+Step-4: 	create a folder in your desktop "My_GIT_REPO" and open it.  Copy 
+	"your project folder in your pc" in "My_GIT_REPO"
+
+Step-5: 	open "My_GIT_REPO" folder by vscode.  
+
+Step-6:	open "terminal" or "command prompt by cmd" and type and run the code 
+	(given in 2)
