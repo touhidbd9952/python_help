@@ -37,7 +37,18 @@ class Likes(models.Model):
 
 b. go to "media" folder and create a new folder "blog_images" for user image upload
 
-c. run migration to create table
+c. go to "App_Blog" --> "admin.py" and register tables
+
+
+	from App_Blog.models import Blog, Comment, Likes   // import models
+
+
+	admin.site.register(Blog)
+	admin.site.register(Comment)
+	admin.site.register(Likes)
+	
+
+d. run migration to create table
 
 	py manage.py migrate
 	py manage.py makemigrations App_Blog
