@@ -1,0 +1,41 @@
+//Project Structure/////////////////////////////////
+------------------------------------------------------------
+My_Blog_Project
+|
+|----App_Blog(application Folder)
+|----App_Login(application Folder)
+|
+|----env(environment variable name)
+|
+|----media(image)
+|----static(css,js)
+|
+|----templates(views)
+|
+|----My_Blog_Project (Main)
+	|
+	|---manage.py
+	|---sttings.py
+	|---urls.py
+
+
+///Basic configuration (settings.py)/////////////////////////////////////////////////
+1. add application folder name in "INSTALLED_APPS"
+2. go to "BASE_DIR" place and create some directories (templates,media, staice)
+
+	TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+	STATIC_DIR = os.path.join(BASE_DIR, 'static')
+	MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+
+ go to "TEMPLATES"  and add
+	
+	'DIRS': [TEMPLATES_DIR, ],
+
+to to "STATIC_URL" and add
+
+	STATIC_URL = '/static/'
+	STATICFILES_DIRS = [STATIC_DIR, ]
+
+ #MEDIA
+ MEDIA_ROOT = MEDIA_DIR
+ MEDIA_URL = '/media/'
