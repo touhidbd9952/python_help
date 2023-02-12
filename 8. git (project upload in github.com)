@@ -11,7 +11,7 @@ Step-2: 	create a repositories "woodyengineering" in githum.com
 	git remote add "git provided address" //connect with github with project
 	git push -u origin master  //upload all file and folder to github
 
-Step-3:    	To upload your project data to githum, in your pc should have
+Step-3:    	To upload your project data to github, in your pc should have
 	"git" software. open command prompt "cmd"
 
 		git --version
