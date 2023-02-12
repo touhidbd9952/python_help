@@ -24,7 +24,7 @@ you can upload python project from github to online in free for test.
 	pip list  // to see what package of python is installed
 	pip install django==2.2.5    // install django with required version (check your django version from pc)
 	pip install pillow  // install image package
-	pip lis
+	pip list
 
    a. copy the path ("web app source code") where manage.py is located "home/YourUserName/YourRepoName/YourProjectName" and paste it in notepad
    b. copy the folder-name where "settings.py" is located (yourProjectName) in notepad
