@@ -1,0 +1,14 @@
+Step-2: User table create
+
+a. go to "App_login" --> models.py
+-------------------------------------------------
+
+from django.db  import  models
+from django.contrib.auth.models  import User   // we will create our user by using builtin User (model class) provided by django
+
+
+class UserProfile(models.Model):
+	user = models.OneToOneField(User, related_name = 'user_profile', on_delete = models.CASCADE)
+	profile_pic = models.ImageField(upload_to = 'profile_pics')
+
+b. go to "media" folder and create a new folder "profile_pics" for user image upload
