@@ -13,7 +13,17 @@ class UserProfile(models.Model):
 
 b. go to "media" folder and create a new folder "profile_pics" for user image upload
 
-c. run migration to create table
+c. go to "App_Login" --> "admin.py" and register tables
+
+
+	from App_Login.models import UserProfile,  // import models
+
+
+	admin.site.register(UserProfile)
+	
+	
+
+d. run migration to create table
 
 	py manage.py migrate
 	py manage.py makemigrations App_Login
