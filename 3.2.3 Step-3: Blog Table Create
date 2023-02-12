@@ -28,6 +28,11 @@ class Comment(models.Model):
 
 	def __str__(self):
 		return self.comment
+
+
+class Likes(models.Model):
+	blog = models.FereignKey(Blog, on_delete = models.CASCADE, related_name = 'liked_blog') //blog_id
+	user = models.ForeignKey(User, on_delete = CASCADE, related_name = 'liker_user') 
 		
 
 b. go to "media" folder and create a new folder "blog_images" for user image upload
