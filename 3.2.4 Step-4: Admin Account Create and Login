@@ -1,0 +1,21 @@
+Step-4: Admin Account Create
+---------------------------------------------
+a. create an account for admin login
+
+open terminal and type below code
+
+
+py manage.py createsupperuser
+username: admin
+Email address: admin@blog.com
+Password: 123456789
+
+
+b. run django server
+
+	py manage.py runserver
+
+c. login as admin
+
+	username : admin
+	password: 123456789
