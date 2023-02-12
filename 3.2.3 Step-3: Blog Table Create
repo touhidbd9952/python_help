@@ -8,7 +8,7 @@ from django.contrib.auth.models  import User   // we will create our user by usi
 
 
 class Blog(models.Model):
-	author = medels.ForeignKey(User, on_delete = models.CASCADE, related_name = 'post_author')
+	author = medels.ForeignKey(User, on_delete = models.CASCADE, related_name = 'post_author')   //author_id
 	blog_title = models.CharField(max_length=264, verbose_name="Put a Title")
 	slug = models.SlugField(max_length = 264, unique=True)
 	blog_content = models.TextField(berbose_name="What is on your mind")
@@ -21,8 +21,8 @@ class Blog(models.Model):
 		
 
 class Comment(models.Model):
-	blog = models.FereignKey(Blog, on_delete = models.CASCADE, related_name = 'blog_comment')
-	user = models.ForeignKey(User, on_delete = CASCADE, related_name = 'user_comment')
+	blog = models.FereignKey(Blog, on_delete = models.CASCADE, related_name = 'blog_comment')  //blog_id
+	user = models.ForeignKey(User, on_delete = CASCADE, related_name = 'user_comment')  //user_id
 	comment = models.TextField()
 	comment_date = models.DateTimeField(auto_now_add = True)
 
