@@ -12,3 +12,10 @@ class UserProfile(models.Model):
 	profile_pic = models.ImageField(upload_to = 'profile_pics')
 
 b. go to "media" folder and create a new folder "profile_pics" for user image upload
+
+c. run migration to create table
+
+	py manage.py migrate
+	py manage.py makemigrations App_Login
+	py mange.py migrate
+
