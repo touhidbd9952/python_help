@@ -1,0 +1,23 @@
+Step-3: Blog table create
+
+a. go to "App_Blog" --> models.py
+-------------------------------------------------
+
+from django.db  import  models
+from django.contrib.auth.models  import User   // we will create our user by using builtin User (model class) provided by django
+
+
+class Blog(models.Model):
+	author = medels.ForeignKey(User, on_delete = models.CASCADE, related_name = 'post_author')
+	blog_title = models.CharField(max_length=264, verbose_name="Put a Title")
+	slug = models.SlugField(max_length = 264, unique=True)
+	blog_content = models.TextField(berbose_name="What is on your mind")
+	blog_image = models.ImageField(upload_to = 'blog_images', verbose_name="Image")
+
+b. go to "media" folder and create a new folder "blog_images" for user image upload
+
+c. run migration to create table
+
+	py manage.py migrate
+	py manage.py makemigrations App_Blog
+	py mange.py migrate
