@@ -40,7 +40,7 @@ you can upload python project from github to online in free for test.
 		1. click on "Enter the path to your web app source code" and paste "app source code" path
 		2. click on "WSGI configuration file" link 
 			1. delete "hello world" code from WSGI file
-			2. go to "django" section and ncomment code
+			2. go to "django" section and uncomment below code
 
 			#+++++++++ DJANGO ++++++++
 			import os
