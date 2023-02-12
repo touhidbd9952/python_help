@@ -29,7 +29,7 @@ you can upload python project from github to online in free for test.
    a. copy the path ("web app source code") where manage.py is located "home/YourUserName/YourRepoName/YourProjectName" and paste it in notepad
    b. copy the folder-name where "settings.py" is located (yourProjectName) in notepad
    c. copy the ("virtual-environment-name") in notepad
-   d. copy the path "/home/YourUserName/.virtualenvs/YourVirtualEnvironmentName" in note pade
+   d. copy the path "/home/YourUserName/.virtualenvs/YourVirtualEnvironmentName" in note pade  //virtual envernment path with name in pythonanywhere.com
 	
 
 5. go to "web" -->"Add a new web app" and copy the domain-name (yourname.pythonanywhere.com) and save it in notepad
