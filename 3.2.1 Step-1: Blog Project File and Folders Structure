@@ -18,6 +18,12 @@ My_Blog_Project
 |----static(css,js)
 |
 |----templates(views)
+|	|---App_Blog(folder)
+|	|---App_Login(folder)
+|	|---master.html
+|	|---index.html
+|	|---about.html
+|	|---contact.html
 |
 |----My_Blog_Project (Main)
 	|---views.py (MainController)
