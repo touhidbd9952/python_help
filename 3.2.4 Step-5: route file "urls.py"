@@ -1,0 +1,33 @@
+we will add one route file "urls.py" in every application and connect it to main route by include
+also, we need to add a controller file "views.py" in Main project (in laravel we call this controller "MainController")
+
+ 
+1. Go to "My_Blog_Project" --> My_Blog_Project --> "urls.py" main route file, add 3 path line
+
+	from   django.urs import path, include
+	from  .  import views  //add views(controller) of main project
+
+	urlpatterns = [
+		path('', views.Index, name='index'),
+		path('account/', include('App_Login.urls')),
+		path('blog/', include('App_Blog.urls'))
+	]
+
+2. Go to "My_Blog_Project" --> My_Blog_Project, and create a file "views.py" 
+	
+	My_Blog_Project
+		|
+		|----My_Blog_Project
+			|---views.py
+			|
+
+  open "views.py" and type below code:
+
+	from django.http import HttpResponse  //import http
+	
+	def  Index(request):
+		return HttpResponse("I am home page")
+
+
+3. create a route file "urls.py" in "App_Login"
+4. create a route file "urls.py" in "App_Blog"
