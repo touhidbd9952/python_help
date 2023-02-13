@@ -15,3 +15,21 @@ in "urls.py" of App_Login
 urlpatterns = [
 	path('logout/', views.logout_user, name='logout'),
 ]
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+in "master.html" 
+---------------------------
+
+<nav>
+ <ul>
+    <li><a href="{% url 'index' %}">Home</a></li>
+  {% if user.is_authenticated %}
+    <li><a href="{% url 'App_Login:logout' %}">Logout</a></li>
+   {% else %}
+    <li><a href="{% url 'App_Login:signup' %}">Sign Up</a></li>	
+    <li><a href="{% url 'App_Login:login' %}">Login</a></li>
+ {% endif %}   
+</ul>
+</nav>
