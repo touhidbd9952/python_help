@@ -23,7 +23,7 @@ also, we need to add a controller file "views.py" in Main project (in laravel we
 
   open "views.py" and type below code:
 
-	from django.http import HttpResponse  //import http
+	from django.http import HttpResponse  //from "source location" import "required file"
 	from django.urls import reverse
 	from django.shortcuts import HttpResponseRedirect
 	
@@ -37,9 +37,11 @@ also, we need to add a controller file "views.py" in Main project (in laravel we
    open urls.py of App_Login and type below code
    ---------------------------------
    
-   form django.urls import path
+   	from django.urls import path // add urls
+	from . import views // add views(controller) from current directory
 
-	App_name = "App_Blog"
+	app_name = "App_Blog"
+	
 	urlpatterns = [
 		path('', views.Index, name='index'),
 		path('blog_list/', views.Index, name='blog_list'),
@@ -49,7 +51,10 @@ also, we need to add a controller file "views.py" in Main project (in laravel we
 open urls.py of App_Blog and type below code
    ---------------------------------
    
-   form django.urls import path
+   	from django.urls import path // add urls library
+	from . import views // add views(controller) from current directory
+	
+	app_name = "App_Blog"
 
 	urlpatterns = [
 
