@@ -1,3 +1,6 @@
+//for help go to "https://docs.djangoproject.com"
+
+
 //////////////////master.html//////////////////////////////////////////////
 
 <a href="{%  url  'index'  %}"></a>   //home
