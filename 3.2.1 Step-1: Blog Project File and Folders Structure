@@ -35,6 +35,7 @@ My_Blog_Project
 	|---manage.py
 	|---sttings.py (config. file)
 	|---urls.py (main route)
+	|---wsgi.py
 
 
 ///Basic configuration (settings.py)/////////////////////////////////////////////////
