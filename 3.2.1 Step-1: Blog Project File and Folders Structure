@@ -3,11 +3,15 @@
 My_Blog_Project
 |
 |----App_Blog(application Folder)
+|	|---__init__.py
+|	|---admin.py (connect model with admin)
 |	|---views.py (application controller file)
 |	|---models.py (database table create file (model))
 |	|---urls.py (application route file)
 |
 |----App_Login(application Folder)
+|	|---__init__.py
+|	|---admin.py (connect model with admin)
 |	|---views.py (application controller file)
 |	|---models.py (database table create file (model))
 |	|---urls.py (application route file)
@@ -26,6 +30,7 @@ My_Blog_Project
 |	|---contact.html
 |
 |----My_Blog_Project (Main)
+	|---__init__.py
 	|---views.py (MainController)
 	|---manage.py
 	|---sttings.py (config. file)
