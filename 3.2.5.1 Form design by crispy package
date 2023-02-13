@@ -1,0 +1,31 @@
+step-1: install a package for forms design
+------------------------------------------------------------
+pip install django-crispy-forms
+
+step-2: settings.py
+-----------------------------------------------------------
+
+INSTALLED_APPS = [
+	.
+	.
+	'crispy_forms',  //add crispy_forms
+]
+
+#bootstrap, bootstrap3, bootstrap4, uni-form 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'   
+
+step-3
+---------------------------------------------------------
+to use crispy form design in your form page, 
+write below line after " {% extends  'master.html'%}"
+
+{% load crispy_forms_tags %}
+
+
+step-4
+--------------------------------------------------------
+<form method='POST'>
+{% csrf_token %}
+{{ form | crispy }}
+<button type="submit" class="btn btn-success btn-sm">Create Account</button>
+</form>
