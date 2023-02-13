@@ -24,9 +24,11 @@ also, we need to add a controller file "views.py" in Main project (in laravel we
   open "views.py" and type below code:
 
 	from django.http import HttpResponse  //import http
+	from django.urls import reverse
+	from django.shortcuts import HttpResponseRedirect
 	
-	def  Index(request):
-		return HttpResponse("I am home page")
+	def Index(request):
+		return HttpResponseRedirect(reverse('App_Blog:blog_list'))  //directly call particular application route to display block list
 
 
 3. create a route file "urls.py" in "App_Login"
@@ -37,8 +39,10 @@ also, we need to add a controller file "views.py" in Main project (in laravel we
    
    form django.urls import path
 
+	App_name = "App_Blog"
 	urlpatterns = [
-
+		path('', views.Index, name='index'),
+		path('blog_list/', views.Index, name='blog_list'),
 	]
 
 
