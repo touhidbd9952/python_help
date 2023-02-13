@@ -1,0 +1,3 @@
+/////for sequrity, we will write below line in "settings.py" after "MEDIA_URL"/////////
+----------------------------------------------------------------------------
+LOGIN_URL = '/account/login/'
