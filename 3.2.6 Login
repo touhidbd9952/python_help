@@ -1,0 +1,50 @@
+///Loin Form///////////////////////////////////////////////
+
+in views.py of App_Login
+---------------------------------
+from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth  import  login, authenticate, logout  //some function we need for authentication
+from django.shortcuts  import HttpResponseRedirect
+from dango.urls  import  reverse
+
+def login_page(request):
+	form =  AuthenticationForm()
+	if request.method == 'POST':
+		form = AuthenticationForm(data = request.POST)  //get all data from form
+		if form.is_valid():
+			username = form.cleaned_data.get('username')
+			password = form.cleaned_data.get('password')
+			user = authenticate(username=username, password=password)
+			if user is not None:
+				login(request, user)
+				return HttpResponseRedirect(reverse('index'))
+
+	return render(request, 'App_Login/login.html', context={'form':form})
+
+in "login.html"
+-------------------------------------
+{% extends 'master.html' %}
+{% load crispy_forms_tags %}
+{% block  title_block %} Login {% endblock %}
+{% block  body_block %}
+
+<h2>Login:</h2>
+<form method="POST">
+{{form|crispy}}
+{% csrf_token %}
+<button type="submit" class="btn btn-primary btn-sm">Login</button>
+</form>
+
+{% endblock %}
+
+
+in "urls.py" of App_Login
+---------------------------------------
+from  django.urls  import  path
+from  App_Login  import  views
+
+urlpattarns = [
+	path('signup/', views.sign_up, name='singup'),
+	path('login', views.login_page, name='login'),
+]
