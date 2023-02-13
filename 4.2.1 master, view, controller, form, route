@@ -1,7 +1,9 @@
 //////////////////master.html//////////////////////////////////////////////
-<a href="{%  url  'first_app:index'  %}"></a>
-<a href="{%  url  'first_app:album_form'  %}"></a>
-<a href="{%  url  'first_app:musician_form'  %}"></a>
+
+<a href="{%  url  'index'  %}"></a>   //home
+<a href="{%  url  'first_app:index'  %}"></a>  //first_app/index
+<a href="{%  url  'first_app:album_form'  %}"></a>  //first_app/album_form
+<a href="{%  url  'first_app:musician_form'  %}"></a> 
 
 //////////////////urls.py//////////////////////////////////////////////////////
 from django.conf.urls  import  url
