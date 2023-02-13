@@ -47,7 +47,7 @@ go to "templates/App_Login" and create a html page "signup.html"
 
      {% if registered %}
  	<div class="alert alert-success">
-  	 Account Created Successfully! <a href="">Login Here</a>
+  	 Account Created Successfully! <a href="{% url 'App_Login:login'%}">Login Here</a>
  	</div>
      {% else %}
 
@@ -63,7 +63,7 @@ go to "templates/App_Login" and create a html page "signup.html"
 	</form>
 
 	<br>
-	<p>Already have an account? <a href="">Login Here</a></p>
+	<p>Already have an account? <a href="{% url 'App_Login:login'%}">Login Here</a></p>
 
       {% endif %}
 
