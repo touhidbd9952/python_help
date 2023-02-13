@@ -3,7 +3,14 @@
 My_Blog_Project
 |
 |----App_Blog(application Folder)
+|	|---views.py (application controller file)
+|	|---models.py (database table create file (model))
+|	|---urls.py (application route file)
+|
 |----App_Login(application Folder)
+|	|---views.py (application controller file)
+|	|---models.py (database table create file (model))
+|	|---urls.py (application route file)
 |
 |----env(environment variable name)
 |
@@ -13,10 +20,10 @@ My_Blog_Project
 |----templates(views)
 |
 |----My_Blog_Project (Main)
-	|
+	|---views.py (MainController)
 	|---manage.py
-	|---sttings.py
-	|---urls.py
+	|---sttings.py (config. file)
+	|---urls.py (main route)
 
 
 ///Basic configuration (settings.py)/////////////////////////////////////////////////
@@ -39,3 +46,7 @@ to to "STATIC_URL" and add
  #MEDIA
  MEDIA_ROOT = MEDIA_DIR
  MEDIA_URL = '/media/'
+ 
+ 3. create a controller file "views.py" in My_Blog_Project --> My_Blog_Project
+ 
+ 
