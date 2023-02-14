@@ -2,7 +2,7 @@
 
 in "views.py" of App_Login
 ------------------------------------
-from django.contrib.auth.decorators  import  login_requred   //for logout, user must have login
+from  django.contrib.auth.decorators  import  login_requred   //for logout, user must have login
 
 @login_required
 def user_profile(request):
@@ -40,10 +40,13 @@ in "user_profile.html" of App_Login
 
 {%  extends  "master.html"  %}
 {% block title_block %} subpage_title_name {% endblock %}
-{%  block  body_block%}
+{% block  body_block %}
 
-<h1> your page html code </h1>
+<h2> My Profile </h2>
+<p> Username: {{user.username}} </p>
+<p> Name: {{user.first_name}} {{user.last_name}} </p>
+<p> Email: {{user.email}} </p>
 
-{%  endblock  %}
+{% endblock %}
 
 
