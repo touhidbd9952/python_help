@@ -33,3 +33,17 @@ in "master.html"
  {% endif %}   
 </ul>
 </nav>
+
+
+in "user_profile.html" of App_Login
+------------------------------------------
+
+{%  extends  "master.html"  %}
+{% block title_block %} subpage_title_name {% endblock %}
+{%  block  body_block%}
+
+<h1> your page html code </h1>
+
+{%  endblock  %}
+
+
