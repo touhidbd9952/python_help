@@ -34,7 +34,8 @@ in master.html of application (amphibious)
 3. in subpage "home.html" in your application add master page
 
 
-{%  extends  "amphibious/master.html"  %}
+{%  extends  "master.html"  %}
+{% block title_block %} subpage_title_name {% endblock %}
 {%  block  body_block%}
 
 <h1> your page html code </h1>
