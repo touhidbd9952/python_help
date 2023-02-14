@@ -1,0 +1,109 @@
+form.py
+----------------------------
+
+from   django import forms
+from   django.contrib.auth.forms   import  UserCreationForm,  UserChangeForm
+from   django.contrib.auth.models  import  User
+
+
+class  SignUpForm(UserCreationForm):
+	email = forms.EmailField(label = "Email Address", required=True)
+	class Meta:
+		model = User
+		fields = ('username', 'email', 'password1', 'password2')
+
+
+class UserProfileChange(UserChangeForm):
+	class Meta:
+		model = User
+		fields = ('username', 'email', 'first_name', 'last_name', 'password')
+
+
+views.py
+----------------------------------
+from  django.shortcuts  import  render
+from  django.contrib.auth.forms  import  UserCreationForm,  AuthenticationForm
+from  django.contrib.auth  import  login,  authenticate,  logout
+from  django.shortcuts  import  HttpResponseRedirect
+from  dango.urls  import  reverse
+from  django.contrib.auth.decorators  import  login_required
+from  App_Login.forms  import  SignUpForm, UserProfileChange
+
+
+def  sign_up(request):
+	form = SignUpForm()
+	registered = False
+	if  request.method == 'POST':
+		form = SignUpForm(data = request.POST)
+		if  form.is_valid():
+			form.save()
+			registered = True
+
+	dict = {'form': form, 'registered': registered}
+	return render(request, 'App_Login/signup.html', context = dict)
+
+def  login_page(request):
+	form = AuthenticationForm()
+	if  request.method == 'POST':
+		form = AuthenticationForm(data = request.POST)
+		if  form.is_valid():
+			username = form.cleaned_data.get('username')
+			password = form.clearned_data.get('password')
+			user = authenticate(username=username, password=password)
+			if  user is not None:
+				login(request, user)
+				return HttpResponseRedirect(reverse('index'))
+		return render(request, 'App_Login/login.html', context={'form':form})
+
+
+@login_required
+def  logout_user(request):
+	logout(request)
+	return HttpResponseRedirect(reverse('index'))
+
+@login_required
+def  profile(request):
+	return render(request, 'App_Login/profile.html', context={})
+
+@login_required
+def  user_change(request):
+	current_user = request.user
+	form = UserProfileChange(instance = current_user)
+	if request.method == 'POST':
+		//form = FormModelName(new_data, old_data)
+		form = UserProfileChange(request.POST, instance = current_user)
+		if form.is_valid():
+			form.save()
+			form = UserProfileChange(instance = current_user)
+	return render(request, 'App_Login/edit_user_profile.html', context={'form':form})
+
+
+
+
+////////edit_user_profile.html//////////////////////////////////////////////////////////////////
+{% extens 'master.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %}Edit Profile {% endblock %}
+{% block body_block %}
+
+<form method='POST'>
+{{form|crispy}}
+{% csrf_token %}
+<button type="submit" class="btn btn-warning btn-sm">Change</button>
+</form>
+
+{%endblock%}
+
+/////////urls.py///////////////////////////////////////////////////////////////////////////////////////
+from  django.urls  import  path
+from  App_Login  import  views
+
+app_name = 'App_Login'
+
+urlpatterns = [
+	path('signup/', view.sign_up, name='signup'),
+	path('login/', view.login_page, name='login'),
+	path('logout/', view.logout_user, name='logout'),
+	path('profile/', view.profile, name='profile'),
+	path('edit_user_profile/', view.edit_profile, name='edit_user_profile'),
+]
