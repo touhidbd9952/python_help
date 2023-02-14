@@ -6,6 +6,7 @@
 <a href="{%  url  'index'  %}"></a>   //home
 <a href="{%  url  'first_app:index'  %}"></a>  //first_app/index
 <a href="{%  url  'first_app:album_form'  %}"></a>  //first_app/album_form
+<a href="{%  url  'first_app:edit_album' album_id=album.id  %}"></a>  //first_app/album_form
 <a href="{%  url  'first_app:musician_form'  %}"></a> 
 <a href="{%  url  'App_Login:signup'  %}"></a> 
 
@@ -20,6 +21,7 @@ urlpatterns = [
 	path('', views.index, name='index'),
 	path('add_album/', views.album_form, name='album_form'),   //path(url, controller.function, name=routename)
 	path('add_musician/', views.index, name='musician_form'),
+	path('edit_album/<int:album_id>/', views.edit_album, name='edit-album'),
 ]
 
 
