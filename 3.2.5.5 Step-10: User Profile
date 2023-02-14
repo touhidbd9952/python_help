@@ -1,0 +1,35 @@
+////User Profile////////////////////////////////
+
+in "views.py" of App_Login
+------------------------------------
+from django.contrib.auth.decorators  import  login_requred   //for logout, user must have login
+
+@login_required
+def user_profile(request):
+	return render(request, 'App_Login/user_profile.html', context={})
+
+
+in "urls.py" of App_Login
+----------------------------------
+urlpatterns = [
+	path('profile/', views.user_profile, name='profile'),
+]
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+in "master.html" 
+---------------------------
+
+<nav>
+ <ul>
+    <li><a href="{% url 'index' %}">Home</a></li>
+  {% if user.is_authenticated %}
+    <li><a href="{% url 'App_Login:profile' %}">Profile</a></li>
+    <li><a href="{% url 'App_Login:logout' %}">Logout</a></li>
+   {% else %}
+    <li><a href="{% url 'App_Login:signup' %}">Sign Up</a></li>	
+    <li><a href="{% url 'App_Login:login' %}">Login</a></li>
+ {% endif %}   
+</ul>
+</nav>
