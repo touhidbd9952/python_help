@@ -38,9 +38,15 @@ def index(request):
 	diction ={'title':"Home Page"}
 	return render(request, 'first_app/index.html', context = diction)
 
-def album_list(request):
-	diction = {'title':"List of Albums"}
-	return render(request, 'first_app/album_list.html', context = diction)
+
+def album_list(request, musician_id):
+	musician_info = Musician.objects.get(pk=musician_id)
+	albumlist = Album.objects.filter(musician = musician_id)
+	musician_rating = Album.objects.filter(musician = musician_id).aggregate(Avg('num_starts'))
+
+	diction = {'musician_info':musician_info, 'albumlist':albumlist, 'musician_rating':musician_rating}
+	return render(request, 'first_app/album_list.html', context=diction)
+	
 
 def musician_form(request):
 	form = froms.MusicianForm()
@@ -66,13 +72,6 @@ def album_form(request):
 	return render(request, 'first_app/album_form.html', context = diction)
 
 
-def album_list(request, musician_id):
-	musician_info = Musician.objects.get(pk=musician_id)
-	albumlist = Album.objects.filter(musician = musician_id)
-	musician_rating = Album.objects.filter(musician = musician_id).aggregate(Avg('num_starts'))
-
-	diction = {'musician_info':musician_info, 'albumlist':albumlist, 'musician_rating':musician_rating}
-	return render(request, 'first_app/album_list.html', context=diction)
 
 def edit_musician_info(request, musician_id):
 	musician_info = Musician.objects.get(pk=musician_id)
@@ -86,6 +85,7 @@ def edit_musician_info(request, musician_id):
 
 	diction.update({'edit_from':form})
 	return render(request, 'first_app/musicia_edit_form.html', context=diction)
+	
 
 def delete_album_info(request, album_id, musician_id):
 	album = Album.objects.get(pk=album_id).delete(0)
