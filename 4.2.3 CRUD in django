@@ -121,6 +121,41 @@ class AlbumForm(forms.ModelForm):
 		fields = "__all__"
 
 
+
+
+///////////master.html///////////////////////////////////////////////
+
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{%  block   title_block  %}  Blog  {% endblock%}</title>
+
+<link rel="stylesheet" href="{% static  "css/mystyle.css" %}">
+
+</head>
+
+<body>
+<nav>
+ <ul>
+    <li><a href="{% url 'index' %}">Home</a></li>
+  {% if user.is_authenticated %}
+    <li><a href="{% url 'App_Login:logout' %}">Logout</a></li>
+   {% else %}
+    <li><a href="{% url 'App_Login:signup' %}">Sign Up</a></li>	
+    <li><a href="{% url 'App_Login:login' %}">Login</a></li>
+ {% endif %}   
+</ul>
+</nav>
+    
+    {%  block  body_block %}
+    
+    
+    {%  end bock %}
+</body>
+</html>
+
+
 ///////////musician_form.html////////////////////////////////////////
 {%  extends  'first_app/master.html'  %}
 {%  block  body_block  %}
@@ -136,6 +171,7 @@ class AlbumForm(forms.ModelForm):
 
 /////////////view_musician.html//////////////////////////////////////////
 {%  extends  'first_app/master.html'  %}
+{%  block   title_block  %}  Musician List  {% endblock%}
 {%  block  body_block  %}
 
 <ul>
@@ -151,6 +187,7 @@ class AlbumForm(forms.ModelForm):
 
 ///////////album_form.html////////////////////////////////////////
 {%  extends  'first_app/master.html'  %}
+{%  block   title_block  %}  Album Form  {% endblock%}
 {%  block  body_block  %}
 
 <form method ="POST">
@@ -164,6 +201,7 @@ class AlbumForm(forms.ModelForm):
 
 ///////////album_list.html////////////////////////////////////////
 {%  extends  'first_app/master.html'  %}
+{%  block   title_block  %}  Album List  {% endblock%}
 {%  block  body_block  %}
 
 <h4>Musician Name: {{musician_info.first_name}} {{musician_info.last_name}}</h4>
@@ -206,6 +244,7 @@ class AlbumForm(forms.ModelForm):
 
 /////////////////////////musicia_edit_form.html/////////////////////////////////////////////////////////
 {%  extends  'first_app/master.html'  %}
+{%  block   title_block  %}  Musician Edit  {% endblock%}
 {%  block  body_block  %}
 
 <form method ="POST">
