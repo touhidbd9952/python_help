@@ -197,6 +197,7 @@ class AlbumForm(forms.ModelForm):
 
 ///////////musician_form.html////////////////////////////////////////
 {%  extends  'first_app/master.html'  %}
+{%  block   title_block  %}  Musician Form  {% endblock%}
 {%  block  body_block  %}
 
 <form method ="POST">
