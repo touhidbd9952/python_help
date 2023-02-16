@@ -24,3 +24,5 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL  = '/media/'
 
 LOGIN_URL = '/account/login/'
+
+TIME_ZONE = 'Asia/Dhaka'
