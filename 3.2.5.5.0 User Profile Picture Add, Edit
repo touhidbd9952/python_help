@@ -1,0 +1,170 @@
+/////Image Upload///////////////////////////////////////
+settings.py
+------------------------------
+
+STATIC_URL  = '/static/'
+STATICFILES_DIRS = [STATIC_DIR,]
+
+#MEDIA
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL  = '/media/'
+
+LOGIN_URL = '/account/login/'
+
+
+
+models.py  of App_Login
+------------------------------
+
+from django.db  import  models
+from django.contrib.auth.models  import  User
+
+class UserProfile(models.Model):
+	user  =  models.OneToOneField(User, related_name = 'user_profile',  on_delete=models.CASCADE)
+	profile_pic = models.ImageField(upload_to = 'profile_pics')
+
+
+urls.py of main project(My_Blog_Project)
+------------------------------
+
+from django.contrib  import admin
+from django.jrls  import path, include
+from .  import views
+from django.conf  import  settings    //image upload
+from django.contrib.staticfiles.urls  import  static, staticfiles_urlpatterns //image upload
+
+
+urlpatterns  =  [
+	path('',  views.Index, name='index'),
+	path('admin/',  admin.site.urls),
+	path('account/',  include('App_Login.urls')),
+	path('blog/',  include('App_Blog.urls')),
+]
+
+urlpatterns += staticfiles_urlpatterns()  //image upload
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  //image upload
+
+
+profile.html
+----------------------------------
+
+{% extends 'master.html' %}
+{% block title-block %} Change Password {% endblock %}
+{% block body-block %}
+
+<h2>My Profile</h2>
+
+{% if user.user_profile %}
+    <img src='/media/{{user.user_profile.profile_pic}}'  class="rounded-circle" with="100px">
+    <a href="{% url 'App_Login:chage_pro_pic'  %}" class="btn btn-info btn-sm">Change Profile Pic</a>
+{% else %}
+    <img src='/media/profile_pics/avatar-male.jpg'  class="rounded-circle" with="100px">
+   <a href="{% url 'App_Login:add_pro_pic' %}" class="btn btn-info btn-sm">Change Profile Pic</a>
+{% endif %}
+
+<p>Username: {{user.username}}</p>
+<p>Email: {{user.email}}</p>
+<p>Name: {{user.first_name}} {{user.last_name}}</p>
+<br>
+<a href="{% url 'App_Login:user_change' %}" class='btn btn-warning btn-sm'>Change Profile Info</a>
+
+{% endblock %}
+
+
+forms.py of App_Login
+-----------------------------
+
+from django  import  forms
+from django.contrib.auth.forms  import  UserCreationForm, UserChangeForm  
+from django.contrib.auth.models  import  User
+from App_Login.models  import  UserProfile
+
+class ProfilePic(forms.ModelForm):
+	class Meta:
+		model = UserProfile
+		fields = ['profile_pic']
+
+
+views.py   of App_Login
+--------------------------------------
+.
+.
+from App_Login.forms  import  ProfilePic
+
+.
+.
+@login_required
+def  add_pro_pic(request):
+	form = ProfilePic()
+	if request.method == 'POST':
+		form = ProfilePic(request.POST, request.FILES)
+		if form.is_valid():
+			user_obj = form.save(commit = False)   //we need user, so at this moment we will not save data
+			user_obj.user = request.user  // get user
+			user_obj.save()  //save data in database
+			return HttpResponseRedirect(reverse('App_Login:profile'))    // call by route name
+	return render(request, 'App_Login/pro_pic_add.html', context={'form':form})
+
+
+@login_required
+def  change_pro_pic(request):
+	form = ProfilePic(instance = request.user.user_profile)
+	if request.method == 'POST':
+		form = ProfilePic(request.POST, request.FILES, instance = request.user.user_profile)
+		if form.is_valid():
+			form.save()   
+			return HttpResponseRedirect(reverse('App_Login:profile'))    // call by route name
+	return render(request, 'App_Login/pro_pic_add.html', context={'form':form})
+
+
+
+urls.py of App_Login
+---------------------------
+//add below path
+path('add-picture', views.add_pro_pic,  name='add_pro_pic')
+path('change-picture', views.change_pro_pic,  name='change_pro_pic')
+
+
+
+
+pro_pic_add.html
+---------------------------
+{% extends 'master.html' %}
+{% load crispy_form_tags %}
+{% block title-block %} Profile Picture {% endblock %}
+{% block body-block %}
+
+<h2>My Profile Picture</h2>
+
+<form method="POST" enctype="multipart/form-data">
+{{form|crispy}}
+{% csrf_token %}
+<button type="submit" class="btn btn-success btn-sm">Add</button>
+</form>
+
+{% endblock %}
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+we need to delete old image when new image is upload. to delete old image 
+we will install a package "django-cleanup"
+
+Step-1:
+go to command prompt and type below line
+
+	pip install django-cleanup
+
+Step-2:
+go to "settings.py" and add below line in "INSTALLED_APPS"
+
+	INSTALLED_APPS = [
+		.
+		.
+	      'django_cleanup.apps.CleanupConfig',
+]
+
+
+
+
