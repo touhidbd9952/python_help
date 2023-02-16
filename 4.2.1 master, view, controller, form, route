@@ -10,6 +10,8 @@
 <a href="{%  url  'first_app:musician_form'  %}"></a> 
 <a href="{%  url  'App_Login:signup'  %}"></a> 
 
+<img src="/media/logo.png">
+
 //////////////////urls.py//////////////////////////////////////////////////////
 from django.conf.urls  import  url
 from django.urls import path
