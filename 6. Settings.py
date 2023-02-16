@@ -5,6 +5,8 @@ INSTALLED_APPS = [
 		.
 		.
 	   'amphibious',  //your application register
+	   'App_Login',
+	   'App_Blog',
 	   'django_cleanup.apps.CleanupConfig',  //old image delete
 	]
 
