@@ -10,5 +10,7 @@ tablename.objects.filter(columnName = value)
 SELECT * FROM TableName WHERE columnName = value ORDER_BY columnName
 tablename.objects.filter(columnName = value).order_by('columnName')
 tablename.objects.filter(columnName = value).order_by('columnName1','columnName2')
+Blog.objects.order_by('publish_date')  // asending order
+Blog.objects.order_by('-publish_date') // (-) decending order
 
 musician = Musician.objects.get(pk=musician_id).delete(0) // for delete
