@@ -175,6 +175,9 @@ class AlbumForm(forms.ModelForm):
 </head>
 
 <body>
+
+<img src="/media/logo.png">
+
 <nav>
  <ul>
     <li><a href="{% url 'index' %}">Home</a></li>
