@@ -1,11 +1,27 @@
+/////Install Image Upload Package///////////////////////
+Step-1: Image package 
+----------------------------------------
+open command prompt and type
+
+	pip install Pillow
+	pip install django-cleanup
+	
 /////Image Upload///////////////////////////////////////
-settings.py
+Step-2: configuration for image
+---------------------------------------
+in settings.py
 ------------------------------
+INSTALLED_APPS = [
+		.
+		.
+	      'django_cleanup.apps.CleanupConfig',
+]
+
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [STATIC_DIR,]
 STATIC_URL  = '/static/'
 
-#MEDIA
+#MEDIA,image
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL  = '/media/'
@@ -13,7 +29,8 @@ MEDIA_URL  = '/media/'
 LOGIN_URL = '/account/login/'
 
 
-
+Step-3: Create table
+------------------------------------------
 models.py  of App_Login
 ------------------------------
 
@@ -25,6 +42,8 @@ class UserProfile(models.Model):
 	profile_pic = models.ImageField(upload_to = 'profile_pics')
 
 
+Ste-4: Route
+----------------------------------------
 urls.py of main project(My_Blog_Project)
 ------------------------------
 
@@ -46,7 +65,7 @@ urlpatterns += staticfiles_urlpatterns()  //image upload
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  //image upload
 
 
-profile.html
+Ste-5: profile.html
 ----------------------------------
 
 {% extends 'master.html' %}
@@ -72,7 +91,7 @@ profile.html
 {% endblock %}
 
 
-forms.py of App_Login
+Ste-6: forms.py of App_Login
 -----------------------------
 
 from django  import  forms
@@ -86,7 +105,7 @@ class ProfilePic(forms.ModelForm):
 		fields = ['profile_pic']
 
 
-views.py   of App_Login
+Ste-7: views.py   of App_Login
 --------------------------------------
 .
 .
@@ -119,7 +138,7 @@ def  change_pro_pic(request):
 
 
 
-urls.py of App_Login
+Ste-8: urls.py of App_Login
 ---------------------------
 //add below path
 path('add-picture', views.add_pro_pic,  name='add_pro_pic')
@@ -128,7 +147,7 @@ path('change-picture', views.change_pro_pic,  name='change_pro_pic')
 
 
 
-pro_pic_add.html
+Ste-9: pro_pic_add.html
 ---------------------------
 {% extends 'master.html' %}
 {% load crispy_form_tags %}
