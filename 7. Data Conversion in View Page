@@ -22,3 +22,56 @@ def  index(request):
 //date convertion
 {{my_dbdate|date:"D d M Y"}}   //Wed 09 Jan 2008
 {{albumlist.release_date|date:"d/m/ Y"}}   //09/02/2008
+
+
+
+
+/////////////////////////////Custom Filter Create and Use////////////////////////////////////////
+we will not show all information of a block, we will show only 500 characters first. if 
+reader want to see more then he/she will click on a "read more" link to display full blog
+content
+
+Step-1: create a folder "templatetags" in "App_Blog" application
+Step-2: create a file "__init__.py"
+Step-3: create a file "custom_filters.py"
+
+      in "custom_filters.py"
+      -------------------------------------
+	from  django   import  template
+
+	register = template.Library()
+
+	
+	def range_filter(value):
+		return value[0:500]+"..........."    
+
+	register.filter('range_filter',range_filter)
+	
+	
+
+Use of custom filter
+---------------------------------
+go to the page where you need to use custom filter
+
+"blog_list.html"
+-----------------
+
+{% extends 'base.html' %}
+{% load custom_filters%}  //add custom filter
+{% block title_block %} Home {% endblock %}
+{% block body_block %}
+
+{% for blog  in blogs %}
+<h3>{{blog.blog_title}}</h3>
+<h6>{{blog.publish_date}}</h6>
+<div class="row">
+   <div class="col-sm-4">
+       <img src="/media/{{blog.blog_image}}" alt="{{blog.blog_image}}" title="{{blog.blog_title}}" width="100%">
+   </div>
+   <div class="col-sm-8">
+      <p>{{blog.blog_content | range_filter | linebreaks}}</p>   //use custom filter
+      <h6>Posted By: <a href="#">{{blog.author}}</a></h6>
+   </div>
+</div>
+<hr>
+{%endfor%}
