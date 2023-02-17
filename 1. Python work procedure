@@ -40,3 +40,22 @@ in each application:
 	controller is "views.py"
 	route is "urls.py"
 	view page is "pagename.html"
+	
+	
+
+//////////////////////////////////////////////////////////
+
+//MVC:  Model --> View --> controller
+
+
+Create Model Database Table (models.py) 
+       ||
+       ||
+       \/
+Create Model Form (forms.py) to create form
+       ||
+       ||
+       \/
+User Model Database Table, Use Model Form (views.py) to create controller function
+
+
