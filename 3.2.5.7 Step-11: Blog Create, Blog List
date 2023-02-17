@@ -1,0 +1,122 @@
+views.py
+-------------------------------------
+from  django.shortcuts  import  render, HttpResponseRedirect
+from  django.views.generic  import  CreateView, UpdateView, ListView, DetailView, View, TemplateView, DeleteView
+from  App_Blog.models  import  Blog, Comment, Likes
+from  django.contrib.auth.decorators   import  login_required  //decorator for function
+from  django.contrib.auth.mixins  import  loginRequiredMixin //decorator for class
+import uuid  //function that help to create uniq id
+
+//def blog_list(request):
+	//return render(request, 'App_Blog/blog_list.html', context={})
+
+class CreateBlog(loginRequiredMixin, CreateView):       //class classfunction(security, InheritClass)
+	model = Blog  				 //model/tableName
+	template_name = 'App_Blog/create_blog.html'       	//page link
+	fields = ('blog_title', 'blog_content', 'blog_image',)	// '__all__'	 for all field	//tableFields
+
+	def from_valid(self, form):
+		blog_obj = form.save(commit = False)
+		blog_obj.author = self.request.user
+		title = blog_obj.blog_title
+		blog_obj.slug = title.replace(" ", "-") + "-" + str(uuid.uuid4())
+		blog_obj.save()
+		return HttpResponseRedirect(reverse('index'))
+
+class BlogList(ListView):
+	context_object_name = 'blogs'   // by default,  blogs = Blog.objects.all()
+				// context ={'blogs':blogs}
+	model = Blog
+	template_name = 'App_Blog/blog_list.html'
+	queryset = Blog.objects.order_by('-publish_date')        //if we want, we can modify  "blogs = Blog.objects.all()" by new queryset 
+						// minus sign use for descending order
+
+
+
+***********
+if we want, we can set assending or decending order in model
+---------------------------------------------------------------------------------
+class Blog(models.Model):
+	.
+	.   your table fields
+	.
+	class Meta:
+		ordering = ('-publish_data',)     //if we set order in model, then we no need to declare it views.py
+	
+	def __str__(self):
+		return self.blog_title
+***********	
+
+
+in urls.py
+--------------------------------------
+from django.urls  import  path
+from App_Blog  import  views
+
+app_name  =  'App_Blog'
+
+urlpatterns = [
+	path('', views.BlogList.as_view(), name='blog_list'),
+	path('write/', views.CreateBlog.as_view(),  name='create_blog'),
+]
+
+
+/////////blog_list.html///////////////////////////////////////////////////////////////////////////////////////////////
+
+{% extends 'base.html' %}
+{% load custom_filters%}
+{% block title_block %} Home {% endblock %}
+{% block body_block %}
+
+{% for blog  in blogs %}
+<h3>{{blog.blog_title}}</h3>
+<h6>{{blog.publish_date}}</h6>
+<div class="row">
+   <div class="col-sm-4">
+       <img src="/media/{{blog.blog_image}}" alt="{{blog.blog_image}}" title="{{blog.blog_title}}" width="100%">
+   </div>
+   <div class="col-sm-8">
+      <p>{{blog.blog_content | range_filter | linebreaks}}</p>
+      <h6>Posted By: <a href="#">{{blog.author}}</a></h6>
+   </div>
+</div>
+<hr>
+{%endfor%}
+
+
+{% endblock %}
+
+
+/////////////////////////////Custom Filter Create and Use////////////////////////////////////////
+we will not show all information of a block, we will show only 500 characters first. if 
+reader want to see more then he/she will click on a "read more" link to display full blog
+content
+
+Step-1: create a folder "templatetags" in "App_Blog" application
+Step-2: create a file "__init__.py"
+Step-3: create a file "custom_filters.py"
+
+      in "custom_filters.py"
+      -------------------------------------
+	from  django   import  template
+
+	register = template.Library()
+
+	
+	def range_filter(value):
+		return value[0:500]+"..........."
+
+	register.filter('range_filter',range_filter)
+
+
+
+
+   
+
+
+
+
+
+
+
+
