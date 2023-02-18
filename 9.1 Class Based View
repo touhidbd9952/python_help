@@ -1,0 +1,52 @@
+///////Class Based View/////////////////////////////////////////////////
+
+from  django.shortcuts import render
+from  django.http  import HttpResponse
+from  django.views.generic  import  View, TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from  first_app  import  models
+from  django.urls  import  reverse_lazy
+
+
+class  IndexView(ListView):
+	model = models.Musician
+	context_object_name = 'musician_list'
+	template_name = 'first_app/index.html'
+
+class MusicianDetail(DetailView):
+	model = models.Musician
+	context_object_name = 'musician'  //musician = Musician.objects.all()
+	template_name = 'first_app/musician_details.html'
+
+class AddMusician(CreateView):
+	model = models.Musician
+	fields = ('first_name','last_name','instrument')
+	template_name = 'first_app/musician_form.html'
+
+class UpdateMusician(UpdateView):
+	model = models.Musician
+	fields = ('first_name','last_name','instrument')
+	template_name = 'first_app/musician_form.html'
+
+class DeteMusician(DeleteView):
+	model = models.Musician
+	context_object_name = 'musician'  //musician = Musician.objects.all()
+	success_url = reverse_lazy("first_app:index")
+	template_name = 'first_app/delete_musician.html'
+
+
+urls.py
+----------------
+from  django.conf.urls   import  url
+from  django.urls  import path
+from  first_app import  views
+
+app_name = "first_app"
+
+urlpatterns = [
+	path('', views.IndexView.as_view(), name='index'),
+	path('musician_details/<pk>/', views.MusicianDetail.as_view(), name='musician_details'),
+	path('add_musician/', views.AddMusician.as_view(),  name='add_musician'),
+	path('musician_update/<pk>/', views.UpdateMusician.as_view(),  name='musician_update'),
+	path('musician_delete/<pk>/',  views.DeleteMusician.as_view(),  name='musician_delete'),
+]
+
