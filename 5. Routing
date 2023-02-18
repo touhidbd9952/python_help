@@ -30,3 +30,4 @@ urlpatterns = [
 
 return render('request', views.userloginform, context={'categories':categories})
 return HttpResponseRedirect(reverse('App_Blog:'index))
+return reverse_lazy('App_Blog:blog_details', kwargs={'slug':self.objects.slug})
