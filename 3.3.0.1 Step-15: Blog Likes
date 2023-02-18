@@ -1,0 +1,66 @@
+in "blog_list.html"
+----------------------------------
+//we can count number of total liked and comments
+
+<h6>{{blog.liked_blog.count}} Likes | {{blog.blog_comment.count}} Comments</h6>
+
+
+
+in "blog_details.html"
+----------------------------------
+//we can count number of total liked and comments
+
+<h6>{{blog.liked_blog.count}} Likes | {{blog.blog_comment.count}} Comments</h6>
+
+
+<hr>
+{% if not liked %}
+<a href="{% url 'App_Blog:liked_post' pk=blog.pk %}">
+  <i class="fa fa-thumb-o-up fa-2x" area-hidden="true"></i>
+</a>
+{% else %}
+<a href="{% url 'App_Blog:unliked_post' pk=blog.pk %}">
+  <i class="fa fa-thumb-o-down fa-2x" area-hidden="true"></i>
+</a>
+{% endif %}
+
+
+in "views.py"
+--------------------------------
+from App_Blog.model  import  Blog, Comment, Likes
+
+//add below code in "def blog_details"
+	already_liked = Likes.objects.filter(blog = bloginfo, user = request.user)
+	if already_liked:
+		liked = True
+	else:
+		liked = False
+	//pass lked in context
+	'liked':liked
+
+@login_required
+def liked(request, pk):
+	bloginfo = Blog.objects.get(pk=pk)  //get blog info
+	userinfo = request.user  //get user info who given liked
+	already_liked = Likes.objects.filter(blog=bloginfo, user=userinfo) //check same user previously given like or not
+	if not already_liked:  //if this user not given liked before
+		liked_post = Likes(blog=bloginfo, user=userinfo) //get liked form info
+		liked_post.save()       //kwargs = key word arguments
+		return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'slug':bloginfo.slug} ))
+
+
+@login_required
+def unliked(request, pk):
+	bloginfo = Blog.objects.get(pk=pk)  //get blog info
+	userinfo = request.user  //get user info who given liked
+	already_liked = Likes.objects.filter(blog=bloginfo, user=userinfo) //check same user previously given like or not
+	already_liked.delete()
+	
+	return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'slug':bloginfo.slug} ))
+
+
+in "urls.py"
+----------------------------------
+path('liked/<pk>/', views.liked,  name='liked_post'),
+path('unliked/<pk>/', views.unliked,  name='unliked_post'),
+	
