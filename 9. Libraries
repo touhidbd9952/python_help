@@ -3,6 +3,7 @@
 from  django.shortcuts  import  render //route
 from  django.shortcuts  import  HttpResponseRedirect //route
 from  dango.urls  import  reverse //route
+from  django.urls  import  reverse, reverse_lazy //route
 
 from  django.contrib.auth.forms  import  UserCreationForm,  AuthenticationForm
 from  django.contrib.auth  import  login,  authenticate,  logout
