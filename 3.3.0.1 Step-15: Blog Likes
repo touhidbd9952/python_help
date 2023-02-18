@@ -1,3 +1,5 @@
+/////Step-5//////////
+
 in "blog_list.html"
 ----------------------------------
 //we can count number of total liked and comments
@@ -8,10 +10,13 @@ in "blog_list.html"
 
 in "blog_details.html"
 ----------------------------------
+/////Step-4//////////
 //we can count number of total liked and comments
 
 <h6>{{blog.liked_blog.count}} Likes | {{blog.blog_comment.count}} Comments</h6>
 
+/////Step-1//////////
+//we need fontwasome css link. so add it first
 
 <hr>
 {% if not liked %}
@@ -25,11 +30,16 @@ in "blog_details.html"
 {% endif %}
 
 
+/////Step-2//////////
+
 in "views.py"
 --------------------------------
+
 from App_Blog.model  import  Blog, Comment, Likes
 
+/////Step-c: pass liked resul by context of "blog_details" function///////
 //add below code in "def blog_details"
+
 	already_liked = Likes.objects.filter(blog = bloginfo, user = request.user)
 	if already_liked:
 		liked = True
@@ -37,6 +47,9 @@ from App_Blog.model  import  Blog, Comment, Likes
 		liked = False
 	//pass lked in context
 	'liked':liked
+
+
+/////Step-a: create liked function ///////
 
 @login_required
 def liked(request, pk):
@@ -49,6 +62,8 @@ def liked(request, pk):
 		return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'slug':bloginfo.slug} ))
 
 
+/////Step-b: create unliked function ///////
+
 @login_required
 def unliked(request, pk):
 	bloginfo = Blog.objects.get(pk=pk)  //get blog info
@@ -59,7 +74,9 @@ def unliked(request, pk):
 	return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'slug':bloginfo.slug} ))
 
 
-in "urls.py"
+/////Step-3//////////
+
+in route "urls.py" of App_Blog
 ----------------------------------
 path('liked/<pk>/', views.liked,  name='liked_post'),
 path('unliked/<pk>/', views.unliked,  name='unliked_post'),
