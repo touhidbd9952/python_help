@@ -30,6 +30,70 @@
       python manage.py runserver
 
 
+//Project Structure/////////////////////////////////
+------------------------------------------------------------
+My_Blog
+|
+|----App_Blog(application Folder)
+|	|---__init__.py
+|	|---admin.py (connect model with admin)
+|	|---views.py (application controller file)
+|	|---models.py (database table create file (model))
+|	|---urls.py (application route file)
+|
+|----App_Login(application Folder)
+|	|---__init__.py
+|	|---admin.py (connect model with admin)
+|	|---views.py (application controller file)
+|	|---models.py (database table create file (model))
+|	|---urls.py (application route file)
+|
+|----env(environment variable name)
+|
+|----media(image)
+|----static(css,js)
+|
+|----templates(views)
+|	|---App_Blog(folder)
+|	|---App_Login(folder)
+|	|---master.html
+|	|---index.html
+|	|---about.html
+|	|---contact.html
+|
+|----My_Blog (Main)
+	|---__init__.py
+	|---views.py (MainController)
+	|---manage.py
+	|---sttings.py (config. file)
+	|---urls.py (main route)
+	|---wsgi.py
+
+
+///Basic configuration (settings.py)/////////////////////////////////////////////////
+1. add application folder name in "INSTALLED_APPS"
+2. go to "BASE_DIR" place and create some directories (templates,media, staice)
+
+	TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+	STATIC_DIR = os.path.join(BASE_DIR, 'static')
+	MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+
+ go to "TEMPLATES"  and add
+	
+	'DIRS': [TEMPLATES_DIR, ],
+
+to to "STATIC_URL" and add
+
+	STATIC_URL = '/static/'
+	STATICFILES_DIRS = [STATIC_DIR, ]
+
+ #MEDIA
+ MEDIA_ROOT = MEDIA_DIR
+ MEDIA_URL = '/media/'
+ 
+ 
+ 
+
 for more help visit
 ----------------------
 https://bobbyhadz.com/blog/django-admin-is-not-recognized-as-internal-or-external-command
