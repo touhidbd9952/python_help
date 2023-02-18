@@ -16,6 +16,7 @@ urlpatterns = [
 	path('blog-details/<pk>/', views.blog_details, name = 'blog_details'),
 	path('blog-edit/<slug>/', views.blog_edit, name = 'blog_edit'),
 	path('my-blog/<int:id>/', views.my_blog, name = 'my_blog'),
+	path('edit-blog/<pk>', views.UpdateBlog.as_view(),  name='edit_blog'),
 ]
 
 
