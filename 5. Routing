@@ -7,15 +7,26 @@ from  django.urls  import  path
 from  first_app  import  views
 
 
-app_name = "amphibious_app"
+app_name = "App_Blog"
 
 
 urlpatterns = [
 	path('', views.index, name = 'index'),
-	path('user_login_form', views.index, name = 'userloginform'),
+	path('blog-list/', views.blog_list, name = 'blog_list'),
+	path('blog-details/<pk>/', views.blog_details, name = 'blog_details'),
+	path('blog-edit/<slug>/', views.blog_edit, name = 'blog_edit'),
+	path('my-blog/<int:id>/', views.my_blog, name = 'my_blog'),
 ]
 
 
 //(in index.html page) routing ////////////////////////////////////////////////
 
-<a href="{% url  'amphibious_app:userloginform'  %}">User Login Form</a>
+<a href="{% url  'App_Blog:blog_list'  %}">Blog List</a>
+<a href="{% url  'App_Blog:blog_details' pk=blog.pk  %}">Blog Details</a>
+<a href="{% url  'App_Blog:blog_edit' id=blog.id  %}">Edit</a>
+<a href="{% url  'App_Blog:my_blog' slug=blog.slug  %}">My Blog</a>
+
+//(in controller views.py) routing////////////////////////////////////////////
+
+return render('request', views.userloginform, context={'categories':categories})
+return HttpResponseRedirect(reverse('App_Blog:'index))
