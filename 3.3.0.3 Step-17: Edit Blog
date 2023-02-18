@@ -1,0 +1,46 @@
+//////Edit Blog/////////////////////////////////////////
+Step-1: in "my_blog.html"
+---------------------------
+
+<a href="{% url 'App_Blog:edit_blog' pk=blog.pk %}">Edit</a>
+
+
+Step-2: in "urls.py"
+-----------------------
+path('edit-blog/<pk>', views.UpdateBlog.as_view(),  name='edit_blog')
+
+
+
+Step-3: in "views.py"
+------------------------
+
+class UpdateBlog(LoginRequiredMixin, UpdateView):
+	model = Blog
+	fields = ('blog_title', 'blog_content', 'blog_image')
+	template_name = 'App_Blog/edit_blog.html'
+
+	def get_success_url(self, **kwargs):
+		return reverse_lazy('App_Blog:blog_details', kwargs={'slug':self.objects.slug})
+
+
+
+
+Step-4: in "edit_blog.html"
+---------------------------
+
+{% extends 'master.html' %}
+{% load crispy_forms_tags%}
+{% block block_title %}Edit Blog{% endblock %}
+{% block block_body %}
+
+{% if blog.author == user %}
+<form method="POST">
+{{form | crispy }}
+{% csrf_token %}
+<button type="submit" class="btn btn-primary btn-sm">Update<button>
+{%else%}
+<p>You are not allowed to view this page, 404</p>
+</form>
+{% endif %}
+
+{% endblock %}
