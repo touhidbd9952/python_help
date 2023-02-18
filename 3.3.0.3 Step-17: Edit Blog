@@ -20,7 +20,7 @@ class UpdateBlog(LoginRequiredMixin, UpdateView):
 	template_name = 'App_Blog/edit_blog.html'
 
 	def get_success_url(self, **kwargs):
-		return reverse_lazy('App_Blog:blog_details', kwargs={'slug':self.objects.slug})
+		return reverse_lazy('App_Blog:blog_details', kwargs={'slug':self.objects.slug})  //If we are using success_url we have to use reverse_lazy(). 
 
 
 
