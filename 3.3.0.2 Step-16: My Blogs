@@ -1,0 +1,44 @@
+in views.py
+-----------------------
+
+class MyBlogs(LoginRequiredMixin, TemplateView):
+	template_name = 'App_Blog/my_blogs.html'
+
+
+
+in "my_blogs.html" of App_Blog
+-------------------------------------------
+
+{% extends 'master.html' %}
+{}% load custom_filters %
+{% block title_block %} {{user}} {%endblock%}
+{% block body_block %}
+
+  {%for blog in user.post_author.all %}
+      <h3>{{blog.blog_title}}</h3>
+      <h6>{{blog.publish_date}}</h6>
+      <div class="row">
+         <div class="col-sm-4">
+             	<img src="/media/{{blog.blog_image}}" alt="" title="" width="100%">
+          </div>
+          <div class="col-sm-8">
+ 	<p>{{blog.blog_content | range_filter | linebreaks }}</p>
+  	<a href="{% url 'App_Blog:blog_details' slug = blog.slug %}">Read More</a>
+           </div>
+       </div>
+   {% endfor %}
+
+{%endblock%}
+
+
+in "master.html"
+----------------------------------------
+<a href="{% url 'App_Blog:my_blogs' %}" class="dropdown-item">My Blogs</a>
+
+
+
+in "urls.py"
+---------------------------------------
+path('my-blogs/', views.MyBlogs.as_view(),  name='my_blogs'),
+
+
