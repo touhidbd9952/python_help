@@ -32,6 +32,15 @@ class BlogList(ListView):
 						// minus sign use for descending order
 
 
+class UpdateBlog(LoginRequiredMixin, UpdateView):
+	model = Blog
+	fields = ('blog_title', 'blog_content', 'blog_image')
+	template_name = 'App_Blog/edit_blog.html'
+
+	def get_success_url(self, **kwargs):
+		return reverse_lazy('App_Blog:blog_details', kwargs={'slug':self.objects.slug})  //If we are using success_url we have to use reverse_lazy(). 
+
+
 
 ***********
 if we want, we can set assending or decending order in model
