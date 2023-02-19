@@ -74,6 +74,7 @@ My_Blog
 1. add application folder name in "INSTALLED_APPS"
 2. go to "BASE_DIR" place and create some directories (templates,media, staice)
 
+	import os
 	TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 	STATIC_DIR = os.path.join(BASE_DIR, 'static')
 	MEDIA_DIR = os.path.join(BASE_DIR, 'media')
