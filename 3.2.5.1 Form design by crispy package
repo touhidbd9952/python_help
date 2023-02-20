@@ -18,7 +18,12 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 step-3
 ---------------------------------------------------------
-to use crispy form design in your form page, 
+//to use bootstrap4 crispy design, add below cdn in "master.html"
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+//to use crispy form design in your form page, 
 write below line after " {% extends  'master.html'%}"
 
 {% load crispy_forms_tags %}
