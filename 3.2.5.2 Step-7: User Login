@@ -22,6 +22,10 @@ def login_page(request):
 
 	return render(request, 'App_Login/login.html', context={'form':form})
 
+
+//install crispy for form design///////
+pip install django-crispy-forms
+
 in "login.html"
 -------------------------------------
 {% extends 'master.html' %}
