@@ -3,6 +3,7 @@ For more help: https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-
 step-1: install a package for forms design
 ------------------------------------------------------------
 pip install django-crispy-forms
+pip install crispy-bootstrap5
 
 step-2: settings.py
 -----------------------------------------------------------
@@ -11,10 +12,14 @@ INSTALLED_APPS = [
 	.
 	.
 	'crispy_forms',  //add crispy_forms
+	'crispy_bootstrap5',
 ]
 
 #bootstrap, bootstrap3, bootstrap4, uni-form 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'   
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"   
+
 
 step-3
 ---------------------------------------------------------
