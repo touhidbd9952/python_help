@@ -1,2 +1,3 @@
 pip install Pillow   // for image upload
 pip install django-cleanup  //old image delete
+pip install django-crispy-forms
