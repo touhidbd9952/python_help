@@ -1,5 +1,7 @@
 For more help   https://docs.djangoproject.com/en/3.0/topics/auth/default/
 
+database table: "auth_user"
+
 
 Step-2: User table create
 
