@@ -75,6 +75,8 @@ My_Blog
 2. go to "BASE_DIR" place and create some directories (templates,media, staice)
 
 	import os
+	from django.urls import reverse_lazy
+	
 	BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 	TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 	STATIC_DIR = os.path.join(BASE_DIR, 'static')
@@ -89,12 +91,33 @@ to to "STATIC_URL" and add
 	STATIC_URL = '/static/'
 	STATICFILES_DIRS = [STATIC_DIR, ]
 
- #MEDIA
- MEDIA_ROOT = MEDIA_DIR
- MEDIA_URL = '/media/'
+	#media
+	MEDIA_ROOT = MEDIA_DIR
+	MEDIA_URL = '/media/'
  
+ //////go to urls.py of main project add like below
  
+ from django.contrib import admin
+from django.urls import path, include
+from . import views
+
+from django.conf import settings  #add for image,css,js 
+from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns   #add for image,css,js
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('account/', include('App_Login.urls')),
+    path('blog/', include('App_Blog.urls')),
+    path('', views.Index, name='index'),
+]
+urlpatterns += staticfiles_urlpatterns()  #add for image,css,js
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  #add for image,css,js
  
+/////in html page/////////
+<img src="/media/profile_pics/man.png">
+<img src="/mediat/{{user.user_profile.profile_pics}}">
+
 
 for more help visit
 ----------------------
