@@ -1,3 +1,71 @@
+///////Project and App Installation///////////////////////////////////////////////////
+
+1. create a project folder "PythonProjects" in d drive where your want
+2. go to "PythonProjects" and open cmd (command prompt)
+
+3. 👇️ create virtual environment:  
+
+        python -m venv venv
+
+4. 👇️ activate on Windows (cmd.exe):
+      
+        venv\Scripts\activate.bat
+
+5. 👇️ install django in the virtual environment:
+
+        pip install django
+
+6. 👇️ create your django project:
+
+      django-admin startproject yourprojectname
+      
+7. 👇️ go to "yourprojectname":
+
+      cd yourprojectname
+
+8. 👇️ run your project:
+
+      python manage.py runserver
+
+
+//Project Structure/////////////////////////////////
+------------------------------------------------------------
+My_Blog
+|
+|----App_Blog(application Folder)
+|	|---__init__.py
+|	|---admin.py (connect model with admin)
+|	|---views.py (application controller file)
+|	|---models.py (database table create file (model))
+|	|---urls.py (application route file)
+|
+|----App_Login(application Folder)
+|	|---__init__.py
+|	|---admin.py (connect model with admin)
+|	|---views.py (application controller file)
+|	|---models.py (database table create file (model))
+|	|---urls.py (application route file)
+|
+|----env(environment variable name)
+|
+|----media(image)
+|----static(css,js)
+|
+|----templates(views)
+|	|---App_Blog(folder)
+|	|---App_Login(folder)
+|	|---master.html
+|	|---index.html
+|	|---about.html
+|	|---contact.html
+|
+|----My_Blog (Main)
+	|---__init__.py
+	|---views.py (MainController)
+	|---manage.py
+	|---sttings.py (config. file)
+	|---urls.py (main route)
+	|---wsgi.py
 
 
 
