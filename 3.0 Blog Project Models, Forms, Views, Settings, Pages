@@ -26,6 +26,26 @@
 8. 👇️ run your project:
 
       python manage.py runserver
+9. 👇️ create project application(App_Login, App_Blog) inside project folder
+
+	python  manage.py  startapp  App_Login
+	python  manage.py  startapp  App_Blog
+
+10. 👇️ Create media, static, templates folder 
+	
+	My_Blog
+	|---App_Blog
+	|---App_Login
+	|---media
+	|---static
+	|---templates
+
+11. 👇️ set configure in settings.py for media, static, templates, App_Blog, App_Login
+
+12. 👇️ create urls.py in application (App_Blog, App_Login) and make connection between main urls.py with application urls.py 
+
+13. 👇️ start developing project from login
+	
 
 
 //Project Structure/////////////////////////////////
