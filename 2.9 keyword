@@ -1,0 +1,11 @@
+Some keyword with definition
+----------------------------
+pass 
+----
+    form.save()
+    pass      //right now you don't know what will be return render(request, '?', context={})
+ 
+ kwargs 
+ ------
+ return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'slug':blog.slug}))
+    
