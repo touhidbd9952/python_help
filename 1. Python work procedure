@@ -36,6 +36,8 @@
 	pip install Pillow   // for image upload
 	pip install django-cleanup  //old image delete
 	pip install django-crispy-forms
+	pip install crispy-bootstrap5
+	pip install mysqlclient
 
 11. 👇️ Create media, static, templates folder 
 	
@@ -49,6 +51,8 @@
 12. 👇️ set configure in settings.py for media, static, templates, App_Blog, App_Login
 
 13. 👇️ create urls.py in application (App_Blog, App_Login) and make connection between main urls.py with application urls.py 
+
+14. 👇️ create views.py in main project
 
 14. 👇️ start developing project from login
 	
