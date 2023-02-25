@@ -31,7 +31,13 @@
 	python  manage.py  startapp  App_Login
 	python  manage.py  startapp  App_Blog
 
-10. 👇️ Create media, static, templates folder 
+10. 👇️ install some package
+
+	pip install Pillow   // for image upload
+	pip install django-cleanup  //old image delete
+	pip install django-crispy-forms
+
+11. 👇️ Create media, static, templates folder 
 	
 	My_Blog
 	|---App_Blog
@@ -40,11 +46,11 @@
 	|---static
 	|---templates
 
-11. 👇️ set configure in settings.py for media, static, templates, App_Blog, App_Login
+12. 👇️ set configure in settings.py for media, static, templates, App_Blog, App_Login
 
-12. 👇️ create urls.py in application (App_Blog, App_Login) and make connection between main urls.py with application urls.py 
+13. 👇️ create urls.py in application (App_Blog, App_Login) and make connection between main urls.py with application urls.py 
 
-13. 👇️ start developing project from login
+14. 👇️ start developing project from login
 	
 
 
