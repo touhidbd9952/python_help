@@ -191,6 +191,44 @@ class UserProfile(models.Model):
 models.py of App_Blog
 ----------------------
 
+from django.db import models
+from django.contrib.auth.models import User
+
+# Create your models here.
+# to see blog site go to medium.com
+
+class Blog(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post_author')
+    blog_title = models.CharField(max_length=255, verbose_name='Put a Title')
+    slug = models.SlugField(max_length=255, unique=True)
+    blog_content = models.TextField(verbose_name='What is in your mind?')
+    blog_image = models.ImageField(upload_to="blog_images", verbose_name="Image")
+    publish_date = models.DateTimeField(auto_now_add=True) #created_at
+    update_date = models.DateTimeField(auto_now=True) #updated_at
+    #author blog_title slug blog_content blog_image publish_date update_date
+
+    def __str__(self):
+        return self.blog_title
+    
+
+class Comment(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="blog_comment")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_comment")
+    comment = models.TextField(verbose_name='Your Comment')
+    comment_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.comment
+
+class Likes(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="liked_blog")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="liker_user")
+
+class Dislikes(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='dislied_blog')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='disliker_user')
+    
+    
 
 ----------------------------------------------------------------------------------------------------------------------------
 
@@ -223,6 +261,86 @@ class ProfilePicForm(forms.ModelForm):
 
 forms.py in App_Blog
 --------------------
+
+from django import forms
+from App_Blog.models import Blog, Comment
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = ['blog_title','blog_content','blog_image',]
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment',]
+
+
+
+///////////////////////urls.py//////////////////////////////////////////////////////
+urls.py in main project
+-----------------------
+
+from django.contrib import admin
+from django.urls import path, include
+from . import views
+
+from django.conf import settings
+from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('account/', include('App_Login.urls')),
+    path('blog/', include('App_Blog.urls')),
+    path('', views.Index, name='index'),
+]
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+urls.py in App_Login
+---------------------
+
+from django.urls import path
+from App_Login import views
+
+
+app_name = 'App_Login'
+
+urlpatterns = [
+    path('signup/', views.sign_up, name='singup'),
+	path('login/', views.login_page, name='login'),
+    path('logout/', views.logout_user, name='logout'),
+    path('user-profile/', views.user_profile, name='user_profile'),
+    path('user-info-edit/', views.user_info_edit, name='user_info_edit'),
+    path('password/', views.user_password_change, name='user_password_change'),
+    path('add-profile-pic/', views.add_profile_pic, name="add_profile_pic"),
+    path('change-profile-pic/', views.change_profile_pic, name="change_profile_pic"),
+]
+
+
+urls.py in App_Blog
+---------------------
+
+from django.urls import path
+from App_Blog import views
+
+app_name = 'App_Blog'
+
+urlpatterns = [
+    path('', views.blog_list, name='blog_list'),
+    path('index', views.Index, name='index'),
+    path('add-blog', views.add_blog, name='add_blog'),
+    path('edit-blog/<int:id>', views.edit_blog, name='edit_blog'),
+    path('myblog-list', views.myblog_list, name='myblog_list'),
+    path('blog-details/<slug:slug>/', views.blog_details, name='blog_details'),
+    path('blog-likes/<pk>', views.blog_likes, name='blog_likes'),
+    path('blog-unlike/<pk>', views.blog_unlikes, name='blog_unlikes'),
+    
+]
+
+
 
 
 
@@ -353,6 +471,122 @@ def change_profile_pic(request):
 
 views.py in App_Blog
 -----------------------
+
+from django.shortcuts import render
+from django.shortcuts import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from App_Blog.forms import BlogForm,CommentForm
+from App_Blog.models import Blog,Comment,Likes
+import uuid
+
+# Create your views here.
+def blog_list(request):
+    blogs = Blog.objects.all()
+    return render(request, 'App_Blog/blog_list.html', context={'blog_list':blogs})
+
+def Index(request):
+    return render(request, 'App_Blog/index.html', context={})
+
+@login_required
+def add_blog(request):
+    form = BlogForm()
+    result = False
+    msg = ""
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            formObj = form.save(commit=False)
+            formObj.author = request.user
+            formObj.slug = request.POST.get('blog_title').replace(" ", "-") + "-" + str(uuid.uuid4())
+
+            formObj.save()
+            result=True
+            msg = "Save Successfully"
+
+    data={
+        'form':form,
+        'result':result,
+        'msg':msg,
+    }
+    return render(request,'App_Blog/add_blog.html', context=data)
+
+@login_required
+def edit_blog(request,id):
+    predata = Blog.objects.get(pk=id)
+    result = False
+    msg = ""
+    form = BlogForm(instance=predata)
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES, instance=predata)
+        if form.is_valid():
+            formObj = form.save(commit=False)
+            formObj.author = request.user
+            formObj.slug = request.POST.get('blog_title').replace(" ","-")+"-"+str(uuid.uuid4())
+            formObj.save()
+            result = True
+            msg = "Updated Successfully"
+
+    data ={
+        'form':form,
+        'result':result,
+        'msg':msg,
+    }
+    return render(request,'App_Blog/edit_blog.html',context=data)
+
+@login_required
+def myblog_list(request):
+    blogs = Blog.objects.filter(author=request.user.id).order_by('-publish_date')  #decending order
+    return render(request, 'App_Blog/myblog_list.html',context={'blog_list':blogs})
+
+@login_required
+def blog_details(request, slug):
+    blog = Blog.objects.get(slug=slug)
+    user = request.user
+    comments = Comment.objects.filter(blog=blog)
+
+    liked = False
+    alreadyliked = Likes.objects.filter(blog=blog, user=user)
+    if alreadyliked:
+        liked = True
+
+    ########Comment#########
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            formObj = form.save(commit=False)
+            formObj.blog = blog
+            formObj.user = request.user
+            formObj.save()
+            return HttpResponseRedirect(reverse('App_Blog:blog_details',kwargs={'slug':slug}))
+    else:
+        form = CommentForm()
+    data = {
+        'blog':blog,
+        'form':form,
+        'comments':comments,
+        'liked':liked,
+    }
+    return render(request, 'App_Blog/blog_details.html', context=data)
+
+@login_required
+def blog_likes(request, pk):
+    blog = Blog.objects.get(pk=pk)
+    user = request.user
+    already_liked = Likes.objects.filter(blog=blog, user=user)
+    if not already_liked:
+        likesObj = Likes(blog=blog, user=user)
+        likesObj.save()
+    return HttpResponseRedirect(reverse('App_Blog:blog_details',kwargs={'slug':blog.slug,}))
+
+@login_required
+def blog_unlikes(request, pk):
+    blog = Blog.objects.get(pk=pk)
+    user = request.user
+    already_liked = Likes.objects.filter(blog=blog, user=user)
+    already_liked.delete()
+    return HttpResponseRedirect(reverse('App_Blog:blog_details', kwargs={'slug':blog.slug}))
+
 
 
 
@@ -573,7 +807,204 @@ add_edit_profile_otherinfo.html
 {% endblock %}
 
 
+
 --------------------------------------------------------------------------------------------------------------------------------
+      Blog
+--------------------------------------------------------------------------------------------------------------------------------
+
+blog_list.html
+--------------------------
+
+{% extends 'master.html' %}
+{% load custom_filters %}
+{% block title_block %}Blog List{% endblock %}
+{% block content %}
+
+<h1>Blog List</h1>
+{% for b in blog_list %}
+<div class="row" style="margin-bottom:20px;">
+  <div class="col-sm-6">
+    <p>
+    <h3>{{b.blog_title}}</h3>
+    <h6>{{b.publish_date|date:"D d M Y"}}</h6>
+
+    {% if user.is_authenticated and  user ==  b.user %}
+    <a href="{% url 'App_Blog:edit_blog' id=b.id %}">Edit Blog</a>
+    {% endif %}
+    </p>
+    <p>
+        {{b.blog_content|range_filter|linebreaks}}
+        <br>
+        <a href="{% url 'App_Blog:blog_details' slug=b.slug %}">Read More</a>
+    </p>
+  </div>
+  <div class="col-sm-6">  
+    <img src="/media/{{b.blog_image}}" width="200px">
+  </div>
+</div>
+<hr>
+{% endfor %}
+
+
+{% endblock %}
+
+
+-------------------------------------------------------------------------------------------------------------
+
+add_blog.html
+-------------------------
+
+{%extends 'master.html'%}
+{%load crispy_forms_tags %}
+{%block block_title%}Add Blog Form{%endblock%}
+{%block content%}
+
+<h3>Add Blog Form</h3>
+{% if result %}
+<div class="alert alert-success">
+    {{msg}}
+</div>
+{% endif %}
+<form method="POST" enctype="multipart/form-data">
+{{form|crispy}}
+{%csrf_token%}
+<button type="submit" class="btn btn-primary btn-sm">Add</button>
+</form>
+
+{%endblock%}
+
+
+---------------------------------------------------------------------------------------------------------------
+
+edit_blog.html
+----------------------------
+
+{% extends 'master.html'%}
+{% load crispy_forms_tags %}
+{% block block_title %}Edit Blog{%endblock%}
+{% block content %}
+
+<a href="{% url 'App_Blog:myblog_list' %}">Back</a>
+<h3>Edit Blog</h3>
+{% if result %}
+    <div class="alert alert-success">{{msg}}</div>
+{% endif %}
+<form method="POST" enctype="multipart/form-data">
+    {{form|crispy}}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary btn-sm">Change</button>
+</form>
+
+{% endblock %}
+
+
+------------------------------------------------------------------------------------------------------------------
+
+blog_details.html
+------------------
+
+{% extends 'master.html' %}
+{%load crispy_forms_tags%}
+{% block block_title %}Blog Details{% endblock %}
+{% block content%}
+
+<div class="row" style="margin-bottom:20px;">
+    <div class="col-sm-6">
+<h2>{{blog.blog_title}}</h2>
+<i><h4>Posted by: @{{blog.author.first_name}} {{blog.author.last_name}}</h4></i>
+<i><h6>Published on: {{blog.publish_date|date:"D d M Y"}}</h6></i>
+<i><h6>Updated on: {{blog.update_date|date:"D d M Y"}}</h6></i>
+    </div>
+    <div class="col-sm-6">
+        <img src="/media/{{blog.blog_image}}" width="200px">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        {{blog.blog_content|linebreaks}}
+        <br>
+        <a href="{% url 'App_Blog:blog_likes' pk=blog.pk %}" class="btn btn-primary btn-sm" title="Like" style="margin-right:10px;"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+        <a href="{% url 'App_Blog:blog_unlikes' pk=blog.pk %}" class="btn btn-primary btn-sm" title="Dislike"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
+        {%if liked %}
+        <span style="padding-left:20px;"><a href="javascript:">You Liked</a></span>
+        {% endif %}
+    </div>
+</div>
+
+
+<div class="row" style="margin-top:20px;">   
+        <div class="col-sm-6">
+            Comments:
+            <br>
+            {%for c in comments%}
+            <table>
+                <tr>
+                    <td><a><b>{{c.user.first_name}}:</b></a> {{c.comment}}</td>
+                </tr>
+            </table>   
+            {%endfor%}
+        </div>
+        <div class="col-sm-6" style="padding-bottom:20px;">
+            <form method="POST">
+                {{form|crispy}}
+                {%csrf_token%}
+                <button type="submit" class="btn btn-primary btn-sm"> Add</button>
+            </form>
+        </div>
+        
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+myblog_list.html
+-----------------------
+
+{% extends 'master.html' %}
+{% load custom_filters %}
+{% block block_title%}My Blog List{%endblock%}
+{% block content %}
+
+<h3>My Blog List</h3>
+
+
+{% for b in blog_list %}
+<div class="row" style="margin-bottom:20px;">
+  <div class="col-sm-6">
+    <p>
+    <h3>{{b.blog_title}}</h3>
+    <h6>{{b.publish_date|date:"D d M Y"}}</h6>
+    </p>
+    
+    <p>
+        {{b.blog_content|range_filter|linebreaks}}
+        <br>
+        <a href="{% url 'App_Blog:blog_details' slug=b.slug %}">Read More</a>
+    </p>
+  </div>
+  <div class="col-sm-6">  
+    <img src="/media/{{b.blog_image}}" width="200px">
+  </div>
+</div>
+<hr>
+{% endfor %}
+
+
+{% endblock %}
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
 
 
 
