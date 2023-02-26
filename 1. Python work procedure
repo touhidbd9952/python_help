@@ -326,7 +326,56 @@ class Dislikes(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='dislied_blog')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='disliker_user')
     
-    
+
+/////////create superadmin account///////////////////////
+create superadmin account
+-------------------------------------
+py manage.py createsuperuser
+username:admin
+email address:admin@gmail.com
+password:123456789
+Bypass password validation and create user anyway? [y/N]: y
+
+now you can login to your admin panel
+--------------------------------------------------
+127.0.0.1:8000/admin
+
+
+///////// Add All Your Table to Admin Panel /////////////
+in admin.py of App_Login
+-------------------------
+
+from django.contrib import admin
+from App_Login.models import UserProfile
+
+# Register your models here.
+admin.site.register(UserProfile)
+
+in admin.py of App_Blog
+------------------------
+
+from django.contrib import admin
+from App_Blog.models import Blog, Comment, Likes
+
+# Register your models here.
+admin.site.register(Blog)
+admin.site.register(Comment)
+admin.site.register(Likes)
+
+
+///////// migrate all your table in database /////////////
+1. create a database in mysql
+2. configure database in settings.py
+3. run migration command:
+	
+	py manage.py migrate
+	py manage.py makemigrations App_Login
+	py manage.py makemigrations App_Blog
+	py manage.py migrate
+
+4. check in database
+
+
 
 ----------------------------------------------------------------------------------------------------------------------------
 
