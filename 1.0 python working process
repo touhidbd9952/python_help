@@ -113,6 +113,29 @@ Total Post: {{user.user_post.count}}
 
 
 
+////////by using relatedname of table, show user's all post////////////////////////////////////
+
+1. find user of that table
+2. dot
+3. relation of this use with particular table
+4. dot
+5. table column name
+syntax:  find user of that table.relation of this use with particular table.table column name
+               --------------------------- . -------------------------------------------------- . ------------------------
+	f.following(follow table relatedname).user_post(post table relatedname).post-table-column_name
+
+{% for   f   in   following_list %}
+  {% for p in f.following.user_post.all %}     //user of follow table relatedname.post table relatedname.all
+
+     {{p.author}}
+      <br>
+     <img src="/media/{{p.image}}" width="100%">
+
+  {% endfor %}
+{% endfor %}
+
+
+
 
 
 
