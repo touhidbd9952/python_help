@@ -1,3 +1,5 @@
+
+
 SELECT * FROM  TableName   //sql
 tablename.objects.all()  //django
 
@@ -10,7 +12,7 @@ tablename.objects.get(pk=pk)
 
 SELECT * FROM TableName WHERE columnName = value
 tablename.objects.filter(columnName = value)
-blogs = Blog.objects.filter(author=request.user.id)
+blogs = Blog.objects.filter(author=request.user.id)  //to see output in console -->  print(blogs)
 
 
 SELECT * FROM TableName WHERE columnName = value ORDER_BY columnName
