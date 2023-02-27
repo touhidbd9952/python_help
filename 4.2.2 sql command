@@ -19,6 +19,7 @@ tablename.objects.filter(columnName = value).order_by('columnName1','columnName2
 Blog.objects.order_by('publish_date')  // asending order
 Blog.objects.order_by('-publish_date') // (-) decending order
 
+/////delete////////////////////////////////////////
 musician = Musician.objects.get(pk=musician_id).delete(0) // for delete
 
 /////where .id.. in ...list...////////////////////
