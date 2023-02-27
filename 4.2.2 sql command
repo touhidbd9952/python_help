@@ -20,3 +20,10 @@ Blog.objects.order_by('publish_date')  // asending order
 Blog.objects.order_by('-publish_date') // (-) decending order
 
 musician = Musician.objects.get(pk=musician_id).delete(0) // for delete
+
+/////where .id.. in ...list...////////////////////
+following_list = Follow.objects.filter(follower=request.user)
+post_list = Post.objects.filter(author__in = following_list.values_list('following'))
+
+////where ... like ////////////////////////
+search_result = User.objects.filter(username__icontains = search)
