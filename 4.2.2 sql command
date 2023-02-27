@@ -30,3 +30,9 @@ post_list = Post.objects.filter(author__in = following_list.values_list('followi
 
 ////where ... like ////////////////////////
 search_result = User.objects.filter(username__icontains = search)
+
+////make an array of post id///////////////////////////////
+liked_post = Like.objects.filter(user=request.user)
+liked_post_list = liked_post.values_list('post', flat=True)  //it will show post id as [2,5,6,...]
+
+
