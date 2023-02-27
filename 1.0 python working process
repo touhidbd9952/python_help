@@ -1,3 +1,125 @@
+models.py of App_Login
+------------
+class UserProfile(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
+	profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
+	description = models.TextField(blank=True)
+	dob = models.DateField(blank=True, null=True)
+	website = models.URLField(blank=True)
+	facebook = models.URLField(blank=True)
+
+class Follow(models.Model):
+	follower = models.Foreignkey(User, on_delete=models.CASCADE, related_name='follower')
+	following = models.Foreignkey(User, on_delete=models.CASCADE, related_name='following')
+	created_at = models.DateTimeField(auto_now_add=True)
+
+
+models.py of App_Post
+------------
+class Post(models.Model):
+	author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_post")
+	image = models.ImageField(upload_to='post_images')
+	caption = models.CharField(max_length=255, blank=True)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+	class Meta:
+		ordering = ['-created_at',]
+
+class Like(models.Model):
+	post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='liked_post')
+	user = models.ForeignKey(User, on_delete=models.CASACADE, related_name='post_liker')
+	created_at = models.DateTimeField(auto_now_add=True)
+
+	def _str_(self):
+		return '{} : {}'.format(self.user, self.post)
+
+forms.py
+----------
+class EditProfile(forms.ModelForm):
+	dod = forms.DateField(widget=forms.TextInput(attrs={'type':'date'}))
+	class Meta:
+		model = UserProfile
+		exclude = ['user',]   //we will show all field except user id field
+
+templates
+|---App_Login
+|---App_Blog
+|---navbar.html
+|---master.html
+|
+|
+
+
+in views.py
+-----------------
+@login_required
+def home(request):
+	title = 'Home'
+	if request.method == 'GET':
+		search = request.GET.get('search', '')  //need a blank space
+		search_result = User.objects.filter(username__icontains = search)
+	data ={
+	  'title':title,
+	   'searchword':search,
+	   'search_result':search_result,
+	}
+	return render(request, 'App_Posts/home.html', context=data)
+
+@login_required
+def follow(request, username):
+	following_user = User.objects.get(username=username)
+	follower_user = request.user
+	already_followed = Follow.objects.filter(follower=follower_user, following=following_user)
+	if not already_followed:
+		followObj = Follow(follower=follower_user, following=following_user)
+		followObj.save()
+	return HttpResponseRedirect(reverse('App_Login:user', kwargs={'username':username}))
+
+@login_required
+def unfollow(request, username):
+	following_user = User.objects.get(username=username)
+	follower_user = request.user
+	already_followed = Follow.objects.filter(follower=follower_user, following=following_user)
+	already_followed.delete()
+	return HttpResponseRedirect(reverse('App_Login:user', kwargs={'username':username}))
+
+
+in urls.py
+------------
+path('user/<username>/', views.user, name='user'),
+
+
+in HTML Page
+-------------------
+{% if user.user_profile.profile_pic %}
+<img src="{{user.user_profile.profile_pic}}" width="40px" class="">
+{% endif %}
+
+Username: {{user.username}}
+Name: {{user.first_name}} {{user.last_name}}
+Total Post: {{user.user_post.count}}
+<h4>{{user.user_post.count}} posts &nbsp;&nbsp; {{user.following.count}} followers &nbsp;&nbsp; {{user.follower.count}} following</h4>
+<div class="row">
+{% for post in user.user_post.all %}
+   <img src="/media/{{post.image}}" title="{{post.caption}}">
+{% endfor %}
+</div>
+{% block css_block %}
+  <style>
+    .imagestyle{width:150px;padding:5px;border:1px solid #000; margin: 5px 5px 5px 5px;}
+  </style>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
 Browser (request)   =====> urls.py (route)
 	/\			||
 	||			||
