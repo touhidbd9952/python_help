@@ -1,0 +1,77 @@
+/////models.py of App_Shop/////////////////////////////////////////////
+-----------------------
+from django.db import models
+
+class Category(models.Model):
+	title = models.CharField(max_length=20)
+	created = models.DateTimeField(auto_now_add=True)
+	
+	def __str__(self):
+		return self.title
+
+	class Meta:
+		verbose_name_plural = "Categories"
+
+class Product(models.Model):
+	mainimage = models.Imag=Field(upload_to='Products')
+	name = models.CharField(max_length=255)
+	category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')
+	short_des = models.TextField(max_length=255, varbose_name='Preview Text')
+	long_des = models.TextField(max_length=1000, varbose_name='Description')
+	price = models.FloatField()
+	old_price = models.FloatField(default=0.00)
+	created = models.DateTimeField(auto_now_add=True)
+
+	def __str__(self):
+		return self.name
+
+	class Meta:
+		ordering = ['-created',]
+
+
+////////migration//////////////////////////
+py manage.py makemigrations App_Shop
+py manage.py migrate
+
+///////register in admin of App_Shop////////////////////
+from django.contrib import admin
+from App_models import Category, Product
+
+admin.site.register(Category)
+admin.site.register(Product)
+
+///////views.py of App_Shop////////////////////////////
+
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView
+from App_Shop.models import Product
+
+class Home(ListView)
+	model = Product
+	template_name = 'App_Shop/home.html'
+
+////////urls.py of App_Shop/////////////////////////////
+from django.urls import path
+from App_Shop import views
+
+app_name = 'App_Shop'
+
+urlpatterns = [
+	path('', views.Home.as_view(), name='home'),
+	
+]
+
+
+///////HTML//////////////////////////////////////////////////////////////
+
+in home.html
+-----------------
+{% extends 'master.html' %}
+{% block title_block %}Home{% endblock %}
+{% block body_block %}
+
+   {% for p in object_list %}  
+       {{p.name}}
+   {% endfor %}
+
+{% endblock %}
