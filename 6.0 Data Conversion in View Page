@@ -9,20 +9,28 @@ def  index(request):
 
 
 ///Data conversion (upper case, lower case)///////////
+
 //to uppercase
 <h3>{{my_variable|upper}}</h3>
+
 //to lowercase
 <h3>{{my_variable|lower}}</h3>
+
 //to extend value
 <h3>{{my_number|add:7}}</h3>   //if my_number=8, then my_number = 8+7
+
 //to remove particular string from a given string
 <h3>{{my_string|cut:"a"}}</h3> //if my_string = "aabc", then my_string ="bc"
+
 //apply several convertion
 <h3>{{my_string|cut:"a"|upper}}</h3>  //BC
+
 //date convertion
 {{my_dbdate|date:"D d M Y"}}   //Wed 09 Jan 2008
 {{albumlist.release_date|date:"d/m/ Y"}}   //09/02/2008
 
+//decimal point
+{{product.price|floatformat:2}}
 
 
 
