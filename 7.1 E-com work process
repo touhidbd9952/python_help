@@ -3,6 +3,7 @@ My_Ecom_Project
 |----App_Login
 |----App_Shop
 |----App_Order
+|----App_Payment
 |----media
 |      |---Products
 |      |---Profile_pic
@@ -12,9 +13,8 @@ My_Ecom_Project
 |----templates
 |      |---App_Login
 |      |---App_Shop
-|      |    |---home.html(show product)
-|      |    |---product_detail(show single product details)
 |      |---App_Order
+|      |---App_Payment
 |      |---Layouts
 |      |    |---master.html
 |      |---inc
@@ -22,6 +22,7 @@ My_Ecom_Project
 |----My_Ecom_Project
 |----db.sqlite3
 |----manage.py
+
 
 forms.py of App_Login
 ---------------------------------------------------------
