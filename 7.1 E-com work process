@@ -1,3 +1,28 @@
+
+My_Ecom_Project
+|----App_Login
+|----App_Shop
+|----App_Order
+|----media
+|      |---Products
+|      |---Profile_pic
+|----static
+|      |---css
+|      |---js
+|----templates
+|      |---App_Login
+|      |---App_Shop
+|      |    |---home.html(show product)
+|      |    |---product_detail(show single product details)
+|      |---App_Order
+|      |---Layouts
+|      |    |---master.html
+|      |---inc
+|           |---navbar.html
+|----My_Ecom_Project
+|----db.sqlite3
+|----manage.py
+
 forms.py of App_Login
 ---------------------------------------------------------
 
