@@ -1,3 +1,26 @@
+My_Ecom_Project
+|----App_Login
+|----App_Shop
+|----App_Order
+|----media
+|      |---Products
+|      |---Profile_pic
+|----static
+|      |---css
+|      |---js
+|----templates
+|      |---App_Login
+|      |---App_Shop
+|      |---App_Order
+|      |---Layouts
+|      |    |---master.html
+|      |---inc
+|           |---navbar.html
+|----My_Ecom_Project
+|----db.sqlite3
+|----manage.py
+
+
 /////models.py of App_Shop/////////////////////////////////////////////
 -----------------------
 from django.db import models
@@ -45,10 +68,35 @@ admin.site.register(Product)
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from App_Shop.models import Product
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class Home(ListView)
+
+class Home(ListView):
 	model = Product
 	template_name = 'App_Shop/home.html'
+
+
+class ProductDetail(LoginRequiredMixin, DetailView):
+	model = Product
+	template_name = 'App_Shop/product_detail.html'
+
+
+////////urls.py of main/////////////////////////////////////
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
+
+urlpatterns =[
+	path('admin/', admin.site.urls),
+	path('', include('App_Shop.urls')),
+	path('account/', include('App_Login.urls')),
+	path('shop/', include('App_Order.urls')),
+]
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 ////////urls.py of App_Shop/////////////////////////////
 from django.urls import path
@@ -58,6 +106,7 @@ app_name = 'App_Shop'
 
 urlpatterns = [
 	path('', views.Home.as_view(), name='home'),
+	path('product/<pk>/', views.ProductDetail.as_view(), name='product_detail'),
 	
 ]
 
@@ -75,3 +124,16 @@ in home.html
    {% endfor %}
 
 {% endblock %}
+
+
+in product_detail.html
+-----------------------------
+{% extends 'master.html' %}
+{% block body_block %}
+
+      {{object.name}}
+
+{% endblock %}
+
+
+
