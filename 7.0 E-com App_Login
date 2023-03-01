@@ -1,3 +1,28 @@
+My_Ecom_Project
+|----App_Login
+|----App_Shop
+|----App_Order
+|----App_Payment
+|----media
+|      |---Products
+|      |---Profile_pic
+|----static
+|      |---css
+|      |---js
+|----templates
+|      |---App_Login
+|      |---App_Shop
+|      |---App_Order
+|      |---App_Payment
+|      |---Layouts
+|      |    |---master.html
+|      |---inc
+|           |---navbar.html
+|----My_Ecom_Project
+|----db.sqlite3
+|----manage.py
+
+
 ///////Befor migration//////////////////////
 
 //////Step-1: we will create some custom model in models.py of App_Login///////////////////////////////////////////////////////////////
