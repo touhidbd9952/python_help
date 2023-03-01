@@ -119,6 +119,91 @@ def add_to_cart(request, pk):
 		message.info(request, "This item was added to your cart")
 		return redirect("App_Shop:home")
 
+@login_required
+def cart_view(request):
+	carts = Cart.objects.filter(user=request.user, purchased=False)
+	orders = Order.objects.filter(user = request.user, ordered=False)
+	if carts.exists() and orders.exists():
+		order = orders[0]
+		data = {
+		   'carts':carts,
+		   'order':order
+		}
+		return render(request, 'App_Order/cart.html', context=data)
+	else:
+		messages.warning(request, "You don't have any item in your cart!")
+		return redirect("App_Shop:home")
+
+@login_required
+def remove_from_cart(request, pk):
+	item = get_object_or_404(Product, pk=pk)
+	order_qs = Order.objects.filter(user=request.user, ordered=False)
+	if order_qs.exists():
+		order = order_qs[0]
+		if order.orderitems.filter(item=item).exists():
+			order_item = Cart.objects.filter(item=item, user=request.user, parchased=False)
+			order_item = order_item[0] //convert to object
+			order.orderitems.remove(order_item)
+			order_item.delete()
+			message.warning(request, "This item was removed from your cart")
+			return redirect("App_Order:cart")
+		else:
+			messages.info(request, "This item was not in your cart")
+			return redirect("App_Shop:home")
+	else:
+		messages.info(request, "You don't have an active order")
+		return redirect("App_Shop:home")
+
+@login_required
+def increase_cart(request, pk):
+	item = get_object_or_404(Product, pk=pk)
+	order_qs = Order.objects.filter(user = request.user, ordered=False)
+	if order_qs.exists():
+		order = order_qs[0] //convert to object
+		if order.orderitems.filter(item=item).exists():
+			order_item = Cart.objects.filter(item=item, user=request.user, parchased=False)
+			order_item = order_item[0] //convert to object
+			if order_item.quantity >= 1:
+				order_item.quantity +=1
+				order_item.save()
+			
+		else:
+			messages.info(request, f"{item.name} is not in your cart")
+			return redirect("App_Shop:home")
+	else:
+		messages.info(request, "You don't have an active order")
+		return redirect("App_Shop:home")
+
+@login_required
+def decrease_cart(request, pk):
+	item = get_object_or_404(Product, pk=pk)
+	order_qs = Order.objects.filter(user = request.user, ordered=False)
+	if order_qs.exists():
+		order = order_qs[0] //convert to object
+		if order.orderitems.filter(item=item).exists():
+			order_item = Cart.objects.filter(item=item, user=request.user, parchased=False)
+			order_item = order_item[0] //convert to object
+			if order_item.quantity > 1:
+				order_item.quantity -=1
+				order_item.save()
+				messages.info(request, f"{item.name} quantity has been updated")
+				return redirect("App_Order:cart")
+			else:
+				order.orderitems.remove(order_item)
+				order_item.delete()
+				messages.warning(request, f"{item.name} has been removed from your cart")
+				return redirect("App_Order:cart")
+			
+		else:
+			messages.info(request, f"{item.name} is not in your cart")
+			return redirect("App_Shop:home")
+			
+	else:
+		messages.info(request, "You don't have an active order")
+		return redirect("App_Shop:home")
+
+
+
 
 
 
@@ -132,14 +217,126 @@ app_name = 'App_Order'
 
 urlpatterns =[
 	path('add/<pk>/', views.add_to_cart, name='add'),
-	
+	path('cart/', views.cart_view, name='cart'),
+	path('remove-cart-item/<pk>', views.remove_cart_item, name='remove_cart_item'),
+	path('increase/<pk>/', views.increase_cart, name="increase_cart"),
+	path('decrease/<pk>/', views.decrease_cart, name="decrease_cart"),
 ]
 
 
 
 
 ///////HTML//////////////////////////////////////////////////////////////
+in navbar.html
+------------------
+<a href="{% url 'App_Order:cart' %}"><i class="fa fa-shopping-cart"></i></a>
+
+
 
 in product_single.html
 -----------------
 <a href="{% url 'App_Order:add' pk=object.pk %}">Add To Cart</a>
+
+
+in cart.html
+------------------
+{% extends 'master.html' %}
+{% block body_block %}
+
+<div class="container my-5">
+  <div class="my-5">
+    <h2>Your Cart</h2>
+  </div>
+  <table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col" width="15%">#</th>
+			<th scope="col">Product Name</th>
+			<th scope="col">Qty</th>
+			<th scope="col" align="right">Price</th>
+			<th scope="col">Remove</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for d in carts %}
+		<tr>
+			<th scope="row">{{forloop.counter}}</th>
+
+			<td>{{d.item.name}}</td>
+
+			<td>
+			   <a href="{% url 'App_Order:decrease_cart' pk=d.item.pk%}" class="mr-2">
+			     <span class="badge badge-light">
+			       <i class="fas fa-minus"></i>
+			   </a>
+
+			   {{d.quantity}}
+
+			   <a href="{% url 'App_Order:increase_cart' pk=d.item.pk%}" class="mr-2">
+			     <span class="badge badge-light">
+			       <i class="fas fa-plus"></i>
+			   </a>	
+			</td>
+
+			<td align="right">{{d.get_total}}</td>
+
+			<td>
+			   <a href="{% url 'App_Order:remove_cart_item' pk=d.item.pk %}">
+			     <i class="fa fa-remove"></i>
+			   </a>
+			</td>
+		</tr>
+		{% endfor %}
+
+		<tr>
+			<th scope="row"></th>
+			<td colspan="2">Total</td>
+			<td align="right">{{order.get_totals | floatformat:2 }}</td>
+			<td></td>
+		</tr>
+
+		<tr>
+			<th scope="row"></th>
+			<td colspan="4" class="text-right">
+			   <a href="{% url 'App_Shop:home' %}" class="btn btn-warning mr-4">Continue Shoping</a>
+			  <a href="{% url '' %}" class="btn btn-success mr-4">Proceed To Checkout</a>
+			</td>
+		</tr>
+	</tbody>
+  </table>
+</div>
+
+{% endblock %}
+
+
+
+//////Count Total Order Item and show as navbar cart total//////////////////////////////////////////
+1. create folder "templatetags" in App_Order
+2. create a file "__init__.py"
+3. create a file "cart_tag.py"
+
+   in cart_tag.py
+----------------------
+from django import template
+from App_Order.models import Order
+
+register = template.Library()
+
+@register.filter
+def cart_total(user):
+	order = Order.objects.filter(user=user, ordered=False)
+	if order.exists():
+		return order[0].orderitems.count()
+	else:
+		return 0
+
+in navbar.html
+------------------
+{% load cart_tag %}
+<a href="{% url 'App_Order:cart' %}" class="nav-link">
+   <i class="fa fa-shopping-cart"></i>
+   <span class="badge badge-light">{{ request.user | cart_total }}</span>
+</a>
+
+
+
