@@ -49,32 +49,31 @@ urlpatterns += statice(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 -----------------------
 from django.db import models
 from django.conf import settings
-
+# Create your models here.
 
 class BillingAddress(models.Model):
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-	address = models.CharField(max_length=255, blank=True)
-	zipcode = models.CharField(max_length=10, blank=True)
-	city = models.CharField(max_length=30, blank=True)
-	country = models.CharField(max_length=50, blank=True)
-	created = models.DateTimeField(auto_now_add=True)
-	updated = models.DateTimeField(auto_now)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    address = models.CharField(max_length=264, blank=True)
+    zipcode = models.CharField(max_length=10, blank=True)
+    city = models.CharField(max_length=30, blank=True)
+    country = models.CharField(max_length=20, blank=True)
 
-	//to show how many product of each item
-	def  __str__(self):
-		return f'{self.user.profile.username} billing address'
+    def __str__(self):
+        return f'{self.user.profile.username} billing address'
 
-	//to check, user has fill-uped all the filled of shipping form or not
-	def  is_fully_filled(self):
-		field_name_list = [f.name for f in self._meta.get_fields()]
-		for field_name in field_name_list:
-			value = getattr(self, field_name)
-			if value is None or value =='':
-				return False
-			return True
+    def is_fully_filled(self):
+        field_names = [f.name for f in self._meta.get_fields()]
 
-	class Meta:
-		verbose_name_plural = "Billing Addresses"
+        for field_name in field_names:
+            value = getattr(self, field_name)
+            if value is None or value=='':
+                return False
+        return True
+
+
+    class Meta:
+        verbose_name_plural = "Billing Addresses"
+
 
 
 
@@ -87,6 +86,8 @@ py manage.py migrate
 from django.contrib import admin
 from App_Payment.models import BillingAddress
 
+# Register your models here.
+
 admin.site.register(BillingAddress)
 
 
@@ -96,10 +97,11 @@ from django import forms
 from App_Payment.models import BillingAddress
 
 
+
 class BillingForm(forms.ModelForm):
-	class Meta:
-		model = BillingAddress
-		fields = ['address', 'zipcode', 'city', 'country']
+    class Meta:
+        model = BillingAddress
+        fields = ['address', 'zipcode', 'city', 'country']
 
 
 
@@ -107,141 +109,120 @@ class BillingForm(forms.ModelForm):
 
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.urls import reverse
+from django.contrib import messages
+#models and forms
 from App_Order.models import Order, Cart
-from App_Payment.models import BillingAddress
+from App_Payment.forms import BillingAddress
 from App_Payment.forms import BillingForm
+
+
 from django.contrib.auth.decorators import login_required
 
-#for payment by sslcommerz
+# for payment
 import requests
 from sslcommerz_python.payment import SSLCSession
 from decimal import Decimal
 import socket
 from django.views.decorators.csrf import csrf_exempt
 
-
-
+# Create your views here.
 @login_required
 def checkout(request):
-	saved_address = BillingAddress.objects.get_or_create(user=request.user)
-	#print(saved_address)
-	saved_address = saved_address[0] //convert to object from tuple
-	form = BillingForm(instance = saved_address)
-	if request.method == 'POST':
-		form = BillingForm(request.POST, instance = saved_address)
-		if from.is_valid():
-			form.save()
-			form = BillingForm(instance = saved_address)
-			messages.success(rquest, f"Shipping Address Saved!")
-
-	order_qs = Order.objects.filter(user=request.user, ordered=False)
-	order_items = order_qs[0].orderitems.all()
-	order_total = order_qs[0].get_totals()
-
-	data = {
-	   'form':form,
-	   'order_items': order_items,
-	   'order_total':order_total,
-  	   'saved_address':saved_address,
-	}
-	return render(request, 'App_Payment/checkout.html', context = data)
+    saved_address = BillingAddress.objects.get_or_create(user=request.user)
+    saved_address = saved_address[0]
+    print(saved_address)
+    form = BillingForm(instance=saved_address)
+    if request.method == "POST":
+        form = BillingForm(request.POST, instance=saved_address)
+        if form.is_valid():
+            form.save()
+            form = BillingForm(instance=saved_address)
+            messages.success(request, f"Shipping Address Saved!")
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    #print(order_qs)
+    order_items = order_qs[0].orderitems.all()
+    #print(order_items)
+    order_total = order_qs[0].get_totals()
+    return render(request, 'App_Payment/checkout.html', context={"form":form, "order_items":order_items, "order_total":order_total, "saved_address":saved_address})
 
 @login_required
 def payment(request):
-	saved_address = BillingAddress.objects.get_or_create(user = request.user)
-	saved_address = saved_address[0]
-	if not saved_address.is_fully_filled():
-		messages.info(request, f"Please complete shipping address!")
-		return redirect("App_Payment:checkout")
-	if not request.user.profile.is_fully_filled():
-		messages.info(request, f"Please complete profile details!")
-		return redirect("App_Login:profile")
-	
-	#payment system by sslcommerz
-	#you can get below code from sslcommerz 	"developer.sslcommerz.com"
-	#"sslc_is_sandbox=True" for pactice time but in real time  "sslc_is_sandbox=False"
-	
-	store_id = "your_sslc_store_id"
-	API_Key = "your_store_passcode"
-	mypayment = SSLCSession(sslc_is_sandbox = True, sslc_store_id = store_id, sslc_store_pass = API_Key)
-	
-	#show payment status (success, fail, cancel) in status_url (App_Payment/complete.html page)
-	status_url = request.build_absolute_url(reverse("App_Payment:complete"))
-	mypayment.set_urls(success_url = status_url, fail_url = status_url, cancel_url = status_url, ipn_url = status_url)
+    saved_address = BillingAddress.objects.get_or_create(user=request.user)
+    saved_address = saved_address[0]
+    if not saved_address.is_fully_filled():
+        messages.info(request, f"Please complete shipping address!")
+        return redirect("App_Payment:checkout")
+
+    if not request.user.profile.is_fully_filled():
+        messages.info(request, f"Please complete profile details!")
+        return redirect("App_Login:profile")
+
+    store_id = 'none5e026730bdf7f'
+    API_key = 'none5e026730bdf7f@ssl'
+    mypayment = SSLCSession(sslc_is_sandbox=True, sslc_store_id=store_id, sslc_store_pass=API_key)
+
+    status_url = request.build_absolute_uri(reverse("App_Payment:complete"))
+    #print(status_url)
+    mypayment.set_urls(success_url=status_url, fail_url=status_url, cancel_url=status_url, ipn_url=status_url)
+
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    order_items = order_qs[0].orderitems.all()
+    order_items_count = order_qs[0].orderitems.count()
+    order_total = order_qs[0].get_totals()
+
+    mypayment.set_product_integration(total_amount=Decimal(order_total), currency='BDT', product_category='Mixed', product_name=order_items, num_of_item=order_items_count, shipping_method='Courier', product_profile='None')
 
 
-	#now we need to pass product information to sslcommerz
+    current_user = request.user
+    mypayment.set_customer_info(name=current_user.profile.full_name, email=current_user.email, address1=current_user.profile.address_1, address2=current_user.profile.address_1, city=current_user.profile.city, postcode=current_user.profile.zipcode, country=current_user.profile.country, phone=current_user.profile.phone)
 
-	order_qs = Order.objects.filter(user = request.user, ordered = False)
-	order_items = order_qs[0].orderitems.all()
-	order_items_count = order_qs[0].orderitems.count()
-	order_total = order_qs[0].get_totals()
+    mypayment.set_shipping_info(shipping_to=current_user.profile.full_name, address=saved_address.address, city=saved_address.city, postcode=saved_address.zipcode, country=saved_address.country)
 
-	mypayment.set_product_integration(total_amount = Decimal(order_total), currency = 'BDT', product_category = 'Mixed', product_name = order_items, num_of_item = order_items_count, shipping_method = 'Courier', prodjuct_profile = 'None')	
-	
-	#customer address
-	current_user = request.user
-	mypayment.set_customer_info(name=current_user.profile.full_name, email = current_user.email, address1 = current_user.profile.address1, address2 = current_user.profile.address1, city = current_user.profile.city, postcode = current_user.profile.zipcode, country = current_user.profile.country, phone = current_user.profile.phone )
-	
-	#shipping address
-	mypayment.set_shipping_info(shipping_to = current_user.profile.full_name, address = saved_address.address, city = saved_address.city, postcode = saved_address.zipcode, country = saved_address.country )	
-
-	#finally you need to set 
-	response_data = mypayment.init_payment()
-	
-	return redirect(response_data['GatewayPageURL'])   //print(response_data)
+    response_data = mypayment.init_payment()
+    return redirect(response_data['GatewayPageURL'])
 
 
-#no need @Login_required to see complete.html page, so we use @csrf_exempt		
 @csrf_exempt
 def complete(request):
-	if request.method == 'POST' or request.method == 'post':
-		payment_data = request.POST
-		#print(payment_data)  
-		status = payment_data['status']
-		
-		if status == 'VALID':
-			val_id = payment_data['val_id']
-			tran_id = payment_data['tran_id']
-			messages.success(request, f"Your Payment Completed Successfully!")
-			return HttResponseRedirect(reverse("App_Payment:purchase"))
-		elif status == 'FAILED':
-			messages.warning(request, f"Your Payment Failed! Please Try Again!")
+    if request.method == 'POST' or request.method == 'post':
+        payment_data = request.POST
+        status = payment_data['status']
 
+        if status == 'VALID':
+            val_id = payment_data['val_id']
+            tran_id = payment_data['tran_id']
+            messages.success(request,f"Your Payment Completed Successfully! Page will be redirected!")
+            return HttpResponseRedirect(reverse("App_Payment:purchase", kwargs={'val_id':val_id, 'tran_id':tran_id},))
+        elif status == 'FAILED':
+            messages.warning(request, f"Your Payment Failed! Please Try Again! Page will be redirected!")
 
-	return render(request, 'App_Payment/complete.html', context={})
+    return render(request, "App_Payment/complete.html", context={})
 
-
-#delete all product from cart and order table
 @login_required
 def purchase(request, val_id, tran_id):
-
-	order_qs = Order.objects.filter(user = request.user, ordered=False)
-	order = order_qs[0]
-	orderId = tran_id
-	order.ordered = True
-	order.orderId = orderId
-	order.paymentId = val_id
-	order.save()
-
-	cart_items = Cart.objects.filter(user = request.user, purchased=False)
-	for item in cart_items:
-		item.purchased = True
-		item.save()
-
-	return HttpResponseRedirect(reverse("App_Shop:home"))
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    order = order_qs[0]
+    orderId = tran_id
+    order.ordered = True
+    order.orderId = orderId
+    order.paymentId = val_id
+    order.save()
+    cart_items = Cart.objects.filter(user=request.user, purchased=False)
+    for item in cart_items:
+        item.purchased = True
+        item.save()
+    return HttpResponseRedirect(reverse("App_Shop:home"))
 
 @login_required
 def order_view(request):
-	try:
-		orders = Order.objects.filter(user = request.user, ordered = True)
-		data = {
-		   'orders': orders,
-		}
-		return render(request, 'App_Payment/order.html', context=data)
-	except:
-		messages.warning(request, "You do not have an active order")
-		return redirect("App_Shop:home")
+    try:
+        orders = Order.objects.filter(user=request.user, ordered=True)
+        context = {"orders": orders}
+    except:
+        messages.warning(request, "You do no have an active order")
+        return redired("App_Shop:home")
+    return render(request, "App_Payment/order.html", context)
+
 
 
 
@@ -251,14 +232,14 @@ def order_view(request):
 from django.urls import path
 from App_Payment import views
 
-app_name = 'App_Payment'
+app_name = "App_Payment"
 
-urlpatterns =[
-	path('checkout/', views.checkout, name='checkout'),
-	path('pay/', views.payment, name="pay"),
-	path('status/', views.complete, name="complete"),
-	path('purchase/<val_id>/<tran_id>', views.purchase, name="purchase"),
-	path('orders/', views.order_view, name="orders"),
+urlpatterns = [
+    path('checkout/', views.checkout, name="checkout"),
+    path('pay/', views.payment, name="payment"),
+    path('status/', views.complete, name="complete"),
+    path('purchase/<val_id>/<tran_id>/', views.purchase, name="purchase"),
+    path('orders/', views.order_view, name="orders"),
 ]
 
 
@@ -278,43 +259,50 @@ in checkout.html
 {% extends 'master.html' %}
 {% load crispy_forms_tags %}
 {% block body_block %}
-
-<div class="col-md-5">
-
-<h2> Shipping Address > <span class="text-muted">Checkout</span> </h2>
-
-<form method="POST">
-  {{form | crispy}}
-  {% csrf_token %}
-  <button type="submit" class="btn btn-primary float-right">Save Address</button>
-</form>
-
+<div class="container mt-5">
+  <h2 class="mb-3">
+    Shipping Address > <span class="text-muted">Checkout</span>
+  </h2>
+  <div class="row">
+    <div class="col-md-9">
+      <div class="card mb-5" style="height: auto">
+        <div class="card-body">
+          <form method="POST">
+            {{form|crispy}}
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary float-right">Save Address</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card" style="height:auto">
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            {% for order_item in order_items %}
+              <li class="list-group-item">{{ order_item.item.name}} x {{order_item.quantity}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="card-footer">
+          <span class="float-left"><b>Order Total</b></span>
+          <span class="float-right"><b>&#2547; {{order_total|floatformat:2}}</b></span>
+        </div>
+      </div>
+      <br>
+      <br>
+      {% if saved_address.is_fully_filled %}
+      <a href="{% url 'App_Payment:payment' %}" class="btn btn-warning btn-md">Make Payment</a>
+      {% else %}
+      <div class="alert alert-info">
+        <p>Please fill up all the information to make payment.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
 </div>
-
-<div class="col-md-7">
-  <ul>
-
-     {% for d in order_items%}
-
-        <li>
-	{{ d.item.name }} x {{ d.quantity }}
-        </li>
-
-     {% endfor %}
-
-  </ul>
-
-   Order Total {{ order_total | floatformat:2 }}
-</div>
-
-{% if saved_address.is_fully_filled %}
-    <a href="{% url 'App_Payment:pay' %}" class="btn btn-warning btn-md">Make Payment</a>
-{% else %}
-    <div class="alert alert-info"><p>Please fill up all the information to make payment.</div>
-{% endif %}
-
-
 {% endblock %}
+
 
 
 
@@ -326,34 +314,28 @@ in payment.html
 in complete.html of App_Payment
 --------------------------------------
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" dir="ltr">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-//add below line, it will refresh this page after 5 second and redirect to "App_Shop:home"
-<meta http-equiv="refresh" content="5; url={% url 'App_Shop:home' %}">
-
-<title>Payment Status</title>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="5; url={% url 'App_Shop:home' %}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Payment Status</title>
 </head>
-
 <body>
-
-	<div class="container">
-	   <div class="messages container mt-2">
-	      {% if messages %}
-	          {% for message in messages %}
-		<div {% if message.tags %} class="alert alert-{{message.tags}} {% endif%}" role="alert">
-			{{message}}
-		</div>
-	          {% endfor %}
-	      {% endif %}
-	   </div>
-	</div>
-
+  <div class="container">
+    <div class="messages container mt-2">
+      {% if messages %}
+      {% for message in messages %}
+      <div {% if message.tags %} class="alert alert-{{message.tags}}{% endif %}" role="alert">
+        {{message}}
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
 </body>
 </html>
+
 
 
 in order.html of App_Payment
@@ -367,40 +349,44 @@ in order.html of App_Payment
 
 {% extends 'master.html' %}
 {% block body_block %}
+<div class="container mt-5">
+  <h2 class="text-center"><strong>Your Orders</strong></h2>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card mt-5" style="height:auto">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Order Id</th>
+                <th scope="col">Products</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td><a href="#">{{ order.orderId }}</a></td>
+                <td>
+                  {% for item in order.orderitems.all %} {{item}} <br> {% endfor %}
+                </td>
+                <td><span class="badge badge-primary">Processing Your ORder</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 my-5 text-center">
+      <a href="{% url 'App_Shop:home' %}">Bact to Home</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
 
-<table>
-   <thead>
-	<tr>
-	   <th scope="col">#</th>
-	   <th scope="col">Order Id</th>
-      	   <th scope="col">Products</th>
-	   <th scope="col">Status</th>
-	</tr>
-   </thead>
-  <tbody>
-	{% for order in orders %}
-	<tr>
-	   <th scope="row">{{forloop.counter}}</th>
-	   <td><a href="#">{{order.orderId}}</a></td>
-      	   <td>
-		{% for item in order.items.all()%}
-			{{item}}<br>
-		{% endfor %}
-	   </td>
-	   <td>
-		<span class="badge badge-primary">
-			Processing Your Order
-		</span>
-	    </td>
-	</tr>
-	{% endfor %}
-   </tbody>
-</table>
-
-<a href="{% url 'App_Shop:home' %}">Back To Home</a>
-
-
-{%endblock%}
 
 
 
