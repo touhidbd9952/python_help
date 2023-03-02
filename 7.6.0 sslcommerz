@@ -1,0 +1,51 @@
+///////For Online Payment, We need to create account in sslcomerz///////////////////////////////////////
+
+1. go to "developer.sslcommerz.com"
+2. click on "create Sand Box Account" to registration
+3. click on "create Sand Box Account"
+    in "create Sand Box Account" page
+    -----------------------------------------------
+	Your application domain name: www.mysite.com 
+
+    --->Next
+   	Your Company name: Woody Co. Ltd
+    --->Next
+	Your company address: chiba, Japan
+    --->Next
+	Your name: Md. Touhidul Islam
+   ---->Next
+	Your email address: touhidbd9952@gmail.com
+   ---->Next
+	Your phone number: 08076311840
+   ---->Next
+	Your username: touhidbd
+   ---->Next
+	Your password: 123456789
+   ---->Next
+	confirm password:
+   ---->Next
+	click on "Sign Up" button
+
+after click on "Sign Up" button, you will get a mail from "developer.sslcommerz.com"
+for account confirmation
+
+after confirm, you will get a mail with details information from "developer.sslcommerz.com"
+
+	Store ID: .......your store ID....
+	Store Password (API/Secret Key): ......your store pass...
+
+
+4. to connect your project payment system with sslcommerz in python, you need to install
+
+	pip install sslcommerz-python
+	pip install requests
+
+5. go to "pypi.org/project/sslcommerz-python/" and follow the instruction
+
+
+
+	 
+
+
+
+	
