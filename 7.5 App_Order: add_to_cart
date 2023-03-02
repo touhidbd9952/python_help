@@ -28,39 +28,42 @@ My_Ecom_Project
 -----------------------
 from django.db import models
 from django.conf import settings
+
+# Model
 from App_Shop.models import Product
+# Create your models here.
 
 class Cart(models.Model):
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="cart")
-	item = models.ForeignKey(Product, on_delete=models.CASCADE)
-	quantity = models.IntegerField(default=1)
-	purchased = models.BooleanField(default=False)
-	created = models.DateTimeField(auto_now_add=True)
-	updated = models.DateTimeField(auto_now)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="cart")
+    item = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    purchased = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
-	//to show how many product of each item
-	def  __str__(self):
-		return f'{self.quantity} x {self.item}'
+    def __str__(self):
+        return f'{self.quantity} X {self.item}'
 
-	//to get item wise total price
-	def  get_total(self):
-		total = self.item.price * self.quantity
-		float_total = format(total, '0.2f')          //2 digit after decimal
-		return float_total
+    def get_total(self):
+        total = self.item.price * self.quantity
+        float_total = format(total, '0.2f')
+        return float_total
+
 
 class Order(models.Model):
-	orderitems = models.ManyToManyField(Cart)
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-	ordered = models.BooleanField(default=False)  //if payed, ordered = True
-	paymenId = models.CharField(max_length=255, blank=True, null=True)  //tranjection id
-	orderId = models.CharField(max_length=255, blank=True, null=True) //random generated id
-	
-	//to get total of an order
-	def get_totals(self):
-		total = 0
-		for order_item in self.orderitems.all():
-			total += float(order_item.get_total())
-		return total
+    orderitems = models.ManyToManyField(Cart)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    ordered = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    paymentId = models.CharField(max_length=264, blank=True, null=True)
+    orderId = models.CharField(max_length=200, blank=True, null=True)
+
+    def get_totals(self):
+        total = 0
+        for order_item in self.orderitems.all():
+            total += float(order_item.get_total())
+        return total
+
 
 
 
@@ -85,7 +88,9 @@ py manage.py migrate
 
 ///////register in admin of App_Order////////////////////
 from django.contrib import admin
-from App_Shop.models import Cart, Order
+from App_Order.models import Cart, Order
+
+# Register your models here.
 
 admin.site.register(Cart)
 admin.site.register(Order)
@@ -93,117 +98,128 @@ admin.site.register(Order)
 ///////views.py of App_Order////////////////////////////
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import message
 
+# Authentications
+from django.contrib.auth.decorators import login_required
+
+# Model
 from App_Order.models import Cart, Order
 from App_Shop.models import Product
-
+# Messages
+from django.contrib import messages
+# Create your views here.
 
 @login_required
 def add_to_cart(request, pk):
-	item = get_object_or_404(Product, pk=pk)  //if product item not found, show error page
-	order_item = Cart.objects.get_or_create(item=item, user=request.user, purchased=False) //to check, same product already added in cart, if not it will add
-	order_qs = Order.objects.filter(user=request.user, ordered=False) // to check current user order is incomplete or not
-	if order_qs.exists():
-		order = order_qs[0]   //get incomplete order item from order que
-		if order.orderitems.filter(item=item).exists():
-			order_item[0].quantity += 1
-			order_item[0].save()
-			messages.info(request, "This item quantity was updated.")
-			return redirect("App_Shop:home")
-		else:
-			order.orderitems.add(order_item[0])
-			message.info(request, "This item was added to your cart")
-	else:
-		order = Order(user=request.user)
-		order.save()  //save in order table
-		order.orderitems.add(order_item[0])  // add in cart
-		message.info(request, "This item was added to your cart")
-		return redirect("App_Shop:home")
+    item = get_object_or_404(Product, pk=pk)
+    print("Item")
+    print(item)
+    order_item = Cart.objects.get_or_create(item=item, user=request.user, purchased=False)
+    print("Order Item Object:")
+    print(order_item)
+    print(order_item[0])
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    print("Order Qs:")
+    print(order_qs)
+    #print(order_qs[0])
+    if order_qs.exists():
+        order = order_qs[0]
+        print("If Order exist")
+        print(order)
+        if order.orderitems.filter(item=item).exists():
+            order_item[0].quantity += 1
+            order_item[0].save()
+            messages.info(request, "This item quantity was updated.")
+            return redirect("App_Shop:home")
+        else:
+            order.orderitems.add(order_item[0])
+            messages.info(request, "This item was added to your cart.")
+            return redirect("App_Shop:home")
+    else:
+        order = Order(user=request.user)
+        order.save()
+        order.orderitems.add(order_item[0])
+        messages.info(request, "This item was added to your cart.")
+        return redirect("App_Shop:home")
+
 
 @login_required
 def cart_view(request):
-	carts = Cart.objects.filter(user=request.user, purchased=False)
-	orders = Order.objects.filter(user = request.user, ordered=False)
-	if carts.exists() and orders.exists():
-		order = orders[0]
-		data = {
-		   'carts':carts,
-		   'order':order
-		}
-		return render(request, 'App_Order/cart.html', context=data)
-	else:
-		messages.warning(request, "You don't have any item in your cart!")
-		return redirect("App_Shop:home")
+    carts = Cart.objects.filter(user=request.user, purchased=False)
+    orders = Order.objects.filter(user=request.user, ordered=False)
+    if carts.exists() and orders.exists():
+        order = orders[0]
+        return render(request, 'App_Order/cart.html', context={'carts':carts, 'order':order})
+    else:
+        messages.warning(request, "You don't have any item in your cart!")
+        return redirect("App_Shop:home")
+
 
 @login_required
 def remove_from_cart(request, pk):
-	item = get_object_or_404(Product, pk=pk)
-	order_qs = Order.objects.filter(user=request.user, ordered=False)
-	if order_qs.exists():
-		order = order_qs[0]
-		if order.orderitems.filter(item=item).exists():
-			order_item = Cart.objects.filter(item=item, user=request.user, parchased=False)
-			order_item = order_item[0] //convert to object
-			order.orderitems.remove(order_item)
-			order_item.delete()
-			message.warning(request, "This item was removed from your cart")
-			return redirect("App_Order:cart")
-		else:
-			messages.info(request, "This item was not in your cart")
-			return redirect("App_Shop:home")
-	else:
-		messages.info(request, "You don't have an active order")
-		return redirect("App_Shop:home")
+    item = get_object_or_404(Product, pk=pk)
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.orderitems.filter(item=item).exists():
+            order_item = Cart.objects.filter(item=item, user=request.user, purchased=False)[0]
+            order.orderitems.remove(order_item)
+            order_item.delete()
+            messages.warning(request, "This item was removed form your cart")
+            return redirect("App_Order:cart")
+        else:
+            messages.info(request, "This item was not in your cart.")
+            return redirect("App_Shop:home")
+    else:
+        messages.info(request, "You don't have an active order")
+        return redirect("App_Shop:home")
 
 @login_required
 def increase_cart(request, pk):
-	item = get_object_or_404(Product, pk=pk)
-	order_qs = Order.objects.filter(user = request.user, ordered=False)
-	if order_qs.exists():
-		order = order_qs[0] //convert to object
-		if order.orderitems.filter(item=item).exists():
-			order_item = Cart.objects.filter(item=item, user=request.user, parchased=False)
-			order_item = order_item[0] //convert to object
-			if order_item.quantity >= 1:
-				order_item.quantity +=1
-				order_item.save()
-			
-		else:
-			messages.info(request, f"{item.name} is not in your cart")
-			return redirect("App_Shop:home")
-	else:
-		messages.info(request, "You don't have an active order")
-		return redirect("App_Shop:home")
+    item = get_object_or_404(Product, pk=pk)
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.orderitems.filter(item=item).exists():
+            order_item = Cart.objects.filter(item=item, user=request.user, purchased=False)[0]
+            if order_item.quantity >= 1:
+                order_item.quantity += 1
+                order_item.save()
+                messages.info(request, f"{item.name} quantity has been updated")
+                return redirect("App_Order:cart")
+        else:
+            messages.info(request, f"{item.name} is not in your cart")
+            return redirect("App_Shop:home")
+    else:
+        messages.info(request, "You don't have an active order")
+        return redirect("App_Shop:home")
+
 
 @login_required
 def decrease_cart(request, pk):
-	item = get_object_or_404(Product, pk=pk)
-	order_qs = Order.objects.filter(user = request.user, ordered=False)
-	if order_qs.exists():
-		order = order_qs[0] //convert to object
-		if order.orderitems.filter(item=item).exists():
-			order_item = Cart.objects.filter(item=item, user=request.user, parchased=False)
-			order_item = order_item[0] //convert to object
-			if order_item.quantity > 1:
-				order_item.quantity -=1
-				order_item.save()
-				messages.info(request, f"{item.name} quantity has been updated")
-				return redirect("App_Order:cart")
-			else:
-				order.orderitems.remove(order_item)
-				order_item.delete()
-				messages.warning(request, f"{item.name} has been removed from your cart")
-				return redirect("App_Order:cart")
-			
-		else:
-			messages.info(request, f"{item.name} is not in your cart")
-			return redirect("App_Shop:home")
-			
-	else:
-		messages.info(request, "You don't have an active order")
-		return redirect("App_Shop:home")
+    item = get_object_or_404(Product, pk=pk)
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.orderitems.filter(item=item).exists():
+            order_item = Cart.objects.filter(item=item, user=request.user, purchased=False)[0]
+            if order_item.quantity > 1:
+                order_item.quantity -= 1
+                order_item.save()
+                messages.info(request, f"{item.name} quantity has been updated")
+                return redirect("App_Order:cart")
+            else:
+                order.orderitems.remove(order_item)
+                order_item.delete()
+                messages.warning(request, f"{item.name} item has been removed from your cart")
+                return redirect("App_Order:cart")
+        else:
+            messages.info(request, f"{item.name} is not in your cart")
+            return redirect("App_Shop:home")
+    else:
+        messages.info(request, "You don't have an active order")
+        return redirect("App_Shop:home")
+
 
 
 
@@ -218,13 +234,14 @@ from App_Order import views
 
 app_name = 'App_Order'
 
-urlpatterns =[
-	path('add/<pk>/', views.add_to_cart, name='add'),
-	path('cart/', views.cart_view, name='cart'),
-	path('remove-cart-item/<pk>', views.remove_cart_item, name='remove_cart_item'),
-	path('increase/<pk>/', views.increase_cart, name="increase_cart"),
-	path('decrease/<pk>/', views.decrease_cart, name="decrease_cart"),
+urlpatterns = [
+    path('add/<pk>/', views.add_to_cart, name="add"),
+    path('remove/<pk>/', views.remove_from_cart, name="remove"),
+    path('cart/', views.cart_view, name="cart"),
+    path('increase/<pk>/', views.increase_cart, name="increase"),
+    path('decrease/<pk>/', views.decrease_cart, name="decrease"),
 ]
+
 
 
 
@@ -245,71 +262,52 @@ in cart.html
 ------------------
 {% extends 'master.html' %}
 {% block body_block %}
-
 <div class="container my-5">
   <div class="my-5">
     <h2>Your Cart</h2>
   </div>
   <table class="table table-hover">
-	<thead>
-		<tr>
-			<th scope="col" width="15%">#</th>
-			<th scope="col">Product Name</th>
-			<th scope="col">Qty</th>
-			<th scope="col" align="right">Price</th>
-			<th scope="col">Remove</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for d in carts %}
-		<tr>
-			<th scope="row">{{forloop.counter}}</th>
-
-			<td>{{d.item.name}}</td>
-
-			<td>
-			   <a href="{% url 'App_Order:decrease_cart' pk=d.item.pk%}" class="mr-2">
-			     <span class="badge badge-light">
-			       <i class="fas fa-minus"></i>
-			   </a>
-
-			   {{d.quantity}}
-
-			   <a href="{% url 'App_Order:increase_cart' pk=d.item.pk%}" class="mr-2">
-			     <span class="badge badge-light">
-			       <i class="fas fa-plus"></i>
-			   </a>	
-			</td>
-
-			<td align="right">{{d.get_total}}</td>
-
-			<td>
-			   <a href="{% url 'App_Order:remove_cart_item' pk=d.item.pk %}">
-			     <i class="fa fa-remove"></i>
-			   </a>
-			</td>
-		</tr>
-		{% endfor %}
-
-		<tr>
-			<th scope="row"></th>
-			<td colspan="2">Total</td>
-			<td align="right">{{order.get_totals | floatformat:2 }}</td>
-			<td></td>
-		</tr>
-
-		<tr>
-			<th scope="row"></th>
-			<td colspan="4" class="text-right">
-			   <a href="{% url 'App_Shop:home' %}" class="btn btn-warning mr-4">Continue Shoping</a>
-			  <a href="{% url '' %}" class="btn btn-success mr-4">Proceed To Checkout</a>
-			</td>
-		</tr>
-	</tbody>
+    <thead>
+      <tr>
+        <th scope="col" width="15%">#</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Quantity</th>
+        <th scope="col" align="right">Price</th>
+        <th scop="col">Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cart in carts %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{cart.item.name}}</td>
+        <td>
+          <a class="mr-2" href="{% url 'App_Order:decrease' pk=cart.item.pk %}"><span class="badge badge-light"><i class="fas fa-minus"></i></span></a>
+          {{ cart.quantity }}
+          <a class="mr-2" href="{% url 'App_Order:increase' pk=cart.item.pk %}"> <span class="badge badge-light"> <i class="fas fa-plus"></i></span></a>
+        </td>
+        <td align="right">&#2547; {{cart.get_total}}</td>
+        <td><a href="{% url 'App_Order:remove' pk=cart.item.pk %}" class="btn btn-danger btn-sm">Remove From Cart</a></td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <th scope="row"></th>
+        <td colspan="2">Total</td>
+        <td align="right">&#2547; {{order.get_totals | floatformat:2 }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <th scope="row"></th>
+        <td colspan="4" class="text-right">
+          <a href="{% url 'App_Shop:home' %}" class="btn btn-warning mr-4">Continue Shoping</a>
+          <a href="{% url 'App_Payment:checkout' %}" class="btn btn-success mr-4">Proceed To Checkout</a>
+        </td>
+      </tr>
+    </tbody>
   </table>
 </div>
-
 {% endblock %}
+
 
 
 
@@ -325,13 +323,15 @@ from App_Order.models import Order
 
 register = template.Library()
 
+
 @register.filter
 def cart_total(user):
-	order = Order.objects.filter(user=user, ordered=False)
-	if order.exists():
-		return order[0].orderitems.count()
-	else:
-		return 0
+    order = Order.objects.filter(user=user, ordered=False)
+
+    if order.exists():
+        return order[0].orderitems.count()
+    else:
+        return 0
 
 in navbar.html
 ------------------
