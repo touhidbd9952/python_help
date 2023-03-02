@@ -15,22 +15,22 @@
 
 6. 👇️ create your django project:
 
-      django-admin startproject Ecom
+      django-admin startproject My_Ecom_Project
       
-7. 👇️ go to "Ecom":
+7. 👇️ go to "My_Ecom_Project":
 
-      cd Ecom
+      cd My_Ecom_Project
 
 8. 👇️ run your project:
 
       python manage.py runserver
       
-9. 👇️ create project application(App_Login, App_Blog) inside project folder
+9. 👇️ create project application(App_Login, App_Shop, App_Order, App_Payment) inside project folder
 
 	python  manage.py  startapp  App_Login
 	python  manage.py  startapp  App_Shop
-  python  manage.py  startapp  App_Order
-  python  manage.py  startapp  App_Payment
+  	python  manage.py  startapp  App_Order
+	python  manage.py  startapp  App_Payment
 
 10. 👇️ install some package
 
@@ -42,11 +42,11 @@
 
 11. 👇️ Create media, static, templates folder 
 	
-	Ecom
+	My_Ecom_Project
 	|---App_Login
 	|---App_Shop
-  |---App_Order
-  |---App_Payment
+  	|---App_Order
+  	|---App_Payment
 	|---media
 	|---static
 	|---templates
@@ -58,3 +58,27 @@
 14. 👇️ create views.py in main project
 
 14. 👇️ start developing project from login (Step-1: 7.1.1,  Step-2: 7.1.2)
+
+My_Ecom_Project
+|----App_Login
+|----App_Shop
+|----App_Order
+|----App_Payment
+|----media
+|      |---Products
+|      |---Profile_pic
+|----static
+|      |---css
+|      |---js
+|----templates
+|      |---App_Login
+|      |---App_Shop
+|      |---App_Order
+|      |---App_Payment
+|      |---Layouts
+|      |    |---master.html
+|      |---inc
+|           |---navbar.html
+|----My_Ecom_Project
+|----db.sqlite3
+|----manage.py
