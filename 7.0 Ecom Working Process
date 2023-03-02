@@ -120,6 +120,7 @@ Category
 |---updated_at	
 
 Product
+|---id
 |---mainimage
 |---name
 |---category 
@@ -131,6 +132,7 @@ Product
 |---updated_at
 
 Cart
+|---id
 |---user_id
 |---product_id
 |---quantity
@@ -139,6 +141,7 @@ Cart
 |---updated_at	
 
 Order
+|---id
 |---cart_items
 |---user_id
 |---ordered(def:False)
