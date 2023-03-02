@@ -109,7 +109,7 @@ def user_profile(request):
 
 HTML
 -----------------------------------------------------------
-base.html
+master.html
 ---------------
 
 {% load static %}
@@ -134,3 +134,61 @@ base.html
 
     </body>
 </html>
+
+
+in signup.html of App_Login
+---------------------------
+
+{% extends 'master.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} Create New Account {% endblock %}
+{% block body_block %}
+<h2>Create New Account:</h2>
+<form method="POST">
+{{ form|crispy }}
+{% csrf_token %}
+<button type="submit" class="btn btn-success btn-sm">Create Account</button>
+</form>
+<br>
+<p>Already have an account? <a href="{% url 'App_Login:login' %}">Login Here</a></p>
+{% endblock %}
+
+
+in login.html of App_Login
+--------------------------
+
+{% extends 'master.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} Login {% endblock %}
+{% block body_block %}
+<h2>Login:</h2>
+<form method="POST">
+{{form|crispy}}
+{% csrf_token %}
+<button type="submit" class="btn btn-primary btn-sm">Login</button>
+</form>
+<br>
+<p>Doesn't have an account? <a href="{% url 'App_Login:signup' %}">Create New Account</a></p>
+{% endblock %}
+
+
+in change_profile.html of App_Login
+-----------------------------------
+
+{% extends 'master.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} Profile {% endblock %}
+{% block body_block %}
+<form method="POST">
+{{form|crispy}}
+{% csrf_token %}
+<button type="submit" class="btn btn-warning btn-sm">Save</button>
+</form>
+<br>
+<br>
+{% endblock %}
+
+
+
+
+
