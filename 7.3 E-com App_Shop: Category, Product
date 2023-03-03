@@ -71,6 +71,14 @@ from App_Shop.models import Category, Product
 admin.site.register(Category)
 admin.site.register(Product)
 
+
+/////////Some Note/////////////////////////////////////
+category entry and product entry are the part admin task.
+so, we no need to create "forms.py" to create category and 
+product form
+
+
+
 ///////views.py of App_Shop////////////////////////////
 
 from django.shortcuts import render
