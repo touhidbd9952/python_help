@@ -145,9 +145,9 @@ urlpatterns = [
 
 ///////HTML//////////////////////////////////////////////////////////////
 
-in home.html
------------------
-{% extends 'base.html' %}
+in home.html of App_Shop
+------------------------
+{% extends 'master.html' %}
 {% block body_block %}
 
 <div class="container my-5">
@@ -177,9 +177,10 @@ in home.html
 {% endblock %}
 
 
-in product_detail.html
------------------------------
-{% extends 'base.html' %}
+
+in product_detail.html of App_Shop
+----------------------------------
+{% extends 'master.html' %}
 {% block body_block %}
 <div class="container my-5">
   <div class="card">
