@@ -46,7 +46,7 @@ class Cart(models.Model):
 
     #get carted single product price subtotal
     def get_total(self):
-        total = self.item.price * self.quantity
+        total = self.item.price * self.quantity    //product.price * quantity
         float_total = format(total, '0.2f')
         return float_total
 
@@ -62,8 +62,8 @@ class Order(models.Model):
     #get carted all product price grandtotal
     def get_totals(self):
         total = 0
-        for order_item in self.orderitems.all():
-            total += float(order_item.get_total())
+        for order_item in self.orderitems.all():        //get all carted product list
+            total += float(order_item.get_total())      // total += product.price * quantity
         return total
 
 
