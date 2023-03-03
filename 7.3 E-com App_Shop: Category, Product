@@ -83,13 +83,13 @@ product form
 
 from django.shortcuts import render
 
-# Import views
+# Import django builtin views to see all product listview and single product detailview
 from django.views.generic import ListView, DetailView
 
-# Models
+# Add your Models
 from App_Shop.models import Product
 
-# Mixin
+# Add Mixin for sequrity. mixins used for class based view
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
