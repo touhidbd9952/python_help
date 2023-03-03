@@ -44,6 +44,7 @@ class Cart(models.Model):
     def __str__(self):
         return f'{self.quantity} X {self.item}'
 
+    #get carted single product price subtotal
     def get_total(self):
         total = self.item.price * self.quantity
         float_total = format(total, '0.2f')
@@ -58,6 +59,7 @@ class Order(models.Model):
     paymentId = models.CharField(max_length=264, blank=True, null=True)
     orderId = models.CharField(max_length=200, blank=True, null=True)
 
+    #get carted all product price grandtotal
     def get_totals(self):
         total = 0
         for order_item in self.orderitems.all():
