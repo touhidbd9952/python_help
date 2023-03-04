@@ -22,7 +22,7 @@ in settings.py,
 	2. 'DIRS': [TEMPLATES_DIR,],
 	3. INSTALLED_APPS = [
 				'App_Api',
-			      ]
+			    ]
 
 Step:5:
 -----------
