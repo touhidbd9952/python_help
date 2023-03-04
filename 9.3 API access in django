@@ -1,0 +1,92 @@
+By using api link, 
+we can send request to a particular server to get data
+
+How can we access a API link to get data in django:
+======================================
+
+Step:1
+--------
+create a project in django
+
+Step:2
+-------
+create an app "App_Api"
+
+Step:3
+------
+create a folder "templates" 
+
+Step-4: 
+in settings.py, 
+	1. TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+	2. 'DIRS': [TEMPLATES_DIR,],
+	3. INSTALLED_APPS = [
+				'App_Api',
+			      ]
+
+Step:5:
+-----------
+//////to work with API, we need to install a package///////////
+	
+	pip install requests
+
+Step:6
+---------
+//////views.py////////////////////////////////////
+
+from django.shortcuts import render
+import requests
+
+
+def index(request):
+	user = false
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		url = 'https://api.github.com/users/' + str(username)
+		response = requests.get(url)  //here need to write "requests" not request
+		user = response.json()
+	data = {
+	   'user': user,
+	}
+
+	return render(request, 'index.html', context=data)
+
+
+Step:7
+---------
+//////in index.html////////////////////////////
+
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Github Public API</title>
+</head>
+
+<body>
+	
+	<form method="POST">
+	  {% csrf_token %}
+	  <input type="text" name="username">
+	  <button type="submit" class="btn btn-success btn-sm">Send</button>
+	</form>
+
+
+	{% if user %}
+
+	   {{user}}
+	   <p> Username : {{user.login}} </p>
+	   <p> URL : {{user.html_url}} </p>
+
+	{% endif %}
+
+</body>
+</html>
+
+
+
+
+you can see more api link below website:
+
+	github.com/public-apis/public-apis
+
