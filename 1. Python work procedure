@@ -9,7 +9,7 @@
 
 4. 👇️ activate on Windows (cmd.exe):
       
-        venv\Scripts\activate.bat
+        venv/Scripts/activate
 
 5. 👇️ install django in the virtual environment:
 
