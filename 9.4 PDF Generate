@@ -1,0 +1,122 @@
+/////install //////////////////////////
+
+pip install xhtml2pdf
+
+
+///////models.py///////////////////////////////////////////////
+
+from django.db import models
+from django.db.models.base import Model
+
+
+class Student(models.Model):
+    name = models.CharField(help_text="Name of Student", max_length=50, blank=False)
+    roll_no = models.IntegerField()
+    score = models.IntegerField()
+
+    def __str__(self) -> str:
+        return self.name
+
+
+
+
+
+/////pdfmakers.py  /////////////////////////////////////////////////////
+//create a file in your App_Student as "pdfmakers.py" and below code paste in there
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
+
+def make_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{pdf_name}"'
+    pdf_status = pisa.CreatePDF(html, dest=response)
+
+    if pdf_status.err:
+        return HttpResponse('Some errors were encountered <pre>' + html + '</pre>')
+
+    return response
+
+
+///////views.py//////////////////////////////////////////////////////////////////////
+
+from App_Student.models import Student
+from App_Student import pdfmakers
+
+
+def GeneratePDF(request):
+    template_name = "App_Student/studentlist_pdf.html"
+    records = Student.objects.all().order_by("roll_no")
+
+    return pdfmakers.make_pdf(
+        template_name,
+        {
+            "record": records,
+        },
+    )
+
+///////urls.py///////////////////////////////////////////////////////////////////////
+
+from django.urls import path
+from App_Student import views
+
+urlpatterns = [
+    path("student-list/", views.GeneratePDF, name="student_list_pdf"),
+]
+
+
+/////create studentlist_pdf.html////////////////////////////////
+
+<html>
+    <head>
+        <style>
+            * {
+                font-size: 15px;
+            }
+
+            table {
+                table-layout: fixed;
+                width: 100%;
+                border: 1px solid black;
+            }
+
+            table th {
+                text-align: left;
+                padding: 3px;
+                padding-bottom: 0;
+            }
+
+            table td {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 3px;
+                padding-bottom: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <table>
+            <tr>
+                <th> S No </th>
+                <th> Name </th>
+                <th> Roll No </th>
+                <th> Score </th>
+            </tr>
+            {%for data in record%}
+            <tr>
+                <td style="width: 10%;"> {{forloop.counter}} </td>
+                <td sttyle="width: 40%; text-align: left;"> {{data.name|title}} </td>
+                <td style="width: 30%;"> {{data.roll_no}} </td>
+                <td style="width: 20%;"> {{data.score}} </td>
+            </tr>
+            {%endfor%}
+        </table>
+    </body>
+</html>
+
