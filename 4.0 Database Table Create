@@ -48,7 +48,7 @@ class SubCategory(models.Model):
 class Musician(models.Model):
    #  id  = models.AutoField(Primary_key = True)
     first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50, blank=True)
     instrument = models.CharField(max_length=100)
     
     def  __str_(self):
@@ -117,6 +117,8 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+
 
 In this example, the Book model has four fields: title, author, publication_date, and price. The CharField and DateField are used for text and date fields, respectively, and the DecimalField is used for decimal fields. The max_length parameter is used to specify the maximum length of a text field, and the max_digits and decimal_places parameters are used to specify the maximum number of digits and the number of decimal places for a decimal field, respectively. The __str__ method is used to define a string representation of the model that can be used for display purposes.
 
