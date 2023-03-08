@@ -1,0 +1,30 @@
+How to change django project name by another name?
+
+we have a django project "MyBlog". now we want to change this project
+name "MyBlog" --> "MyBlogProject". 
+
+1. change project folder name "MyBlog" --> "MyBlogProject"
+2. change project main folder name "MyBlog" --> "MyBlogProject"
+3. go to below file one by one and search "MyBlog" and replace it by "MyBlogProject"
+
+
+in manage.py
+--------------
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MyBlogProject.settings')
+                                                                                                   --------------------
+///////in main project, you have to change project name in below files/////////
+in wsgi.py
+--------------
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MyBlogProject.settings')
+                                                                                                    -------------------
+in settings.py
+----------------
+ROOT_URLCONF = 'MyBlogProject.urls'
+                                      --------------------
+WSGI_APPLICATION = 'MyBlogProject.wsgi.application'
+                                             -------------------
+in asgi.py
+---------------
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'MyBlogProject.settings')
+                                                                                                   --------------------
+
