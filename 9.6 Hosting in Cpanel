@@ -95,7 +95,7 @@ Step-12: if problem in project css, js, image loding, move "static" foler to "pu
               |        Move File <----------- click on "Move File" button
               |-----------------------|    
           
-          3.got to root directory and drug & drop "static" to "public_html" folder
+          3.go to root directory and drug & drop "static" to "public_html" folder
           
           
               //now go to Step-5: restart server
