@@ -1,0 +1,22 @@
+///////Image Resize/////////////////////////
+
+    1. pip install pillow    //If you're using an ImageField in Django
+    2. pip install django-imagekit
+    3. Add "imagekit" to "INSTALLED_APPS" list in "settings.py"
+
+in Models.py
+----------
+
+from django.db import models
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
+
+class Profile(models.Model):
+    avatar = models.ImageField(upload_to='avatars')
+    avatar_thumbnail = ImageSpecField(source='avatar',
+                                  processors=[ResizeToFill(100, 50)],
+                                  format='JPEG',
+                                  options={'quality': 60})
+
+
+Pay attention to the source attribute of ImageSpecField which directs to the actual image field (avatar in this case) as ImageSpecField are virtual in nature
