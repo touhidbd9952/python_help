@@ -1,0 +1,108 @@
+Step-1: Compressed Zip
+        --------------
+        right you python project folder "MYBLOG" ---> compressed(zipped)Folder
+
+Step-2: Project upload to Cpanel
+        ------------------------
+        1. login cpanel
+        2. go to FileManager
+          
+               //in root directory "/home/..." you need to upload your project
+               
+               a. click "Upload" ---> select file --> MYBLOB.zip (select)
+               b. MYBLOB.zip (select and right click)-->Extract
+
+Step-3: Python App Setup in Cpanel
+        ---------------------------
+        Cpanel: 
+               a. go to Software ---> Setup Python App (click here) 
+               b. Create Application (click)
+                      1. Python Version: 3.9.10  //select according to your project wise python version
+                      2. Application root: MYBLOG/myblog
+                      3. Application URL: yourdomain.com
+                      4. Application setup file:    //keep it blank
+                      5. Application Entry Point:    //keep it blank
+                      6. Passenger Log File: /home/your-root-name/applog/passenger.log   //applog: is a folder where passenger.log file will create
+                      
+                      now click on "Create" button
+                      
+Step-4: Virtural environment setup
+        --------------------------
+        Cpanel:
+               when you clicked on "Create" button, vertual environment link is created and it will show at the top.
+               1. click on vertual environment link to copy it
+               2. go to Cpanel-->Advanced ---> Terminal (click)
+                    right click on Terminal blank sceen --> Paste (vertual environment link)
+                    
+                    //now you need to install all packages that are required your django project
+                    
+                    pip install django==2.2    //2.2 is django version. if your project django version is diffrent then change it
+                    pip install pillow
+                    .
+                    .
+                    
+Step-5: Restart Server
+        --------------
+        when you need to change any configuration or need to install any package, after doing that you have to restart server to update.
+        to restart server:
+        1. Cpanel ---> Software ---> Python app (click here)
+        2. in "action", click on restart icon
+        
+Step-6: Set application path in "passenger_wsgi.py"
+        -----------------
+        Go to "Cpanel-->File Manager-->MYBLOG" and open "passenger_wsgi.py"  and change by below code
+        
+            import os
+            import sys
+            
+            from myblog.wsgi import application
+            
+Step-7: Create Database, Create User, Link with user and database. 
+       
+Step-8: Create Database Table
+        ----------------------
+        1. Cpanel --> Software ---> Python App (click)
+        2. in your install python app, in "action", click on Edit icon --> click on virtual environment link and copy it
+        3. Cpanel --->Advanced--->Terminal:
+          
+            paste (link)
+            
+            python manage.py makemigrations
+            python manage.py migrate
+            
+            //now go to Step-5: restart server
+
+Step-9: Set mysql database configuration in "settings.py" with database name, username and password 
+
+Step-10: Set domain path in "settings.py"
+
+          ALLOWED-HOSTS = ['yourdomainname.com','www.yourdomainname.com']
+          
+          //now go to Step-5: restart server
+
+Step-11: in a browser: type "yourdomainname.com" and check everything is ok or not
+
+Step-12: if problem in project css, js, image loding, move "static" foler to "public_html"
+          -------------------------------------------
+          
+          1. Cpanel ---> File Manager --->Your project folder (open)
+          2. click on "static" folder --> move (right click)
+              
+              |      move             |
+              ------------------------|
+              |....path....... <------|------- delete all
+              |                       |
+              |        Move File <----------- click on "Move File" button
+              |-----------------------|    
+          
+          3.got to root directory and drug & drop "static" to "public_html" folder
+          
+          
+              //now go to Step-5: restart server
+              //check browser
+          
+  
+        
+                    
+        
+               
