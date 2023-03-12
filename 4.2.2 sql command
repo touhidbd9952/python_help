@@ -40,7 +40,7 @@ product_list = Product.object.all()[0:8]
 
 //get_object_or_404
 from django.shortcuts import render, get_object_or_404
-from .models import Category, Product
+from .models import Category, Product 
 
 category = get_objects_or_404(Category, slug=category_slug)
 
