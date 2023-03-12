@@ -1,0 +1,25 @@
+Step-1: create a file in App_Product "context_processors.py"
+
+in context_processors.py
+--------------------------------
+
+from App_Product.models import Category
+
+def menu_categories(request):
+	categories = Category.object.all()
+	return {'menu_categories':categories}
+
+
+Step-2: configure menu in "settings.py"
+
+	TEMPLATES = [
+		:
+		:
+		'App_Product.context_processors.menu_categories',
+	]
+
+Step-3: use "menu_categories" in navbar of master.html
+
+	{% for cateogy in menu_categories %}
+	    <a href="{% url 'category' category.slug %}">{{category.title}}</a>
+	{% endfor %}
