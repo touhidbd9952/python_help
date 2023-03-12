@@ -35,4 +35,7 @@ search_result = User.objects.filter(username__icontains = search)
 liked_post = Like.objects.filter(user=request.user)
 liked_post_list = liked_post.values_list('post', flat=True)  //it will show post id as [2,5,6,...]
 
+//8 product per page
+product_list = Product.object.all()[0:8]
+
 
