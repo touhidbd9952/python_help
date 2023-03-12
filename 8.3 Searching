@@ -1,0 +1,40 @@
+////////////Searching////////////////////////////////////
+
+in views.py
+-----------------
+
+from django.db.models import Q
+from App_Product.models import Product
+
+def search(request):
+	query = request.GET.get('Query', '')
+	products = Product.objects.filter(Q(title_icontains=query) | Q(description_icontains=query)
+	return render(request, 'App_Product/search.html', {'products':products, 'query': query})
+
+
+in search.html
+----------------------
+{% extends 'master.html' %}
+{% block title_block %}Search{% endblock %}
+{% block body_block %}
+
+<h2>Search</h2>
+<h3>Search term: "{{query}}"</h3>
+
+{% for product in products%}
+    
+{% endfor %}
+
+{% endblock %}
+
+
+in navbar.html
+-------------------
+<form method="get" action="{% url 'search' %}">
+   <input type="text" name="query">
+   <button>Search</button> 
+</form>
+
+in urls.py
+---------------------
+path('search/', views.search, name='search'),
