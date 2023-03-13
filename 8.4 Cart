@@ -28,13 +28,13 @@ in App_Cart
 
 			if update_quantity:
 				self.cart[product_id]['quantity'] = quantity
-			else:
+			else:  //when new product add in cart
 				self.cart[product_id]['quantity'] = self.cart[product_id]['quantity'] + 1
-			self.save()
+			self.save()  //call save function
 
 
 		def save(self):
-			self.session[settings.CART_SESSION_ID] = self.cart
+			self.session[settings.CART_SESSION_ID] = self.cart  //store cart in session
 			self.session.modified = True
 
 
@@ -73,17 +73,17 @@ from App_Cart import Cart
 
 def cart_detail(request):
 	cart = Cart(request)  //create object of cart
-	remove_from_cart = request.GET.get('remove_from_cart', '')    //get cart product_id that quantity need to decrease or remove
-	change_quantity = request.GET.get('change_quantity', '')  //get cart product_id that quantity need to increase
-	quantity = request.GET.get('quantity', 0)   //get total cart quantity
+	remove_id_from_cart = request.GET.get('remove_from_cart', '')    //get product id that need to remove
+	change_quantity = request.GET.get('change_quantity', '')  //get product id that quantity need to change
+	quantity = request.GET.get('quantity', 0)   //get quantity = -1 or  quantity = +1
 
 	if remove_from_cart:
-		cart.remove(remove_from_cart)
-		return redirect('cart')
+		cart.remove(remove_id_from_cart)  //call remove function of Cart class
+		return redirect('cart')  //redirect to cart_detail.html page
 	
 	if change_quantity:
-		cart.add(change_quantity, quantity, True)
-		return redirect('cart') 
+		cart.add(change_quantity, quantity, True)  //call add function of Cart class
+		return redirect('cart') //redirect to cart_detail.html page
 
 	return render(request, 'App_Cart/cart_detail.html')
 
