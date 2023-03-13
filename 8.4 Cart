@@ -5,7 +5,7 @@ CART_SESSION_ID = 'cart'
 
 in App_Cart
 ----------------
-1. create a file "cart.py"  and in it, create a class "Cart"
+1. create a file "Cart.py"  and in it, create a class "Cart"
 	
 	from django.conf import settings
 	
