@@ -1,0 +1,277 @@
+////session_cookie set in settings.py//////////////////////////
+
+SESSION_COOKIE_AGE = 86400
+CART_SESSION_ID = 'cart'
+
+in App_Cart
+----------------
+1. create a file "cart.py"  and in it, create a class "Cart"
+	
+	from django.conf import settings
+	
+	class Cart(object):
+		def __init_(self, request):
+			self.session = request.session
+			cart = self.session.get(settings.SESSION_COOKIE_AGE)
+
+			if not cart:
+				cart = self.session[settings.CART_SESSION_ID] = {}
+			self.cart = cart
+
+
+		def add(self, product, quantity=1, update_quantity=False):
+			product_id = srt(product.id)
+			price = product.price
+		
+			if product_id not in self.cart:
+				self.cart[product_id] = {'quantity':0, 'price': price, 'id': product_id}
+
+			if update_quantity:
+				self.cart[product_id]['quantity'] = quantity
+			else:
+				self.cart[product_id]['quantity'] = self.cart[product_id]['quantity'] + 1
+			self.save()
+
+
+		def save(self):
+			self.session[settings.CART_SESSION_ID] = self.cart
+			self.session.modified = True
+
+
+
+
+
+//////////context_processors.py in App_Cart//////////////////////////////////////////////////
+1. to get cart object from every page, we need to create a file "context_processors.py" in App_Cart
+
+in "context_processors.py"
+-------------------------------------
+
+from App_Cart import Cart
+
+def cart(request):
+	return ('cart':Cart(request))
+
+2. configure "context_processors.py" in templates of settings.py
+
+    in settings.py
+    ------------------
+	TEMPLATES = [
+	:
+	:
+	'OPTIONS':{
+		:
+		:
+		'App_Cart.context_processors.cart',
+	}
+]
+
+
+///////in  views.py of App_Cart//////////////////////////
+from django.shortcuts import render, redirect
+from App_Cart import Cart
+
+def cart_detail(request):
+	cart = Cart(request)  //create object of cart
+	remove_from_cart = request.GET.get('remove_from_cart', '')    //get cart product_id that quantity need to decrease or remove
+	change_quantity = request.GET.get('change_quantity', '')  //get cart product_id that quantity need to increase
+	quantity = request.GET.get('quantity', 0)   //get total cart quantity
+
+	if remove_from_cart:
+		cart.remove(remove_from_cart)
+		return redirect('cart')
+	
+	if change_quantity:
+		cart.add(change_quantity, quantity, True)
+		return redirect('cart') 
+
+	return render(request, 'App_Cart/cart_detail.html')
+
+
+
+////////in "cart_detail.html" of App_Cart///////////////////////
+
+{% extends 'master.html' %}
+{% block title_block %}Cart | {% endblock%}
+{% block body_block %}
+
+<h2 class="title">Cart</h2>
+
+{% if cart %}
+
+<table>
+  <thead>
+	<th></th>
+	<th>Product</th>
+	<th>Quantity</th>
+	<th>Price</th>
+	<th></th>
+  </thead>
+  <tbody>
+      {% for item in cart %}
+          <tr>
+             	<td>
+	      <img src="{{ item.product.get_thumnail }}">
+	</td>
+	<td>
+                        <a href="{% url 'product' item.product.category.slug   item.product.slug %}"> {{ item.product.title}} </a>
+	</td>
+	<td>
+	      {{ item.quantity }}
+
+	      <a href="?change_quantity={{ item.id }}&quantity = -1"> - </a>
+	      <a href="?change_quantity={{ item.id }}&quantity = 1"> + </a>
+	</td>
+	<td>
+	      ${{ item.total_price }}
+	</td>
+	<td>
+	      <a href="?remove_from_cart={{ item.id }}">Remove</a>
+	</td>
+          </tr>
+      {% endfor %}
+  </tbody>
+  <tfoot>
+           <tr>
+	<td></td>
+	<td><strong> Total cost </strong></td>
+	<td><strong> {{ cart | length }} </strong></td>
+	<td colspan="2" ><strong> ${{ cart.get_total_cost }} </strong></td>
+            </tr>
+  </tfoot>
+</table>
+
+<h2>Contact Information</h2>
+<form method="POST">
+{{ form | crispy }}
+{% csrf_token %}
+<button class="btn btn-success">Checkout</button>
+</form>
+
+{% else %}
+	<p>You don't have any products in your cart</p>
+
+{% endif %}
+
+
+
+{% endblock %}
+
+
+in urls.py of App_Cart
+-----------------------------
+from django.urls import path
+from App_Cart import views
+
+urlpatterns = [
+	path('', views.cart_detail, name="cart_detail"),
+]
+/////////////////////////////////////////////////////////////////////////////////////
+
+//////in App_Store//////////////////////
+create a file "api.py"
+
+	from django.http import JsonResponse
+	from django.shortcuts import get_object_or_404
+	from app_cart.cart import Cart
+	from .models import Product
+
+	def api_add_to_cart(request):
+		jsonresponse = {'success':True}
+		product_id = request.POST.get('product_id')
+		update = request.POST.get('update')
+		quantity = request.POST.get('quantity', 1)
+
+		cart =Cart(request)
+		
+		product = get_object_or_404(Product, pk=product_id)
+	
+		if not update:
+			cart.add(product=product, quantity=1, update_quantity=False)
+		else:
+			cart.add(product=product, quantity=quantity, update_quantity=True)
+		
+		return JsonResponse(jsonresponse)
+
+/////////////in models.py of App_Product///////////////////////////////////////////////////////////////////////
+class Category(models.Model):
+	title = models.CharField(max_length=255)
+	slug = models.SlugField(max_length=255)    //slug
+	ordering = models.IntegerField(default=0)
+	
+	class Meta:
+		verbose_name_plural = 'Categories'
+		ordering = ('ordering',)                           //indexing
+
+	def __str__(self):
+		return self.title
+
+class Product(models.Model):
+	category = models.ForeignKey(Category, related_name='product')
+	title = models.CharField(max_length=255)
+	slug = models.SlugField(max_length=255)
+	description = models.TextField(blank=True, null=True)
+	price = models.FloatField()
+	is_featured = models.BooleanField(default=False)
+	date_added = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering =('-date_added')     //desending 
+
+	def __str__(self):
+		return self.title
+
+
+////////forms.py in App_Product//////////////////////////////////////////////////
+from django import forms
+
+class AddToCartForm(forms.Form):
+	quantity = forms.IntegerField()
+
+
+///////views.py in App_Product/////////////////////////////////////////////////
+
+from .forms import AddToCartForm
+from App_Cart import Cart
+
+def product(request, category_slug, product_slug):
+	cart = Cart(request)
+	
+	product = get_object_or_404(Product, category_slug=category_slug, slug=product_slug)
+
+	if request.method == 'POST':
+		form = AddToCartForm(request.POST)
+		if form.is_valid():
+			quantity = form.cleaned_data('quantity')
+			cart.add(product_id=product.id, quantity=quantity, update_quantity=False)
+			messages.success(request, 'The product was added to the cart')
+			return redirect('product', category_slug=category_slug, product_slug=product_slug)
+	else:
+		form = AddToCartForm()
+
+	similar_product_list = list(product.category.products.exclude(id=product.id))
+	if len(similar_product_list) >= 4:
+		similar_product_list = rendom.sample(similar_product_list, 4)
+
+	return render(request, 'product_details.html', {'form':form, 'similar_product_list':similar_product_list})
+
+
+///////in product_details.html//////////////////////////////////
+
+{% if messages %}
+   {% for message in messages%}
+       <div class="notification is-success is-toast">{{ message }}</div>
+    {% endif %}
+{% endif %}
+
+<form method="POST" action=".">
+   {% csrf_token %}
+    <input type="number" name="quantity" value="1" class="input" min="1">
+    <button class="button is-dark is-uppercase">Add to cart</button>
+</form>
+
+
+
+		
+
+
