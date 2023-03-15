@@ -1,0 +1,19 @@
+User (create from builtin)
+
+
+UserProfile
+-----------------------------------
+1. user (fk, user_profile)
+2. profile_pic (upload to)
+3. address (text)
+4. phone (char)
+
+Blog			Comment			Likes
+-----------------------------------	-------------------------------------	-----------------------------------
+1. author (fk post_author)	1. blog (fk blog_comment)	1. blog (fk liked_blog)
+2. blog_title (char)		2. user (fk user_comment)	2. user (fk liker_user)
+3. slug (char)		3. comment (text)
+4. blog_content (text)		4. comment_date (datetime)
+5. blog_image (upload to)
+6. publish_date (datetime)
+7. update_date (datetime)
