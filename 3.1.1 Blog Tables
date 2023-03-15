@@ -10,7 +10,7 @@ UserProfile
 
 Blog			                    Comment			             Likes
 -----------------------------------	-------------------------------------	-----------------------------------
-1. author (fk post_author)	          1. blog (fk blog_comment)	         1. blog (fk liked_blog)
+1. author (fk post_author)	          1. blog (fk blog_comment)	          1. blog (fk liked_blog)
 2. blog_title (char)		          2. user (fk user_comment)	            2. user (fk liker_user)
 3. slug (char)		                  3. comment (text)
 4. blog_content (text)		          4. comment_date (datetime)
