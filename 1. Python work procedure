@@ -31,7 +31,7 @@
 	python  manage.py  startapp  App_Login
 	python  manage.py  startapp  App_Blog
 
-10. 👇️ install some package
+10. 👇️ install some package (pip : prefereed installer program)
 
 	pip install Pillow   // for image upload
 	pip install django-cleanup  //old image delete
