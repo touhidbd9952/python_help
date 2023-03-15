@@ -16,3 +16,5 @@ Blog			                    Comment			             Likes
 5. blog_image (upload to)
 6. publish_date (datetime)
 7. update_date (datetime)
+
+
