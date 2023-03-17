@@ -1,0 +1,59 @@
+////git Installation///////////////////////////////
+1. go to git-scm.com and download git latest version for windows
+2. install git in pc
+
+//////git configuration//////////////////////////////////////////////
+1. git version check
+	git --version
+2. user name and email create for global/server
+	git config --global user.name "Md. Touhidul Islam"
+	git config --global user.email "touhidbd9952@gmail.com"
+3. check user name and email is created or not
+	git config --list
+
+//////working with git///////////////////////////////////////////////
+	git init     // to crate a git config file in project folder
+	git add .  // add all file in git local repository
+	git add filename-with-extention  // to add a single file in git locally
+	git commit  -m "first commit 2022-10-30"  // to save project file in git local repository with a uniq id number
+
+	git remote add origin https://github.com/touhidbd9952/Git-Tutorial.git    // connect with global git folder/repository
+	git branch -M main  // connect with global repository branch (if exist)
+	git push -u origin main //upload files from project to global repository
+
+from next time, when we update any code in our project then we need to do below task
+	git add .		//add in local repository
+	git commit -m "your message"   //save in local repository
+	git push -u orgin main                  // upload global repository
+
+/////other git command////////////////////////////////////////
+	git  status   // to see which files still not add to git local repository
+	git  log    //to see  all the commited/saved information indetails 
+	git  log  --oneline  //to see all the commited/saved information in one line
+
+//////if we want, we can move to previous any saved commited lavel.///////////////////////////////
+//to move to previous any commit
+///syntex:   git  checkout  pre-commit-id   filename  //move from current-commit  move to previous commit //////
+
+	git  checkout  888c6c7  index.js  //change current file and move to  previous index.js that commited id  was 888c6c7 
+	git commit  -m "2nd commit"    //after move to previous saved file, we need to commit again
+
+///after add a file to git repository, we can remove it below way
+
+	git reset index.js   //remove index.js from add list
+
+/////git ignore///////////////////////////////////////////////////////////////
+sometime it is necessary that some file or folder will not keep track(what ever change happen no need to keep track).
+before commit we need to do below step
+
+1. create a file ".gitignore"
+2. write all those file name that will not keep track
+3. write all those folder name that will not keep track
+
+in .gitignore file
+----------------------
+indes.js     //filename with extension
+/new         //foldername
+
+//to check ignore status
+	git status
