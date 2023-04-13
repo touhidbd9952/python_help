@@ -1,6 +1,6 @@
 python
 exit()
-pip list    //python install package
+pip list    //see python installed package
 pip install django
 django-admin startproject projectname
 dir
@@ -9,6 +9,7 @@ python manage.py runserver
 python manage.py runserver 7000  //port
 ctrl  + c   //close
 cls   //clear
+
 github django repo
 
 admin
@@ -21,6 +22,7 @@ urlpatterns
 site
 urls
 contrib
+conf
 MEDIA_URL
 document_root
 MEDIA_ROOT
@@ -35,7 +37,9 @@ model
 fields
 exclude
 
-////models.py//////
+
+////models.py////////////////////////////////////////////////////////////////////////////////////////////////
+
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy
