@@ -1,0 +1,364 @@
+python
+exit()
+pip list    //python install package
+pip install django
+django-admin startproject projectname
+dir
+cd projectname
+python manage.py runserver
+python manage.py runserver 7000  //port
+ctrl  + c   //close
+cls   //clear
+github django repo
+
+admin
+path
+include
+settings
+static
+staticfiles_urlpatterns
+urlpatterns
+site
+urls
+contrib
+MEDIA_URL
+document_root
+MEDIA_ROOT
+views
+as_view()
+forms
+models
+UserCreationForm
+ModelForm
+Meta
+model
+fields
+exclude
+
+////models.py//////
+from django.db import models
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.utils.translation import gettext_lazy
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+-------------------------------------------------------
+from django.db import models
+
+class Category(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
+    ordering = models.IntegerField(default=0)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = "Categories"
+        ordering = ('ordering',) 
+
+class Product(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')
+    mainimage = models.ImageField(upload_to='Products')
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
+    preview_text = models.TextField(max_length=200, verbose_name='Preview Text')
+    detail_text = models.TextField(max_length=1000, verbose_name='Description')
+    price = models.FloatField()
+    old_price = models.FloatField(default=0.00)
+    is_featured = models.BooleanField(default=False)  #home page show produt is_featured=True
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['-created',]   #decending
+
+
+
+
+///urls.py/////
+from django.contrib import admin
+from django.urls import path, include
+# To show media files
+from django.conf import settings
+from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('App_Shop.urls')),
+    # path('account/', include('App_Login.urls')),
+    # path('shop/', include('App_Order.urls')),
+    # path('payment/', include('App_Payment.urls'))
+]
+
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+----------------------------------------------------------------------
+from django.urls import path
+from App_Login import views
+
+
+app_name = 'App_Login'
+
+urlpatterns = [
+    path('signup/', views.sign_up, name='signup'),
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
+    path('profile/', views.user_profile, name='profile'),
+]
+
+---------------------------------------------------------------------
+
+////forms.py////
+from django import forms
+#Add model
+from App_Login.models import User, Profile
+#Add Builtin Form
+from django.contrib.auth.forms import UserCreationForm
+
+
+class SignUpForm(UserCreationForm):
+	class Meta:
+		model = User
+		fields = ['email', 'password1', 'password2',]    
+
+class ProfileForm(forms.ModelForm):
+	class Meta:
+		model = Profile
+		exclude = ['user',]
+
+
+//////views.py//////
+from django.shortcuts import render, HttpResponseRedirect
+
+from django.urls import reverse
+from django.http import HttpResponse
+
+# Authetication
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
+
+# Forms and Models
+from App_Login.models import Profile
+from App_Login.forms import ProfileForm, SignUpForm
+
+# Messages
+from django.contrib import messages
+
+
+def sign_up(request):
+    form = SignUpForm()
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Account Created Successfully!")
+            return HttpResponseRedirect(reverse('App_Login:login'))
+    return render(request, 'App_Login/sign_up.html', context={'form':form})
+    
+
+def login_user(request):
+    form = AuthenticationForm()
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)  #put login user info in session
+                return HttpResponseRedirect(reverse('App_Shop:home'))
+
+        data={
+	        'form':form,
+        }
+    return render(request, 'App_Login/login.html', context=data)
+	
+
+@login_required
+def logout_user(request):
+    logout(request)
+    messages.warning(request, "You are logged out!!")
+    return HttpResponseRedirect(reverse('App_Shop:home'))
+    
+
+@login_required
+def user_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    form = ProfileForm(instance=profile)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Change Saved!!")
+            form = ProfileForm(instance=profile)
+    data ={
+	   'form':form,
+    }
+    return render(request, 'App_Login/change_profile.html', context=data)
+
+
+
+//////sign_up.html///////////////////////////////////////////
+
+{% extends 'master.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %} Create New Account {% endblock %}
+{% block body_block %}
+<h2>Create New Account:</h2>
+
+<form method="POST">
+{{ form|crispy }}
+{% csrf_token %}
+<button type="submit" class="btn btn-success btn-sm">Create Account</button>
+</form>
+
+<br>
+<p>Already have an account? <a href="{% url 'App_Login:login' %}">Login Here</a></p>
+{% endblock %}
+
+///////////master.html/////////////////////////////////////
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <title>{% block title_block %} E-com | Woody {% endblock %}</title>
+  <style>
+  .card {
+    height: 350px;
+  }
+
+  .card-product:after {
+    content: "";
+    display: table;
+    clear: both;
+    visibility: hidden;
+  }
+  .card-product .price-new, .card-product .price {
+    margin-right: 5px;
+  }
+
+  .card-product .price-old {
+    color: #999;
+  }
+
+  .card-product .img-wrap {
+    border-radius: 3px 3px 0 0;
+    overflow: hidden;
+    position: relative;
+    height: 220px;
+    text-align: center;
+  }
+
+  .card-product .img-wrap img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+  }
+
+  .card-product .info-wrap {
+    overflow: hidden;
+    padding: 15px;
+    border-top: 1px solid #eee;
+  }
+
+  .card-product .action-wrap {
+    padding-top: 4px;
+    margin-top: 4px;
+  }
+
+  .card-product .bottom-wrap {
+    padding: 15px;
+    border-top: 1px solid #eee;
+  }
+
+  .card-product .title {
+    margin-top: 0px;
+  }
+
+  </style>
+</head>
+<body>
+
+  {% include 'navbar.html' %}
+  
+  <div class="container">
+  
+    <div class="messages container mt-2">
+      {% if messages %}
+        {% for message in messages %}
+          <div {% if message.tags %} class="alert alert-{{message.tags}}{% endif %}" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    
+    {% block body_block %} {% endblock %}
+
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+
+///////navbar.html////////////////////////////////////////////////
+
+{% load cart_tag %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'App_Shop:home' %}">Django E-commerce Project</a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a href="{% url 'App_Order:cart' %}" class="nav-link">
+              <i class="fa fa-shopping-cart"></i> Cart
+              <span class="badge badge-light">{{ request.user | cart_total }}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-tie"></i> {{request.user.profile.username}}</a>
+          <div class="dropdown-menu" aria-labelledby="nabbarDropdown">
+            <a class="dropdown-item" href="{% url 'App_Login:profile' %}">Profile</a>
+            <a class="dropdown-item" href="{% url 'App_Payment:orders' %}">Orders</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
+          </div>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a href="{% url 'App_Login:login' %}" class="btn btn-primary">Login</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+
