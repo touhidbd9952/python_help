@@ -5,7 +5,7 @@ to use operator in python, we need to import operator
 	from operator import *
 
 1. Comment ===> #your comment
-2. No data type for variable declaration      ===>  
+2. No data type for variable declaration    
 	num1 = 15
 	arr1[] = {1,2,3}
 	list1 = [11, 5, 17, 18, 23]
